@@ -16,9 +16,8 @@ export default async function LandingLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ lang: Locale }>;
+  params: Promise<{ lang: string }>;
 }) {
-  // params consumed here so the layout can be async-ready for future use
   await params;
   return <>{children}</>;
 }
