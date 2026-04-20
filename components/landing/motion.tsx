@@ -3,31 +3,22 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
+const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
 /* ── Shared variants ──────────────────────────────────────────── */
 export const fadeUp = {
   hidden: { opacity: 0, y: 32 },
-  visible: (delay = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay },
-  }),
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
 };
 
 export const fadeIn = {
   hidden: { opacity: 0 },
-  visible: (delay = 0) => ({
-    opacity: 1,
-    transition: { duration: 0.6, ease: "easeOut", delay },
-  }),
+  visible: { opacity: 1, transition: { duration: 0.6, ease: "easeOut" as const } },
 };
 
 export const scaleIn = {
   hidden: { opacity: 0, scale: 0.88 },
-  visible: (delay = 0) => ({
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay },
-  }),
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: EASE } },
 };
 
 /* ── Trigger-on-scroll wrapper ───────────────────────────────── */
@@ -52,8 +43,8 @@ export function RevealOnScroll({
       ref={ref}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      custom={delay}
       variants={variants}
+      transition={{ delay }}
       className={className}
     >
       {children}
