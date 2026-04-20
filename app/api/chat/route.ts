@@ -95,8 +95,8 @@ export async function POST(request: Request) {
       let reply: string;
       if (isInit) {
         reply = userProfile?.first_time
-          ? MOCK_GREETING_FIRST(userProfile.name)
-          : MOCK_GREETING_RETURNING(userProfile.name);
+          ? MOCK_GREETING_FIRST(userProfile?.name)
+          : MOCK_GREETING_RETURNING(userProfile?.name);
       } else {
         reply = MOCK_REPLIES[mockReplyIndex % MOCK_REPLIES.length];
         mockReplyIndex++;
