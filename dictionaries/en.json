@@ -1,0 +1,89 @@
+{
+  "nav": {
+    "brand": "InMobi AI OS",
+    "portfolio": "Portfolio",
+    "insights": "Insights",
+    "ops": "Operations"
+  },
+  "hero": {
+    "eyebrow": "Predictive Real Estate Intelligence",
+    "headline1": "Not an academy.",
+    "headline2": "An Operating System",
+    "headline3": "that runs with you.",
+    "description": "Deploy a proprietary AI infrastructure that automates property acquisition, lead nurturing, and deal closing. While others teach, we install and operate.",
+    "cta_primary": "Implement Now",
+    "cta_secondary": "View Case Studies"
+  },
+  "agents": {
+    "agent01": "Content Agent",
+    "agent02": "Ads Optimizer",
+    "agent03": "Lead Engine",
+    "agent04": "Strategy Core"
+  },
+  "social_proof": {
+    "leads_value": "+2.4k",
+    "leads_label": "Verified Leads/Month",
+    "portfolio_value": "$124M",
+    "portfolio_label": "Portfolio Managed",
+    "reliability_value": "4.9/5",
+    "reliability_label": "System Reliability",
+    "automation_value": "85%",
+    "automation_label": "Automation Rate"
+  },
+  "comparison": {
+    "title": "The 'Old Way' vs. The Operating System",
+    "subtitle": "Why keep buying courses when you can install results?",
+    "old_title": "Academies & Coaching",
+    "new_title": "InMobi AI OS",
+    "new_badge": "Recommended",
+    "old_items": [
+      "They give you theory, you do the dirty work.",
+      "6 to 12-month learning curve.",
+      "Complete dependence on your time and energy.",
+      "No real technology integration."
+    ],
+    "new_items": [
+      "Infrastructure ready to operate in 14 days.",
+      "AI agents running 24/7 without rest.",
+      "Data-driven decisions, not gut feelings.",
+      "Permanent 'Done-With-You' support."
+    ]
+  },
+  "phases": {
+    "eyebrow": "Implementation Path",
+    "title": "7-Phase OS Integration",
+    "subtitle": "From base architecture to massive scale. A surgical process of digital transformation.",
+    "items": [
+      { "title": "Data Audit", "desc": "We scan your current ecosystem to identify bottlenecks and lead leaks." },
+      { "title": "Core Structure", "desc": "Installation of the central operating system and predictive CRM." },
+      { "title": "Agent Deployment", "desc": "We activate multi-channel nurturing and prospecting bots." },
+      { "title": "Ads Optimizer v1", "desc": "Launch of high-impact AI-managed campaigns to attract premium sellers." },
+      { "title": "Closing Protocol", "desc": "Script refinement and schedule automation for your consultants." },
+      { "title": "Executive Dashboard", "desc": "Full ROI visibility in real time. No spreadsheets, only live dashboards." },
+      { "title": "Autonomous Scale", "desc": "The system learns from every interaction and optimizes to lower acquisition costs." }
+    ]
+  },
+  "done_with_you": {
+    "title": "You're not alone in the cockpit.",
+    "description": "Unlike software you subscribe to and forget, or a course you never finish, we are your technology partners. We install the architecture, configure your agents, and operate by your side.",
+    "support_badge": "Strategic Support Active",
+    "response_time": "Response time: < 5 min",
+    "items": [
+      { "title": "1:1 Strategic Support", "desc": "Weekly optimization sessions to tune your growth engine." },
+      { "title": "AI Maintenance", "desc": "We update your AI models monthly so they never become obsolete." }
+    ],
+    "cta": "Schedule an Architecture Call"
+  },
+  "cta_final": {
+    "title": "Ready for the command shift?",
+    "description": "We accept only 5 new implementations per month to guarantee deployment quality. Secure your spot now.",
+    "cta": "Implement Now",
+    "disclaimer": "Risk-Free Pilot Phase Available"
+  },
+  "footer": {
+    "copyright": "© 2025 InMobi AI. All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "security": "Security"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "nav": {
+    "brand": "InMobi AI OS",
+    "portfolio": "Portefeuille",
+    "insights": "Insights",
+    "ops": "Opérations"
+  },
+  "hero": {
+    "eyebrow": "Intelligence Immobilière Prédictive",
+    "headline1": "Pas une académie.",
+    "headline2": "Un Système d'Exploitation",
+    "headline3": "qui opère avec vous.",
+    "description": "Déployez une infrastructure d'IA propriétaire qui automatise l'acquisition, le nurturing et la clôture de biens immobiliers. Pendant que d'autres enseignent, nous installons et opérons.",
+    "cta_primary": "Implémenter Maintenant",
+    "cta_secondary": "Voir les Études de Cas"
+  },
+  "agents": {
+    "agent01": "Agent de Contenu",
+    "agent02": "Optimiseur de Pubs",
+    "agent03": "Moteur de Leads",
+    "agent04": "Noyau Stratégique"
+  },
+  "social_proof": {
+    "leads_value": "+2.4k",
+    "leads_label": "Leads Vérifiés/Mois",
+    "portfolio_value": "$124M",
+    "portfolio_label": "Portefeuille Géré",
+    "reliability_value": "4.9/5",
+    "reliability_label": "Fiabilité du Système",
+    "automation_value": "85%",
+    "automation_label": "Taux d'Automatisation"
+  },
+  "comparison": {
+    "title": "L'Ancienne Méthode vs. le Système d'Exploitation",
+    "subtitle": "Pourquoi acheter des cours quand vous pouvez installer des résultats ?",
+    "old_title": "Académies & Coaching",
+    "new_title": "InMobi AI OS",
+    "new_badge": "Recommandé",
+    "old_items": [
+      "On vous donne la théorie, vous faites le sale boulot.",
+      "Courbe d'apprentissage de 6 à 12 mois.",
+      "Dépendance totale à votre temps et énergie.",
+      "Aucune intégration technologique réelle."
+    ],
+    "new_items": [
+      "Infrastructure prête à opérer en 14 jours.",
+      "Agents IA opérant 24h/24 sans relâche.",
+      "Décisions basées sur les données, pas l'intuition.",
+      "Accompagnement 'Done-With-You' permanent."
+    ]
+  },
+  "phases": {
+    "eyebrow": "Parcours d'Implémentation",
+    "title": "Intégration OS en 7 Phases",
+    "subtitle": "De l'architecture de base à l'échelle massive. Un processus chirurgical de transformation digitale.",
+    "items": [
+      { "title": "Audit de Données", "desc": "Nous analysons votre écosystème actuel pour identifier les goulots d'étranglement et les fuites de leads." },
+      { "title": "Structure Centrale", "desc": "Installation du système d'exploitation central et du CRM prédictif." },
+      { "title": "Déploiement des Agents", "desc": "Nous activons les bots de nurturing et prospection multi-canal." },
+      { "title": "Ads Optimizer v1", "desc": "Lancement de campagnes à fort impact gérées par IA pour attirer des vendeurs premium." },
+      { "title": "Protocole de Clôture", "desc": "Affinage des scripts et automatisation des agendas pour vos consultants." },
+      { "title": "Dashboard Exécutif", "desc": "Visibilité totale du ROI en temps réel. Pas de tableurs, seulement des dashboards vivants." },
+      { "title": "Échelle Autonome", "desc": "Le système apprend de chaque interaction et s'optimise pour réduire le coût d'acquisition." }
+    ]
+  },
+  "done_with_you": {
+    "title": "Vous n'êtes pas seul dans le cockpit.",
+    "description": "Contrairement à un logiciel que vous souscrivez et oubliez, ou un cours que vous ne terminez jamais, nous sommes vos partenaires technologiques. Nous installons l'architecture, configurons vos agents et opérons à vos côtés.",
+    "support_badge": "Support Stratégique Actif",
+    "response_time": "Temps de réponse : < 5 min",
+    "items": [
+      { "title": "Support Stratégique 1:1", "desc": "Sessions d'optimisation hebdomadaires pour ajuster votre moteur de croissance." },
+      { "title": "Maintenance IA", "desc": "Nous mettons à jour vos modèles d'IA chaque mois pour qu'ils ne deviennent jamais obsolètes." }
+    ],
+    "cta": "Planifier un Appel d'Architecture"
+  },
+  "cta_final": {
+    "title": "Prêt pour le changement de commande ?",
+    "description": "Nous acceptons seulement 5 nouvelles implémentations par mois pour garantir la qualité du déploiement. Sécurisez votre place maintenant.",
+    "cta": "Implémenter Maintenant",
+    "disclaimer": "Phase Pilote Sans Risque Disponible"
+  },
+  "footer": {
+    "copyright": "© 2025 InMobi AI. Tous droits réservés.",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "security": "Sécurité"
+  }
+}

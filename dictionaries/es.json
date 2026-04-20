@@ -1,0 +1,89 @@
+{
+  "nav": {
+    "brand": "InMobi AI OS",
+    "portfolio": "Portafolio",
+    "insights": "Insights",
+    "ops": "Operaciones"
+  },
+  "hero": {
+    "eyebrow": "Inteligencia Inmobiliaria Predictiva",
+    "headline1": "No es una academia.",
+    "headline2": "Es un Sistema Operativo",
+    "headline3": "que ejecuta con vos.",
+    "description": "Desplegá una infraestructura de IA propietaria que automatiza la captación, nutrición y cierre de propiedades. Mientras otros enseñan, nosotros instalamos y operamos.",
+    "cta_primary": "Implementar Ahora",
+    "cta_secondary": "Ver Casos de Éxito"
+  },
+  "agents": {
+    "agent01": "Agente de Contenido",
+    "agent02": "Optimizador de Anuncios",
+    "agent03": "Motor de Leads",
+    "agent04": "Núcleo Estratégico"
+  },
+  "social_proof": {
+    "leads_value": "+2.4k",
+    "leads_label": "Leads Verificados/Mes",
+    "portfolio_value": "$124M",
+    "portfolio_label": "Portafolio Gestionado",
+    "reliability_value": "4.9/5",
+    "reliability_label": "Confiabilidad del Sistema",
+    "automation_value": "85%",
+    "automation_label": "Tasa de Automatización"
+  },
+  "comparison": {
+    "title": "El 'Camino Viejo' vs. El Sistema Operativo",
+    "subtitle": "¿Por qué seguir comprando cursos cuando podés instalar resultados?",
+    "old_title": "Academias & Coaching",
+    "new_title": "InMobi AI OS",
+    "new_badge": "Recomendado",
+    "old_items": [
+      "Te dan la teoría, vos hacés el trabajo sucio.",
+      "Curva de aprendizaje de 6 a 12 meses.",
+      "Dependencia absoluta de tu tiempo y energía.",
+      "Falta de integración tecnológica real."
+    ],
+    "new_items": [
+      "Infraestructura lista para operar en 14 días.",
+      "Agentes de IA que ejecutan 24/7 sin descanso.",
+      "Decisiones basadas en datos, no en intuición.",
+      "Acompañamiento 'Done-With-You' permanente."
+    ]
+  },
+  "phases": {
+    "eyebrow": "Ruta de Implementación",
+    "title": "Integración OS en 7 Fases",
+    "subtitle": "De la arquitectura base a la escala masiva. Un proceso quirúrgico de transformación digital.",
+    "items": [
+      { "title": "Auditoría de Datos", "desc": "Escaneamos tu ecosistema actual para identificar cuellos de botella y fugas de leads." },
+      { "title": "Estructura Núcleo", "desc": "Instalación del sistema operativo central y CRM predictivo." },
+      { "title": "Despliegue de Agentes", "desc": "Activamos los bots de nutrición y prospección multi-canal." },
+      { "title": "Ads Optimizer v1", "desc": "Lanzamiento de campañas de alto impacto gestionadas por IA para captar vendedores premium." },
+      { "title": "Protocolo de Cierre", "desc": "Refinamiento de scripts y automatización de agendas para tus consultores." },
+      { "title": "Dashboard Ejecutivo", "desc": "Visibilidad total del ROI en tiempo real. Sin hojas de cálculo, solo dashboards vivos." },
+      { "title": "Escala Autónoma", "desc": "El sistema aprende de cada interacción y se optimiza para bajar el costo de adquisición." }
+    ]
+  },
+  "done_with_you": {
+    "title": "No estás solo en la cabina.",
+    "description": "A diferencia de un software que contratás y olvidás, o un curso que nunca terminás, somos tus socios tecnológicos. Instalamos la arquitectura, configuramos tus agentes y operamos a tu lado.",
+    "support_badge": "Soporte Estratégico Activo",
+    "response_time": "Tiempo de respuesta: < 5 min",
+    "items": [
+      { "title": "Soporte Estratégico 1:1", "desc": "Sesiones de optimización semanal para ajustar tu motor de crecimiento." },
+      { "title": "Mantenimiento de IA", "desc": "Actualizamos tus modelos de IA mensualmente para que nunca queden obsoletos." }
+    ],
+    "cta": "Agendar una Llamada de Arquitectura"
+  },
+  "cta_final": {
+    "title": "¿Listo para el cambio de mando?",
+    "description": "Aceptamos solo 5 nuevas implementaciones por mes para garantizar la calidad del despliegue. Asegurá tu lugar ahora.",
+    "cta": "Implementar Ahora",
+    "disclaimer": "Fase Piloto Sin Riesgo Disponible"
+  },
+  "footer": {
+    "copyright": "© 2025 InMobi AI. Todos los derechos reservados.",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "security": "Seguridad"
+  }
+}
