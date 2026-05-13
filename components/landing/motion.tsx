@@ -25,11 +25,13 @@ export const scaleIn = {
 export function RevealOnScroll({
   children,
   className,
+  style,
   delay = 0,
   variant = "fadeUp",
 }: {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
   delay?: number;
   variant?: "fadeUp" | "fadeIn" | "scaleIn";
 }) {
@@ -46,6 +48,7 @@ export function RevealOnScroll({
       variants={variants}
       transition={{ delay }}
       className={className}
+      style={style}
     >
       {children}
     </motion.div>

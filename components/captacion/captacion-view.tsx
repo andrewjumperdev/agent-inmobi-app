@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -34,7 +34,7 @@ export function CaptacionView({ leads, kpis }: { leads: Lead[]; kpis: Kpis }) {
       {/* Tab bar */}
       <div
         className="flex gap-1 border-b px-4 md:px-8"
-        style={{ borderColor: "rgba(69,70,77,0.3)", backgroundColor: "#0b1326" }}
+        style={{ borderColor: "rgba(255,255,255,0.08)", backgroundColor: "#060609" }}
       >
         {TABS.map((tab) => {
           const active = activeTab === tab.id;
@@ -43,7 +43,7 @@ export function CaptacionView({ leads, kpis }: { leads: Lead[]; kpis: Kpis }) {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className="relative flex items-center gap-2 px-4 py-3 font-label text-xs uppercase tracking-widest transition-colors"
-              style={{ color: active ? "#bcff5f" : "#909097" }}
+              style={{ color: active ? "#3b82f6" : "#64748b" }}
             >
               <span
                 className="material-symbols-outlined text-sm"
@@ -64,7 +64,7 @@ export function CaptacionView({ leads, kpis }: { leads: Lead[]; kpis: Kpis }) {
                 <motion.div
                   layoutId="tab-underline"
                   className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                  style={{ backgroundColor: "#bcff5f" }}
+                  style={{ backgroundColor: "#3b82f6" }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 />
               )}

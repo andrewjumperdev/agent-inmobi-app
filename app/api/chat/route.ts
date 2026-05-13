@@ -1,4 +1,4 @@
-/**
+﻿/**
  * /api/chat — Streaming chat endpoint para ARIA
  *
  * Provider seleccionado via env:
@@ -10,7 +10,7 @@
 const PROVIDER = process.env.AI_PROVIDER ?? "mock";
 
 /* ── System prompt compartido ──────────────────────────────── */
-const BASE_SYSTEM = `Eres ARIA, la inteligencia artificial del sistema InMobi AI OS — un sistema operativo diseñado exclusivamente para agentes y equipos inmobiliarios en Latinoamérica.
+const BASE_SYSTEM = `Eres ARIA, la inteligencia artificial del sistema KORE AI — un sistema operativo diseñado exclusivamente para agentes y equipos inmobiliarios en Latinoamérica.
 
 Tu rol es ser la primera interfaz que recibe al usuario cuando entra al sistema. Eres cálida, directa y altamente profesional. Tu objetivo es:
 
@@ -29,7 +29,7 @@ Reglas: Responde siempre en el idioma del usuario. Máximo 3-4 oraciones. Lengua
 
 /* ── Respuestas mock para testing ──────────────────────────── */
 const MOCK_GREETING_FIRST = (name?: string) =>
-  `¡Hola${name ? `, ${name}` : ""}! Soy ARIA, tu asistente de inteligencia artificial dentro del InMobi AI OS. Estoy aquí para ayudarte a automatizar tu negocio inmobiliario desde la captación hasta el cierre. Para empezar, ¿en qué ciudad operás y qué tipo de propiedades manejás principalmente?`;
+  `¡Hola${name ? `, ${name}` : ""}! Soy ARIA, tu asistente de inteligencia artificial dentro del KORE AI. Estoy aquí para ayudarte a automatizar tu negocio inmobiliario desde la captación hasta el cierre. Para empezar, ¿en qué ciudad operás y qué tipo de propiedades manejás principalmente?`;
 
 const MOCK_GREETING_RETURNING = (name?: string) =>
   `Bienvenido de vuelta${name ? `, ${name}` : ""}. ¿En qué puedo ayudarte hoy? Podés preguntarme sobre leads, contenido, captación o cualquier módulo del sistema.`;

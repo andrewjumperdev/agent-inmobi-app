@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -19,7 +19,7 @@ export interface SidebarUser {
 
 /* ── Plan badge ─────────────────────────────────────────────── */
 const PLAN_STYLES: Record<string, { label: string; color: string; bg: string }> = {
-  pro:   { label: "Pro",   color: "#bcff5f", bg: "rgba(188,255,95,0.12)" },
+  pro:   { label: "Pro",   color: "#3b82f6", bg: "rgba(59,130,246,0.12)" },
   trial: { label: "Trial", color: "#facc15", bg: "rgba(250,204,21,0.12)" },
   free:  { label: "Free",  color: "#94a3b8", bg: "rgba(148,163,184,0.12)" },
 };
@@ -53,7 +53,7 @@ function AvatarCircle({
   return (
     <div
       className={cn(dim, radius, "flex items-center justify-center font-bold shrink-0 overflow-hidden")}
-      style={{ backgroundColor: "rgba(188,255,95,0.12)", color: "#bcff5f" }}
+      style={{ backgroundColor: "rgba(59,130,246,0.12)", color: "#3b82f6" }}
     >
       {avatarUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -107,7 +107,7 @@ export function UserDropdown({
         className={triggerClass}
         style={
           variant === "navbar"
-            ? { borderColor: "rgba(188,255,95,0.3)" }
+            ? { borderColor: "rgba(59,130,246,0.3)" }
             : undefined
         }
       >
@@ -135,7 +135,7 @@ export function UserDropdown({
               "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
               "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
             )}
-            style={{ backgroundColor: "#171f33", borderColor: "rgba(69,70,77,0.5)" }}
+            style={{ backgroundColor: "#10101c", borderColor: "rgba(69,70,77,0.5)" }}
           >
             {/* User info header */}
             <div className="flex items-center gap-3 px-3 py-3 mb-1">
@@ -147,7 +147,7 @@ export function UserDropdown({
               />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-semibold truncate" style={{ color: "#dae2fd" }}>
+                  <span className="text-sm font-semibold truncate" style={{ color: "#f1f5f9" }}>
                     {displayName}
                   </span>
                   <span
@@ -158,7 +158,7 @@ export function UserDropdown({
                   </span>
                 </div>
                 {user.email && (
-                  <p className="text-xs truncate mt-0.5" style={{ color: "#909097" }}>
+                  <p className="text-xs truncate mt-0.5" style={{ color: "#64748b" }}>
                     {user.email}
                   </p>
                 )}
@@ -174,18 +174,18 @@ export function UserDropdown({
                 "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm outline-none",
                 "cursor-pointer transition-colors",
               )}
-              style={{ color: "#dae2fd" }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(188,255,95,0.07)")}
+              style={{ color: "#f1f5f9" }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(59,130,246,0.07)")}
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
             >
               <div
                 className="size-6 rounded-md flex items-center justify-center shrink-0"
                 style={{ backgroundColor: "rgba(188,198,224,0.08)" }}
               >
-                <User size={12} style={{ color: "#c6c6cd" }} />
+                <User size={12} style={{ color: "#94a3b8" }} />
               </div>
               <span className="flex-1">Mi cuenta</span>
-              <ChevronRight size={13} style={{ color: "#45464d" }} />
+              <ChevronRight size={13} style={{ color: "#334155" }} />
             </Menu.Item>
 
             <div className="h-px mx-1 my-1" style={{ backgroundColor: "rgba(69,70,77,0.5)" }} />

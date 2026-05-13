@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,7 +9,7 @@ type Channel = "whatsapp" | "formulario" | "landing";
 /* ── Channel Tab ───────────────────────────────────────────── */
 const CHANNELS: { id: Channel; label: string; icon: string; color: string }[] = [
   { id: "whatsapp",   label: "WhatsApp",  icon: "chat",    color: "#25d366" },
-  { id: "formulario", label: "Formulario", icon: "article", color: "#bcff5f" },
+  { id: "formulario", label: "Formulario", icon: "article", color: "#3b82f6" },
   { id: "landing",    label: "Landing",   icon: "web",     color: "#818cf8" },
 ];
 
@@ -27,9 +27,9 @@ function CopyButton({ text, label = "Copiar" }: { text: string; label?: string }
       onClick={copy}
       className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-label uppercase tracking-widest transition-all"
       style={{
-        backgroundColor: copied ? "rgba(188,255,95,0.15)" : "rgba(188,198,224,0.08)",
-        color: copied ? "#bcff5f" : "#909097",
-        border: copied ? "1px solid rgba(188,255,95,0.3)" : "1px solid rgba(69,70,77,0.3)",
+        backgroundColor: copied ? "rgba(59,130,246,0.15)" : "rgba(188,198,224,0.08)",
+        color: copied ? "#3b82f6" : "#64748b",
+        border: copied ? "1px solid rgba(59,130,246,0.3)" : "1px solid rgba(255,255,255,0.08)",
       }}
     >
       <span className="material-symbols-outlined text-xs">{copied ? "check" : "content_copy"}</span>
@@ -44,7 +44,7 @@ function CodeBlock({ code }: { code: string }) {
     <div className="relative rounded-xl overflow-hidden" style={{ backgroundColor: "#080f1f" }}>
       <div
         className="flex items-center justify-between px-4 py-2"
-        style={{ borderBottom: "1px solid rgba(69,70,77,0.25)" }}
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
       >
         <div className="flex gap-1.5">
           {["#ef4444", "#eab308", "#22c55e"].map((c) => (
@@ -53,7 +53,7 @@ function CodeBlock({ code }: { code: string }) {
         </div>
         <CopyButton text={code} />
       </div>
-      <pre className="overflow-x-auto px-4 py-4 text-xs leading-relaxed" style={{ color: "#bec6e0", fontFamily: "monospace" }}>
+      <pre className="overflow-x-auto px-4 py-4 text-xs leading-relaxed" style={{ color: "#e2e8f0", fontFamily: "monospace" }}>
         {code}
       </pre>
     </div>
@@ -66,11 +66,11 @@ function Step({ n, label }: { n: number; label: string }) {
     <div className="flex items-start gap-3">
       <div
         className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-headline text-xs font-bold"
-        style={{ backgroundColor: "rgba(188,255,95,0.12)", color: "#bcff5f", border: "1px solid rgba(188,255,95,0.2)" }}
+        style={{ backgroundColor: "rgba(59,130,246,0.12)", color: "#3b82f6", border: "1px solid rgba(59,130,246,0.2)" }}
       >
         {n}
       </div>
-      <p className="pt-0.5 text-sm leading-relaxed" style={{ color: "#c6c6cd" }}>{label}</p>
+      <p className="pt-0.5 text-sm leading-relaxed" style={{ color: "#94a3b8" }}>{label}</p>
     </div>
   );
 }
@@ -78,12 +78,12 @@ function Step({ n, label }: { n: number; label: string }) {
 /* ── Stat pill ─────────────────────────────────────────────── */
 function StatPill({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
-    <div className="rounded-xl p-4" style={{ backgroundColor: "#0b1326", border: "1px solid rgba(69,70,77,0.2)" }}>
+    <div className="rounded-xl p-4" style={{ backgroundColor: "#060609", border: "1px solid rgba(255,255,255,0.06)" }}>
       <div className="flex items-center gap-2 mb-1">
-        <span className="material-symbols-outlined text-sm" style={{ color: "#bcff5f" }}>{icon}</span>
-        <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#909097" }}>{label}</span>
+        <span className="material-symbols-outlined text-sm" style={{ color: "#3b82f6" }}>{icon}</span>
+        <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#64748b" }}>{label}</span>
       </div>
-      <p className="font-headline text-xl font-bold" style={{ color: "#dae2fd" }}>{value}</p>
+      <p className="font-headline text-xl font-bold" style={{ color: "#f1f5f9" }}>{value}</p>
     </div>
   );
 }
@@ -98,7 +98,7 @@ function WhatsAppPanel() {
 
   const cleanPhone = phone.replace(/\D/g, "");
   const waLink = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
-  const widgetCode = `<!-- InMobi WhatsApp Widget -->
+  const widgetCode = `<!-- KORE AI WhatsApp Widget -->
 <a href="${waLink}" target="_blank" rel="noopener"
    style="position:fixed;bottom:24px;right:24px;z-index:9999;
           display:flex;align-items:center;justify-content:center;
@@ -119,12 +119,12 @@ function WhatsAppPanel() {
       </div>
 
       {/* Config */}
-      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#131b2e" }}>
-        <h3 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>Configurar número</h3>
+      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#0c0c14" }}>
+        <h3 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Configurar número</h3>
 
         <div className="space-y-3">
           <div>
-            <label className="font-label text-[10px] uppercase tracking-widest block mb-1" style={{ color: "#909097" }}>
+            <label className="font-label text-[10px] uppercase tracking-widest block mb-1" style={{ color: "#64748b" }}>
               Teléfono WhatsApp Business
             </label>
             <input
@@ -132,12 +132,12 @@ function WhatsAppPanel() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-              style={{ backgroundColor: "#0b1326", border: "1px solid rgba(69,70,77,0.4)", color: "#dae2fd" }}
+              style={{ backgroundColor: "#060609", border: "1px solid rgba(255,255,255,0.10)", color: "#f1f5f9" }}
               placeholder="+54911..."
             />
           </div>
           <div>
-            <label className="font-label text-[10px] uppercase tracking-widest block mb-1" style={{ color: "#909097" }}>
+            <label className="font-label text-[10px] uppercase tracking-widest block mb-1" style={{ color: "#64748b" }}>
               Mensaje predeterminado
             </label>
             <textarea
@@ -145,7 +145,7 @@ function WhatsAppPanel() {
               onChange={(e) => setMessage(e.target.value)}
               rows={2}
               className="w-full resize-none rounded-lg px-3 py-2 text-sm outline-none"
-              style={{ backgroundColor: "#0b1326", border: "1px solid rgba(69,70,77,0.4)", color: "#dae2fd" }}
+              style={{ backgroundColor: "#060609", border: "1px solid rgba(255,255,255,0.10)", color: "#f1f5f9" }}
             />
           </div>
         </div>
@@ -166,20 +166,20 @@ function WhatsAppPanel() {
       </div>
 
       {/* Widget embed */}
-      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#131b2e" }}>
+      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#0c0c14" }}>
         <div className="flex items-center justify-between">
-          <h3 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>Widget para tu web</h3>
-          <span className="rounded-full px-2 py-0.5 font-label text-[10px] uppercase tracking-widest" style={{ backgroundColor: "rgba(188,255,95,0.1)", color: "#bcff5f", border: "1px solid rgba(188,255,95,0.2)" }}>
+          <h3 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Widget para tu web</h3>
+          <span className="rounded-full px-2 py-0.5 font-label text-[10px] uppercase tracking-widest" style={{ backgroundColor: "rgba(59,130,246,0.1)", color: "#3b82f6", border: "1px solid rgba(59,130,246,0.2)" }}>
             HTML
           </span>
         </div>
-        <p className="text-xs" style={{ color: "#909097" }}>Pegá este código antes de cerrar el <code style={{ color: "#bcff5f" }}>&lt;/body&gt;</code> de tu sitio web.</p>
+        <p className="text-xs" style={{ color: "#64748b" }}>Pegá este código antes de cerrar el <code style={{ color: "#3b82f6" }}>&lt;/body&gt;</code> de tu sitio web.</p>
         <CodeBlock code={widgetCode} />
       </div>
 
       {/* Setup steps */}
-      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#131b2e" }}>
-        <h3 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>Guía de configuración</h3>
+      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#0c0c14" }}>
+        <h3 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Guía de configuración</h3>
         <div className="space-y-4">
           <Step n={1} label="Verificá tu número en WhatsApp Business y activá el catálogo de propiedades." />
           <Step n={2} label="Copiá el link de arriba y pegalo en tu perfil de Instagram, Facebook y Google My Business." />
@@ -210,9 +210,9 @@ function FormularioPanel() {
     );
   }
 
-  const embedCode = `<!-- InMobi Lead Form -->
+  const embedCode = `<!-- KORE AI Lead Form -->
 <iframe
-  src="https://app.inmobi.ai/form/TU_ID_AQUI"
+  src="https://app.kore.ai/form/TU_ID_AQUI"
   width="100%"
   height="520"
   frameborder="0"
@@ -230,10 +230,10 @@ function FormularioPanel() {
       </div>
 
       {/* Field builder */}
-      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#131b2e" }}>
+      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#0c0c14" }}>
         <div className="flex items-center justify-between">
-          <h3 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>Campos del formulario</h3>
-          <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#909097" }}>
+          <h3 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Campos del formulario</h3>
+          <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#64748b" }}>
             {activeFields.length} activos
           </span>
         </div>
@@ -245,23 +245,23 @@ function FormularioPanel() {
                 key={field.id}
                 className="flex items-center justify-between rounded-lg px-3 py-2.5 cursor-pointer transition-all"
                 style={{
-                  backgroundColor: active ? "rgba(188,255,95,0.06)" : "rgba(188,198,224,0.03)",
-                  border: active ? "1px solid rgba(188,255,95,0.18)" : "1px solid rgba(69,70,77,0.2)",
+                  backgroundColor: active ? "rgba(59,130,246,0.06)" : "rgba(188,198,224,0.03)",
+                  border: active ? "1px solid rgba(59,130,246,0.18)" : "1px solid rgba(255,255,255,0.06)",
                 }}
                 onClick={() => !field.req && toggle(field.id)}
               >
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-sm" style={{ color: active ? "#bcff5f" : "#45464d" }}>
+                  <span className="material-symbols-outlined text-sm" style={{ color: active ? "#3b82f6" : "#334155" }}>
                     {active ? "check_box" : "check_box_outline_blank"}
                   </span>
-                  <span className="text-sm" style={{ color: active ? "#dae2fd" : "#909097" }}>{field.label}</span>
+                  <span className="text-sm" style={{ color: active ? "#f1f5f9" : "#64748b" }}>{field.label}</span>
                   {field.req && (
                     <span className="rounded-full px-1.5 py-0.5 font-label text-[9px] uppercase" style={{ backgroundColor: "rgba(239,68,68,0.12)", color: "#ef4444" }}>
                       requerido
                     </span>
                   )}
                 </div>
-                <span className="font-label text-[10px]" style={{ color: "#45464d" }}>{field.type}</span>
+                <span className="font-label text-[10px]" style={{ color: "#334155" }}>{field.type}</span>
               </div>
             );
           })}
@@ -269,15 +269,15 @@ function FormularioPanel() {
       </div>
 
       {/* Embed */}
-      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#131b2e" }}>
-        <h3 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>Código de embed</h3>
-        <p className="text-xs" style={{ color: "#909097" }}>Insertá este iframe en cualquier página web, portal inmobiliario o blog.</p>
+      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#0c0c14" }}>
+        <h3 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Código de embed</h3>
+        <p className="text-xs" style={{ color: "#64748b" }}>Insertá este iframe en cualquier página web, portal inmobiliario o blog.</p>
         <CodeBlock code={embedCode} />
       </div>
 
       {/* Setup steps */}
-      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#131b2e" }}>
-        <h3 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>Guía de configuración</h3>
+      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#0c0c14" }}>
+        <h3 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Guía de configuración</h3>
         <div className="space-y-4">
           <Step n={1} label="Seleccioná los campos que querés mostrar. Los requeridos no se pueden desactivar." />
           <Step n={2} label="Copiá el código de embed y pegalo en tu web o portal inmobiliario." />
@@ -312,8 +312,8 @@ function LandingPanel() {
       </div>
 
       {/* Template picker */}
-      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#131b2e" }}>
-        <h3 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>Plantilla de landing</h3>
+      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#0c0c14" }}>
+        <h3 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Plantilla de landing</h3>
         <div className="grid grid-cols-2 gap-3">
           {LANDING_TEMPLATES.map((tpl) => {
             const active = selected === tpl.id;
@@ -323,23 +323,23 @@ function LandingPanel() {
                 onClick={() => setSelected(tpl.id)}
                 className="text-left rounded-xl p-4 transition-all"
                 style={{
-                  backgroundColor: active ? "rgba(188,255,95,0.08)" : "rgba(188,198,224,0.03)",
-                  border: active ? "1px solid rgba(188,255,95,0.25)" : "1px solid rgba(69,70,77,0.2)",
+                  backgroundColor: active ? "rgba(59,130,246,0.08)" : "rgba(188,198,224,0.03)",
+                  border: active ? "1px solid rgba(59,130,246,0.25)" : "1px solid rgba(255,255,255,0.06)",
                 }}
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="material-symbols-outlined text-base" style={{ color: active ? "#bcff5f" : "#909097" }}>
+                  <span className="material-symbols-outlined text-base" style={{ color: active ? "#3b82f6" : "#64748b" }}>
                     {tpl.icon}
                   </span>
-                  <span className="font-label text-xs font-bold" style={{ color: active ? "#dae2fd" : "#909097" }}>
+                  <span className="font-label text-xs font-bold" style={{ color: active ? "#f1f5f9" : "#64748b" }}>
                     {tpl.label}
                   </span>
                 </div>
                 <div className="flex gap-3">
-                  <span className="font-label text-[10px] uppercase" style={{ color: "#45464d" }}>
+                  <span className="font-label text-[10px] uppercase" style={{ color: "#334155" }}>
                     {tpl.leads}
                   </span>
-                  <span className="font-label text-[10px] uppercase" style={{ color: active ? "#bcff5f" : "#45464d" }}>
+                  <span className="font-label text-[10px] uppercase" style={{ color: active ? "#3b82f6" : "#334155" }}>
                     CR {tpl.cr}
                   </span>
                 </div>
@@ -350,30 +350,30 @@ function LandingPanel() {
       </div>
 
       {/* Link preview */}
-      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#131b2e" }}>
-        <h3 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>Tu link de captación</h3>
+      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#0c0c14" }}>
+        <h3 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Tu link de captación</h3>
         <div
           className="flex items-center gap-3 rounded-lg px-4 py-3"
-          style={{ backgroundColor: "#0b1326", border: "1px solid rgba(69,70,77,0.3)" }}
+          style={{ backgroundColor: "#060609", border: "1px solid rgba(255,255,255,0.08)" }}
         >
-          <span className="material-symbols-outlined text-sm" style={{ color: "#bcff5f" }}>link</span>
-          <span className="flex-1 font-label text-xs truncate" style={{ color: "#bec6e0" }}>
-            app.inmobi.ai/lp/tu-agencia/{selectedTpl.id}
+          <span className="material-symbols-outlined text-sm" style={{ color: "#3b82f6" }}>link</span>
+          <span className="flex-1 font-label text-xs truncate" style={{ color: "#e2e8f0" }}>
+            app.kore.ai/lp/tu-agencia/{selectedTpl.id}
           </span>
-          <CopyButton text={`https://app.inmobi.ai/lp/tu-agencia/${selectedTpl.id}`} />
+          <CopyButton text={`https://app.kore.ai/lp/tu-agencia/${selectedTpl.id}`} />
         </div>
 
-        <div className="flex items-center gap-2 rounded-lg px-3 py-2" style={{ backgroundColor: "rgba(188,255,95,0.05)", border: "1px solid rgba(188,255,95,0.1)" }}>
-          <span className="material-symbols-outlined text-xs" style={{ color: "#bcff5f" }}>info</span>
-          <p className="text-xs" style={{ color: "#909097" }}>
-            Conversión estimada: <span style={{ color: "#bcff5f" }}>{selectedTpl.cr}</span> · Leads/mes: <span style={{ color: "#bcff5f" }}>{selectedTpl.leads}</span>
+        <div className="flex items-center gap-2 rounded-lg px-3 py-2" style={{ backgroundColor: "rgba(59,130,246,0.05)", border: "1px solid rgba(59,130,246,0.1)" }}>
+          <span className="material-symbols-outlined text-xs" style={{ color: "#3b82f6" }}>info</span>
+          <p className="text-xs" style={{ color: "#64748b" }}>
+            Conversión estimada: <span style={{ color: "#3b82f6" }}>{selectedTpl.cr}</span> · Leads/mes: <span style={{ color: "#3b82f6" }}>{selectedTpl.leads}</span>
           </p>
         </div>
       </div>
 
       {/* Setup steps */}
-      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#131b2e" }}>
-        <h3 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>Guía de configuración</h3>
+      <div className="rounded-xl p-6 space-y-4" style={{ backgroundColor: "#0c0c14" }}>
+        <h3 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Guía de configuración</h3>
         <div className="space-y-4">
           <Step n={1} label="Elegí la plantilla que mejor represente tu oferta principal." />
           <Step n={2} label="Compartí el link en tus campañas de Meta Ads, Google Ads o redes sociales." />
@@ -407,8 +407,8 @@ export function EntryPoints() {
               className="relative flex items-center gap-2 rounded-xl px-4 py-2.5 font-label text-xs uppercase tracking-widest transition-all"
               style={{
                 backgroundColor: active ? `${ch.color}18` : "rgba(188,198,224,0.04)",
-                color: active ? ch.color : "#909097",
-                border: active ? `1px solid ${ch.color}40` : "1px solid rgba(69,70,77,0.2)",
+                color: active ? ch.color : "#64748b",
+                border: active ? `1px solid ${ch.color}40` : "1px solid rgba(255,255,255,0.06)",
               }}
             >
               <span className="material-symbols-outlined text-sm">{ch.icon}</span>

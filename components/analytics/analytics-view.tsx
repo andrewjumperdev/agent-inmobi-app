@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -21,9 +21,9 @@ import {
 
 /* ── Mock data ───────────────────────────────────────────── */
 const FUNNEL_DATA = [
-  { stage: "Nuevo",       leads: 142, fill: "#bec6e0" },
+  { stage: "Nuevo",       leads: 142, fill: "#e2e8f0" },
   { stage: "Contactado",  leads: 98,  fill: "#818cf8" },
-  { stage: "Calificado",  leads: 67,  fill: "#bcff5f" },
+  { stage: "Calificado",  leads: 67,  fill: "#3b82f6" },
   { stage: "Cita",        leads: 38,  fill: "#fb923c" },
   { stage: "Negociación", leads: 21,  fill: "#eab308" },
   { stage: "Cerrado",     leads: 11,  fill: "#22c55e" },
@@ -42,7 +42,7 @@ const LEADS_OVER_TIME = Array.from({ length: 30 }, (_, i) => {
 
 const SOURCE_DATA = [
   { name: "WhatsApp",  value: 38, color: "#22c55e" },
-  { name: "Landing",   value: 27, color: "#bcff5f" },
+  { name: "Landing",   value: 27, color: "#3b82f6" },
   { name: "Formulario",value: 18, color: "#818cf8" },
   { name: "Referido",  value: 11, color: "#fb923c" },
   { name: "Directo",   value: 6,  color: "#6366f1"  },
@@ -70,9 +70,9 @@ function CustomTooltip({
   return (
     <div
       className="rounded-lg px-3 py-2 text-xs shadow-xl"
-      style={{ backgroundColor: "#0f172a", border: "1px solid rgba(69,70,77,0.4)", color: "#dae2fd" }}
+      style={{ backgroundColor: "#080812", border: "1px solid rgba(255,255,255,0.10)", color: "#f1f5f9" }}
     >
-      <p className="mb-1 font-semibold" style={{ color: "#909097" }}>
+      <p className="mb-1 font-semibold" style={{ color: "#64748b" }}>
         {label}
       </p>
       {payload.map((p) => (
@@ -108,24 +108,24 @@ function KpiCards() {
           transition={{ delay: i * 0.07, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           className="rounded-xl p-5"
           style={{
-            backgroundColor: "#131b2e",
+            backgroundColor: "#0c0c14",
             border: kpi.accent
-              ? "1px solid rgba(188,255,95,0.2)"
-              : "1px solid rgba(69,70,77,0.15)",
+              ? "1px solid rgba(59,130,246,0.2)"
+              : "1px solid rgba(255,255,255,0.05)",
             background: kpi.accent
-              ? "linear-gradient(135deg, rgba(188,255,95,0.06) 0%, #131b2e 60%)"
-              : "#131b2e",
+              ? "linear-gradient(135deg, rgba(59,130,246,0.06) 0%, #0c0c14 60%)"
+              : "#0c0c14",
           }}
         >
           <div className="mb-3 flex items-center justify-between">
             <div
               className="flex h-8 w-8 items-center justify-center rounded-lg"
-              style={{ backgroundColor: kpi.accent ? "#bcff5f" : "rgba(188,255,95,0.08)" }}
+              style={{ backgroundColor: kpi.accent ? "#3b82f6" : "rgba(59,130,246,0.08)" }}
             >
               <span
                 className="material-symbols-outlined text-base"
                 style={{
-                  color: kpi.accent ? "#203600" : "#bcff5f",
+                  color: kpi.accent ? "#ffffff" : "#3b82f6",
                   fontVariationSettings: "'FILL' 1",
                 }}
               >
@@ -142,10 +142,10 @@ function KpiCards() {
               {kpi.change}
             </span>
           </div>
-          <p className="font-headline text-2xl font-bold" style={{ color: "#dae2fd" }}>
+          <p className="font-headline text-2xl font-bold" style={{ color: "#f1f5f9" }}>
             {kpi.value}
           </p>
-          <p className="mt-0.5 text-xs" style={{ color: "#909097" }}>
+          <p className="mt-0.5 text-xs" style={{ color: "#64748b" }}>
             {kpi.label}
           </p>
         </motion.div>
@@ -172,16 +172,16 @@ function Section({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay, ease: [0.16, 1, 0.3, 1] }}
       className="rounded-xl p-5"
-      style={{ backgroundColor: "#131b2e", border: "1px solid rgba(69,70,77,0.15)" }}
+      style={{ backgroundColor: "#0c0c14", border: "1px solid rgba(255,255,255,0.05)" }}
     >
       <div className="mb-4 flex items-center gap-2">
         <span
           className="material-symbols-outlined text-base"
-          style={{ color: "#bcff5f", fontVariationSettings: "'FILL' 1" }}
+          style={{ color: "#3b82f6", fontVariationSettings: "'FILL' 1" }}
         >
           {icon}
         </span>
-        <h2 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>
+        <h2 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>
           {title}
         </h2>
       </div>
@@ -202,12 +202,12 @@ function FunnelChart() {
         >
           <CartesianGrid
             horizontal={false}
-            stroke="rgba(69,70,77,0.2)"
+            stroke="rgba(255,255,255,0.06)"
             strokeDasharray="3 3"
           />
           <XAxis
             type="number"
-            tick={{ fill: "#909097", fontSize: 11 }}
+            tick={{ fill: "#64748b", fontSize: 11 }}
             axisLine={false}
             tickLine={false}
           />
@@ -215,11 +215,11 @@ function FunnelChart() {
             type="category"
             dataKey="stage"
             width={82}
-            tick={{ fill: "#909097", fontSize: 11 }}
+            tick={{ fill: "#64748b", fontSize: 11 }}
             axisLine={false}
             tickLine={false}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(69,70,77,0.1)" }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
           <Bar dataKey="leads" radius={[0, 4, 4, 0]} name="Leads">
             {FUNNEL_DATA.map((entry, i) => (
               <Cell key={i} fill={entry.fill} fillOpacity={0.85} />
@@ -237,12 +237,12 @@ function FunnelChart() {
             <div
               key={stage.stage}
               className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5"
-              style={{ backgroundColor: "rgba(69,70,77,0.12)" }}
+              style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
             >
               <span className="text-[11px]" style={{ color: stage.fill }}>
                 {stage.stage}
               </span>
-              <span className="material-symbols-outlined text-xs" style={{ color: "#45464d" }}>
+              <span className="material-symbols-outlined text-xs" style={{ color: "#334155" }}>
                 arrow_forward
               </span>
               <span className="text-[11px] font-semibold" style={{ color: next.fill }}>
@@ -271,9 +271,9 @@ function TrendChart() {
             onClick={() => setRange(r)}
             className="rounded px-2.5 py-1 font-label text-[10px] uppercase tracking-widest transition-colors"
             style={{
-              backgroundColor: range === r ? "rgba(188,255,95,0.12)" : "transparent",
-              color: range === r ? "#bcff5f" : "#909097",
-              border: range === r ? "1px solid rgba(188,255,95,0.2)" : "1px solid transparent",
+              backgroundColor: range === r ? "rgba(59,130,246,0.12)" : "transparent",
+              color: range === r ? "#3b82f6" : "#64748b",
+              border: range === r ? "1px solid rgba(59,130,246,0.2)" : "1px solid transparent",
             }}
           >
             {r}d
@@ -285,37 +285,37 @@ function TrendChart() {
         <AreaChart data={data} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="gradLeads" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%"  stopColor="#bcff5f" stopOpacity={0.18} />
-              <stop offset="95%" stopColor="#bcff5f" stopOpacity={0}    />
+              <stop offset="5%"  stopColor="#3b82f6" stopOpacity={0.18} />
+              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}    />
             </linearGradient>
             <linearGradient id="gradCitas" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%"  stopColor="#fb923c" stopOpacity={0.15} />
               <stop offset="95%" stopColor="#fb923c" stopOpacity={0}    />
             </linearGradient>
           </defs>
-          <CartesianGrid stroke="rgba(69,70,77,0.15)" strokeDasharray="3 3" />
+          <CartesianGrid stroke="rgba(255,255,255,0.05)" strokeDasharray="3 3" />
           <XAxis
             dataKey="date"
-            tick={{ fill: "#909097", fontSize: 10 }}
+            tick={{ fill: "#64748b", fontSize: 10 }}
             axisLine={false}
             tickLine={false}
             interval={range === 30 ? 6 : range === 14 ? 3 : 1}
           />
           <YAxis
-            tick={{ fill: "#909097", fontSize: 10 }}
+            tick={{ fill: "#64748b", fontSize: 10 }}
             axisLine={false}
             tickLine={false}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(188,255,95,0.2)" }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(59,130,246,0.2)" }} />
           <Area
             type="monotone"
             dataKey="leads"
             name="Leads"
-            stroke="#bcff5f"
+            stroke="#3b82f6"
             strokeWidth={2}
             fill="url(#gradLeads)"
             dot={false}
-            activeDot={{ r: 4, fill: "#bcff5f" }}
+            activeDot={{ r: 4, fill: "#3b82f6" }}
           />
           <Area
             type="monotone"
@@ -383,7 +383,7 @@ function SourceChart() {
                   className="h-2.5 w-2.5 shrink-0 rounded-full"
                   style={{ backgroundColor: item.color, opacity: activeIdx === null || activeIdx === i ? 1 : 0.35 }}
                 />
-                <span className="flex-1 text-xs" style={{ color: activeIdx === i ? "#dae2fd" : "#909097" }}>
+                <span className="flex-1 text-xs" style={{ color: activeIdx === i ? "#f1f5f9" : "#64748b" }}>
                   {item.name}
                 </span>
                 <span className="font-label text-xs font-semibold" style={{ color: item.color }}>
@@ -414,12 +414,12 @@ function CampaignTable() {
       <div className="overflow-x-auto">
         <table className="w-full min-w-[480px] text-xs">
           <thead>
-            <tr style={{ borderBottom: "1px solid rgba(69,70,77,0.2)" }}>
+            <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               {["Campaña", "Plataforma", "Leads", "CPL", "CTR", "Estado"].map((h) => (
                 <th
                   key={h}
                   className="pb-2 text-left font-label text-[10px] uppercase tracking-widest"
-                  style={{ color: "#909097" }}
+                  style={{ color: "#64748b" }}
                 >
                   {h}
                 </th>
@@ -435,9 +435,9 @@ function CampaignTable() {
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25 + i * 0.05 }}
-                  style={{ borderBottom: "1px solid rgba(69,70,77,0.1)" }}
+                  style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
                 >
-                  <td className="py-3 pr-3 font-medium" style={{ color: "#dae2fd" }}>
+                  <td className="py-3 pr-3 font-medium" style={{ color: "#f1f5f9" }}>
                     {row.name}
                   </td>
                   <td className="py-3 pr-3">
@@ -451,26 +451,26 @@ function CampaignTable() {
                       {row.platform}
                     </span>
                   </td>
-                  <td className="py-3 pr-3 font-semibold" style={{ color: "#bcff5f" }}>
+                  <td className="py-3 pr-3 font-semibold" style={{ color: "#3b82f6" }}>
                     {row.leads}
                   </td>
-                  <td className="py-3 pr-3" style={{ color: "#c6c6cd" }}>
+                  <td className="py-3 pr-3" style={{ color: "#94a3b8" }}>
                     ${row.cpl}
                   </td>
-                  <td className="py-3 pr-3" style={{ color: "#c6c6cd" }}>
+                  <td className="py-3 pr-3" style={{ color: "#94a3b8" }}>
                     {row.ctr}
                   </td>
                   <td className="py-3">
                     <span
                       className="flex w-fit items-center gap-1 rounded-full px-2 py-0.5 font-label text-[9px] uppercase tracking-widest"
                       style={{
-                        backgroundColor: isActive ? "rgba(34,197,94,0.12)" : "rgba(69,70,77,0.15)",
-                        color: isActive ? "#22c55e" : "#909097",
+                        backgroundColor: isActive ? "rgba(34,197,94,0.12)" : "rgba(255,255,255,0.05)",
+                        color: isActive ? "#22c55e" : "#64748b",
                       }}
                     >
                       <span
                         className="h-1.5 w-1.5 rounded-full"
-                        style={{ backgroundColor: isActive ? "#22c55e" : "#909097" }}
+                        style={{ backgroundColor: isActive ? "#22c55e" : "#64748b" }}
                       />
                       {isActive ? "Activa" : "Pausada"}
                     </span>
@@ -496,29 +496,29 @@ export function AnalyticsView() {
   return (
     <div
       className="flex flex-col flex-1 min-h-svh"
-      style={{ backgroundColor: "#0b1326", color: "#dae2fd" }}
+      style={{ backgroundColor: "#060609", color: "#f1f5f9" }}
     >
       {/* Header */}
       <header
         className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b px-4 md:px-6"
         style={{
-          backgroundColor: "#0f172a",
-          borderColor: "rgba(69,70,77,0.3)",
-          boxShadow: "0 0 20px rgba(188,255,95,0.04)",
+          backgroundColor: "#080812",
+          borderColor: "rgba(255,255,255,0.08)",
+          boxShadow: "0 0 20px rgba(59,130,246,0.04)",
         }}
       >
         <div className="flex items-center gap-3">
-          <SidebarTrigger className="-ml-1" style={{ color: "#c6c6cd" }} />
+          <SidebarTrigger className="-ml-1" style={{ color: "#94a3b8" }} />
           <Separator orientation="vertical" className="h-4 opacity-30" />
           <span
             className="material-symbols-outlined text-lg"
-            style={{ color: "#bcff5f", fontVariationSettings: "'FILL' 1" }}
+            style={{ color: "#3b82f6", fontVariationSettings: "'FILL' 1" }}
           >
             bar_chart_4_bars
           </span>
           <h1
             className="font-headline text-sm font-bold uppercase tracking-tighter"
-            style={{ color: "#dae2fd" }}
+            style={{ color: "#f1f5f9" }}
           >
             Analytics
           </h1>
@@ -527,7 +527,7 @@ export function AnalyticsView() {
         {/* Period selector */}
         <div
           className="flex items-center gap-0.5 rounded-lg p-1"
-          style={{ backgroundColor: "rgba(69,70,77,0.15)" }}
+          style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
         >
           {PERIODS.map((p) => (
             <button
@@ -535,8 +535,8 @@ export function AnalyticsView() {
               onClick={() => setPeriod(p)}
               className="rounded-md px-3 py-1 font-label text-[11px] transition-colors"
               style={{
-                backgroundColor: period === p ? "#131b2e" : "transparent",
-                color: period === p ? "#bcff5f" : "#909097",
+                backgroundColor: period === p ? "#0c0c14" : "transparent",
+                color: period === p ? "#3b82f6" : "#64748b",
                 boxShadow: period === p ? "0 1px 4px rgba(0,0,0,0.3)" : "none",
               }}
             >

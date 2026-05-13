@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import type { Database } from "@/lib/supabase/types";
@@ -50,10 +50,10 @@ export function LeadCard({
       onClick={onClick}
       className="rounded-xl p-3.5 cursor-pointer select-none transition-all group"
       style={{
-        backgroundColor: selected ? `${stageColor}10` : "#131b2e",
+        backgroundColor: selected ? `${stageColor}10` : "#0c0c14",
         border: selected
           ? `1px solid ${stageColor}50`
-          : "1px solid rgba(69,70,77,0.25)",
+          : "1px solid rgba(255,255,255,0.07)",
         boxShadow: selected ? `0 0 0 1px ${stageColor}20` : "none",
       }}
     >
@@ -67,10 +67,10 @@ export function LeadCard({
             {(lead.name ?? "?").charAt(0).toUpperCase()}
           </div>
           <div className="min-w-0">
-            <p className="font-headline text-xs font-bold truncate" style={{ color: "#dae2fd" }}>
+            <p className="font-headline text-xs font-bold truncate" style={{ color: "#f1f5f9" }}>
               {lead.name ?? "Sin nombre"}
             </p>
-            <p className="font-label text-[10px] truncate" style={{ color: "#45464d" }}>
+            <p className="font-label text-[10px] truncate" style={{ color: "#334155" }}>
               {lead.zone_interest ?? lead.phone}
             </p>
           </div>
@@ -91,7 +91,7 @@ export function LeadCard({
       <div className="flex items-center gap-1.5 flex-wrap">
         {/* Source */}
         <div className="flex items-center gap-1">
-          <span className="material-symbols-outlined text-xs" style={{ color: "#45464d" }}>
+          <span className="material-symbols-outlined text-xs" style={{ color: "#334155" }}>
             {SOURCE_ICON[lead.source ?? ""] ?? "person"}
           </span>
         </div>
@@ -100,7 +100,7 @@ export function LeadCard({
         {lead.operation_type && (
           <span
             className="rounded-full px-1.5 py-0.5 font-label text-[9px] uppercase tracking-widest"
-            style={{ backgroundColor: "rgba(188,198,224,0.08)", color: "#909097" }}
+            style={{ backgroundColor: "rgba(188,198,224,0.08)", color: "#64748b" }}
           >
             {OP_LABEL[lead.operation_type] ?? lead.operation_type}
           </span>
@@ -120,7 +120,7 @@ export function LeadCard({
       {/* Footer */}
       <div className="flex items-center justify-between mt-2.5">
         {/* Budget */}
-        <span className="font-label text-[10px]" style={{ color: "#45464d" }}>
+        <span className="font-label text-[10px]" style={{ color: "#334155" }}>
           {lead.budget_min
             ? `$${(lead.budget_min / 1000).toFixed(0)}k${lead.budget_max ? `–$${(lead.budget_max / 1000).toFixed(0)}k` : ""}`
             : "Sin presupuesto"}
@@ -130,7 +130,7 @@ export function LeadCard({
         {lead.next_followup_at ? (
           <span
             className="flex items-center gap-0.5 font-label text-[10px]"
-            style={{ color: overdue ? "#ef4444" : "#45464d" }}
+            style={{ color: overdue ? "#ef4444" : "#334155" }}
           >
             <span className="material-symbols-outlined text-xs">
               {overdue ? "alarm" : "calendar_month"}
@@ -138,7 +138,7 @@ export function LeadCard({
             {overdue ? "Vencido" : timeAgo(lead.next_followup_at)}
           </span>
         ) : lead.last_contact_at ? (
-          <span className="font-label text-[10px]" style={{ color: "#45464d" }}>
+          <span className="font-label text-[10px]" style={{ color: "#334155" }}>
             {timeAgo(lead.last_contact_at)} atrás
           </span>
         ) : (

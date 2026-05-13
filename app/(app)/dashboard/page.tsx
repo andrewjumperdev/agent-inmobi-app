@@ -1,4 +1,4 @@
-import { SidebarTrigger } from "@/components/ui/sidebar";
+﻿import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardKPI } from "@/components/dashboard/kpi";
@@ -50,25 +50,25 @@ export default async function DashboardPage() {
   return (
     <div
       className="flex flex-col flex-1 min-h-svh"
-      style={{ backgroundColor: "#0b1326", color: "#dae2fd" }}
+      style={{ backgroundColor: "#060609", color: "#f1f5f9" }}
     >
       {/* Top bar */}
       <header
         className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b px-4 md:px-6"
         style={{
-          backgroundColor: "#0f172a",
-          borderColor: "rgba(69,70,77,0.3)",
-          boxShadow: "0 0 20px rgba(188,255,95,0.04)",
+          backgroundColor: "#080812",
+          borderColor: "rgba(255,255,255,0.08)",
+          boxShadow: "0 0 20px rgba(59,130,246,0.04)",
         }}
       >
         <div className="flex items-center gap-3">
-          <SidebarTrigger className="-ml-1" style={{ color: "#c6c6cd" }} />
+          <SidebarTrigger className="-ml-1" style={{ color: "#94a3b8" }} />
           <Separator orientation="vertical" className="h-4 opacity-30" />
           <span
             className="font-headline text-sm font-bold uppercase tracking-tighter"
-            style={{ color: "#bcff5f" }}
+            style={{ color: "#3b82f6" }}
           >
-            InMobi AI OS
+            KORE AI
           </span>
         </div>
 
@@ -77,28 +77,28 @@ export default async function DashboardPage() {
           <div className="relative hidden sm:block">
             <span
               className="material-symbols-outlined cursor-pointer text-xl"
-              style={{ color: "#c6c6cd" }}
+              style={{ color: "#94a3b8" }}
             >
               sensors
             </span>
             <span
               className="absolute -right-0.5 -top-0.5 h-2 w-2 animate-ping rounded-full"
-              style={{ backgroundColor: "#bcff5f" }}
+              style={{ backgroundColor: "#3b82f6" }}
             />
             <span
               className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full"
-              style={{ backgroundColor: "#bcff5f" }}
+              style={{ backgroundColor: "#3b82f6" }}
             />
           </div>
           <span
             className="material-symbols-outlined cursor-pointer text-xl"
-            style={{ color: "#c6c6cd" }}
+            style={{ color: "#94a3b8" }}
           >
             notifications
           </span>
           <span
             className="material-symbols-outlined cursor-pointer text-xl"
-            style={{ color: "#c6c6cd" }}
+            style={{ color: "#94a3b8" }}
           >
             settings
           </span>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Inter, Manrope, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
@@ -21,7 +21,7 @@ const MATERIAL_SYMBOLS_URL =
   "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200";
 
 export const metadata: Metadata = {
-  title: "InMobi AI OS — Predictive Real Estate Intelligence",
+  title: "KORE AI — Predictive Real Estate Intelligence",
   description: "Captá, calificá y cerrá leads con inteligencia artificial.",
 };
 

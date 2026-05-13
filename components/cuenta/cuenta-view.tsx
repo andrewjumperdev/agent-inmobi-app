@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -49,7 +49,7 @@ const fadeUp = {
 
 /* ── Plan badge config ──────────────────────────────────────── */
 const PLAN_LABELS: Record<string, { label: string; color: string; bg: string }> = {
-  pro:   { label: "Pro",      color: "#bcff5f", bg: "rgba(188,255,95,0.1)" },
+  pro:   { label: "Pro",      color: "#3b82f6", bg: "rgba(59,130,246,0.1)" },
   trial: { label: "Trial",    color: "#facc15", bg: "rgba(250,204,21,0.1)" },
   free:  { label: "Free",     color: "#94a3b8", bg: "rgba(148,163,184,0.1)" },
 };
@@ -118,7 +118,7 @@ export function CuentaView({ profile, authEmail }: Props) {
         {/* Avatar */}
         <div
           className="size-16 rounded-2xl flex items-center justify-center text-xl font-bold shrink-0"
-          style={{ backgroundColor: "rgba(188,255,95,0.12)", color: "#bcff5f" }}
+          style={{ backgroundColor: "rgba(59,130,246,0.12)", color: "#3b82f6" }}
         >
           {profile.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,7 +16,7 @@ const OP_OPTIONS = [
 const URGENCY_OPTIONS = [
   { value: "hot",  label: "Caliente", color: "#ef4444", bg: "rgba(239,68,68,0.12)"  },
   { value: "warm", label: "Tibio",    color: "#eab308", bg: "rgba(234,179,8,0.12)"  },
-  { value: "cold", label: "Frío",     color: "#bec6e0", bg: "rgba(188,198,224,0.12)" },
+  { value: "cold", label: "Frío",     color: "#e2e8f0", bg: "rgba(188,198,224,0.12)" },
 ];
 
 const SCORE_OPTIONS = [
@@ -78,13 +78,13 @@ function AISuggestion({ suggestion, onApply }: { suggestion: Partial<Classificat
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       className="rounded-xl p-4 flex items-start justify-between gap-4"
-      style={{ backgroundColor: "rgba(188,255,95,0.06)", border: "1px solid rgba(188,255,95,0.2)" }}
+      style={{ backgroundColor: "rgba(59,130,246,0.06)", border: "1px solid rgba(59,130,246,0.2)" }}
     >
       <div className="flex items-start gap-2">
-        <span className="material-symbols-outlined text-sm mt-0.5" style={{ color: "#bcff5f" }}>auto_awesome</span>
+        <span className="material-symbols-outlined text-sm mt-0.5" style={{ color: "#3b82f6" }}>auto_awesome</span>
         <div className="space-y-1">
-          <p className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#bcff5f" }}>Sugerencia de ARIA</p>
-          <p className="text-xs" style={{ color: "#c6c6cd" }}>
+          <p className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#3b82f6" }}>Sugerencia de ARIA</p>
+          <p className="text-xs" style={{ color: "#94a3b8" }}>
             {suggestion.operation_type && `Operación: ${OP_OPTIONS.find(o => o.value === suggestion.operation_type)?.label}`}
             {suggestion.urgency && ` · Urgencia: ${URGENCY_OPTIONS.find(u => u.value === suggestion.urgency)?.label}`}
             {suggestion.zone_interest && ` · Zona: ${suggestion.zone_interest}`}
@@ -94,7 +94,7 @@ function AISuggestion({ suggestion, onApply }: { suggestion: Partial<Classificat
       <button
         onClick={onApply}
         className="shrink-0 rounded-lg px-3 py-1.5 font-label text-[10px] uppercase tracking-widest transition-all"
-        style={{ backgroundColor: "rgba(188,255,95,0.15)", color: "#bcff5f", border: "1px solid rgba(188,255,95,0.25)" }}
+        style={{ backgroundColor: "rgba(59,130,246,0.15)", color: "#3b82f6", border: "1px solid rgba(59,130,246,0.25)" }}
       >
         Aplicar
       </button>
@@ -120,15 +120,15 @@ function LeadRow({
       className="w-full text-left rounded-xl p-4 transition-all"
       style={{
         backgroundColor: active
-          ? "rgba(188,255,95,0.07)"
+          ? "rgba(59,130,246,0.07)"
           : classified
           ? "rgba(188,198,224,0.02)"
-          : "#131b2e",
+          : "#0c0c14",
         border: active
-          ? "1px solid rgba(188,255,95,0.25)"
+          ? "1px solid rgba(59,130,246,0.25)"
           : classified
-          ? "1px solid rgba(69,70,77,0.12)"
-          : "1px solid rgba(69,70,77,0.2)",
+          ? "1px solid rgba(255,255,255,0.05)"
+          : "1px solid rgba(255,255,255,0.06)",
         opacity: classified ? 0.5 : 1,
       }}
     >
@@ -137,8 +137,8 @@ function LeadRow({
         <div
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-headline text-sm font-bold"
           style={{
-            backgroundColor: classified ? "rgba(188,198,224,0.06)" : "rgba(188,255,95,0.1)",
-            color: classified ? "#45464d" : "#bcff5f",
+            backgroundColor: classified ? "rgba(188,198,224,0.06)" : "rgba(59,130,246,0.1)",
+            color: classified ? "#334155" : "#3b82f6",
           }}
         >
           {(lead.name ?? "?").charAt(0).toUpperCase()}
@@ -146,24 +146,24 @@ function LeadRow({
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
-            <span className="font-headline text-sm font-bold truncate" style={{ color: classified ? "#45464d" : "#dae2fd" }}>
+            <span className="font-headline text-sm font-bold truncate" style={{ color: classified ? "#334155" : "#f1f5f9" }}>
               {lead.name ?? "Sin nombre"}
             </span>
-            <span className="font-label text-[10px] shrink-0" style={{ color: "#45464d" }}>
+            <span className="font-label text-[10px] shrink-0" style={{ color: "#334155" }}>
               {lead.created_at ? timeAgo(lead.created_at) : ""}
             </span>
           </div>
           <div className="flex items-center gap-2 mt-0.5">
-            <span className="material-symbols-outlined text-xs" style={{ color: "#45464d" }}>
+            <span className="material-symbols-outlined text-xs" style={{ color: "#334155" }}>
               {SRC_ICON[lead.source ?? ""] ?? "person"}
             </span>
-            <span className="font-label text-[10px] capitalize" style={{ color: "#45464d" }}>
+            <span className="font-label text-[10px] capitalize" style={{ color: "#334155" }}>
               {lead.source ?? "directo"}
             </span>
             {lead.zone_interest && (
               <>
-                <span style={{ color: "#45464d" }}>·</span>
-                <span className="font-label text-[10px]" style={{ color: "#45464d" }}>
+                <span style={{ color: "#334155" }}>·</span>
+                <span className="font-label text-[10px]" style={{ color: "#334155" }}>
                   {lead.zone_interest}
                 </span>
               </>
@@ -172,7 +172,7 @@ function LeadRow({
         </div>
 
         {classified && (
-          <span className="material-symbols-outlined text-sm" style={{ color: "#bcff5f" }}>check_circle</span>
+          <span className="material-symbols-outlined text-sm" style={{ color: "#3b82f6" }}>check_circle</span>
         )}
       </div>
     </button>
@@ -193,7 +193,7 @@ function ChipGroup<T extends string>({
 }) {
   return (
     <div>
-      <p className="font-label text-[10px] uppercase tracking-widest mb-2" style={{ color: "#909097" }}>{label}</p>
+      <p className="font-label text-[10px] uppercase tracking-widest mb-2" style={{ color: "#64748b" }}>{label}</p>
       <div className="flex gap-2 flex-wrap">
         {options.map((opt) => {
           const active = value === opt.value;
@@ -203,11 +203,11 @@ function ChipGroup<T extends string>({
               onClick={() => onChange(opt.value)}
               className="rounded-full px-3 py-1 font-label text-xs uppercase tracking-widest transition-all"
               style={{
-                backgroundColor: active ? (opt.bg ?? "rgba(188,255,95,0.12)") : "rgba(188,198,224,0.05)",
-                color: active ? (opt.color ?? "#bcff5f") : "#909097",
+                backgroundColor: active ? (opt.bg ?? "rgba(59,130,246,0.12)") : "rgba(188,198,224,0.05)",
+                color: active ? (opt.color ?? "#3b82f6") : "#64748b",
                 border: active
-                  ? `1px solid ${opt.color ? opt.color + "50" : "rgba(188,255,95,0.3)"}`
-                  : "1px solid rgba(69,70,77,0.2)",
+                  ? `1px solid ${opt.color ? opt.color + "50" : "rgba(59,130,246,0.3)"}`
+                  : "1px solid rgba(255,255,255,0.06)",
               }}
             >
               {opt.label}
@@ -310,7 +310,7 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
       >
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>
+          <h2 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>
             Por clasificar
           </h2>
           <span
@@ -325,15 +325,15 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
         {classifiedCount > 0 && (
           <div className="space-y-1">
             <div className="flex items-center justify-between">
-              <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#45464d" }}>Progreso</span>
-              <span className="font-label text-[10px]" style={{ color: "#bcff5f" }}>
+              <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#334155" }}>Progreso</span>
+              <span className="font-label text-[10px]" style={{ color: "#3b82f6" }}>
                 {classifiedCount}/{displayLeads.length}
               </span>
             </div>
-            <div className="h-1 overflow-hidden rounded-full" style={{ backgroundColor: "#0b1326" }}>
+            <div className="h-1 overflow-hidden rounded-full" style={{ backgroundColor: "#060609" }}>
               <motion.div
                 className="h-full rounded-full"
-                style={{ backgroundColor: "#bcff5f" }}
+                style={{ backgroundColor: "#3b82f6" }}
                 animate={{ width: `${(classifiedCount / displayLeads.length) * 100}%` }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               />
@@ -359,9 +359,9 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
 
         {/* Demo notice */}
         {unclassified.length === 0 && (
-          <div className="rounded-xl px-3 py-2.5 flex items-center gap-2" style={{ backgroundColor: "rgba(188,255,95,0.04)", border: "1px solid rgba(188,255,95,0.1)" }}>
-            <span className="material-symbols-outlined text-xs" style={{ color: "#bcff5f" }}>info</span>
-            <p className="text-[10px]" style={{ color: "#909097" }}>Datos de demostración</p>
+          <div className="rounded-xl px-3 py-2.5 flex items-center gap-2" style={{ backgroundColor: "rgba(59,130,246,0.04)", border: "1px solid rgba(59,130,246,0.1)" }}>
+            <span className="material-symbols-outlined text-xs" style={{ color: "#3b82f6" }}>info</span>
+            <p className="text-[10px]" style={{ color: "#64748b" }}>Datos de demostración</p>
           </div>
         )}
       </motion.div>
@@ -378,34 +378,34 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
             className="flex-1 space-y-5 overflow-y-auto"
           >
             {/* Lead header */}
-            <div className="rounded-xl p-5 flex items-center gap-4" style={{ backgroundColor: "#131b2e" }}>
+            <div className="rounded-xl p-5 flex items-center gap-4" style={{ backgroundColor: "#0c0c14" }}>
               <div
                 className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full font-headline text-lg font-bold"
-                style={{ backgroundColor: "rgba(188,255,95,0.12)", color: "#bcff5f" }}
+                style={{ backgroundColor: "rgba(59,130,246,0.12)", color: "#3b82f6" }}
               >
                 {(selectedLead.name ?? "?").charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-headline text-base font-bold" style={{ color: "#dae2fd" }}>
+                <h3 className="font-headline text-base font-bold" style={{ color: "#f1f5f9" }}>
                   {selectedLead.name ?? "Sin nombre"}
                 </h3>
                 <div className="flex items-center gap-3 mt-0.5 flex-wrap">
-                  <span className="font-label text-xs" style={{ color: "#909097" }}>
+                  <span className="font-label text-xs" style={{ color: "#64748b" }}>
                     {selectedLead.phone ?? "—"}
                   </span>
-                  <span style={{ color: "#45464d" }}>·</span>
+                  <span style={{ color: "#334155" }}>·</span>
                   <div className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-xs" style={{ color: "#bcff5f" }}>
+                    <span className="material-symbols-outlined text-xs" style={{ color: "#3b82f6" }}>
                       {SRC_ICON[selectedLead.source ?? ""] ?? "person"}
                     </span>
-                    <span className="font-label text-xs capitalize" style={{ color: "#909097" }}>
+                    <span className="font-label text-xs capitalize" style={{ color: "#64748b" }}>
                       {selectedLead.source ?? "directo"}
                     </span>
                   </div>
                   {selectedLead.created_at && (
                     <>
-                      <span style={{ color: "#45464d" }}>·</span>
-                      <span className="font-label text-xs" style={{ color: "#45464d" }}>
+                      <span style={{ color: "#334155" }}>·</span>
+                      <span className="font-label text-xs" style={{ color: "#334155" }}>
                         {timeAgo(selectedLead.created_at)}
                       </span>
                     </>
@@ -419,9 +419,9 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
                 disabled={aiLoading}
                 className="flex items-center gap-2 rounded-xl px-4 py-2.5 font-label text-xs uppercase tracking-widest transition-all disabled:opacity-50"
                 style={{
-                  backgroundColor: "rgba(188,255,95,0.1)",
-                  color: "#bcff5f",
-                  border: "1px solid rgba(188,255,95,0.25)",
+                  backgroundColor: "rgba(59,130,246,0.1)",
+                  color: "#3b82f6",
+                  border: "1px solid rgba(59,130,246,0.25)",
                 }}
               >
                 {aiLoading ? (
@@ -447,8 +447,8 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
             </AnimatePresence>
 
             {/* Classification fields */}
-            <div className="rounded-xl p-5 space-y-5" style={{ backgroundColor: "#131b2e" }}>
-              <h4 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>Clasificación</h4>
+            <div className="rounded-xl p-5 space-y-5" style={{ backgroundColor: "#0c0c14" }}>
+              <h4 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Clasificación</h4>
 
               <ChipGroup
                 label="Tipo de operación"
@@ -473,12 +473,12 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
             </div>
 
             {/* Budget & Zone */}
-            <div className="rounded-xl p-5 space-y-4" style={{ backgroundColor: "#131b2e" }}>
-              <h4 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>Detalles</h4>
+            <div className="rounded-xl p-5 space-y-4" style={{ backgroundColor: "#0c0c14" }}>
+              <h4 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Detalles</h4>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="font-label text-[10px] uppercase tracking-widest block mb-1.5" style={{ color: "#909097" }}>
+                  <label className="font-label text-[10px] uppercase tracking-widest block mb-1.5" style={{ color: "#64748b" }}>
                     Presupuesto mín. (USD)
                   </label>
                   <input
@@ -486,12 +486,12 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
                     value={classification.budget_min ?? ""}
                     onChange={(e) => updateField("budget_min", e.target.value ? Number(e.target.value) : null)}
                     className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                    style={{ backgroundColor: "#0b1326", border: "1px solid rgba(69,70,77,0.4)", color: "#dae2fd" }}
+                    style={{ backgroundColor: "#060609", border: "1px solid rgba(255,255,255,0.10)", color: "#f1f5f9" }}
                     placeholder="50000"
                   />
                 </div>
                 <div>
-                  <label className="font-label text-[10px] uppercase tracking-widest block mb-1.5" style={{ color: "#909097" }}>
+                  <label className="font-label text-[10px] uppercase tracking-widest block mb-1.5" style={{ color: "#64748b" }}>
                     Presupuesto máx. (USD)
                   </label>
                   <input
@@ -499,14 +499,14 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
                     value={classification.budget_max ?? ""}
                     onChange={(e) => updateField("budget_max", e.target.value ? Number(e.target.value) : null)}
                     className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                    style={{ backgroundColor: "#0b1326", border: "1px solid rgba(69,70,77,0.4)", color: "#dae2fd" }}
+                    style={{ backgroundColor: "#060609", border: "1px solid rgba(255,255,255,0.10)", color: "#f1f5f9" }}
                     placeholder="150000"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="font-label text-[10px] uppercase tracking-widest block mb-1.5" style={{ color: "#909097" }}>
+                <label className="font-label text-[10px] uppercase tracking-widest block mb-1.5" style={{ color: "#64748b" }}>
                   Zona de interés
                 </label>
                 <input
@@ -514,13 +514,13 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
                   value={classification.zone_interest}
                   onChange={(e) => updateField("zone_interest", e.target.value)}
                   className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ backgroundColor: "#0b1326", border: "1px solid rgba(69,70,77,0.4)", color: "#dae2fd" }}
+                  style={{ backgroundColor: "#060609", border: "1px solid rgba(255,255,255,0.10)", color: "#f1f5f9" }}
                   placeholder="Palermo, Belgrano, etc."
                 />
               </div>
 
               <div>
-                <label className="font-label text-[10px] uppercase tracking-widest block mb-1.5" style={{ color: "#909097" }}>
+                <label className="font-label text-[10px] uppercase tracking-widest block mb-1.5" style={{ color: "#64748b" }}>
                   Notas del agente
                 </label>
                 <textarea
@@ -528,7 +528,7 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
                   onChange={(e) => updateField("notes", e.target.value)}
                   rows={3}
                   className="w-full resize-none rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ backgroundColor: "#0b1326", border: "1px solid rgba(69,70,77,0.4)", color: "#dae2fd" }}
+                  style={{ backgroundColor: "#060609", border: "1px solid rgba(255,255,255,0.10)", color: "#f1f5f9" }}
                   placeholder="Detalles adicionales sobre el lead…"
                 />
               </div>
@@ -542,9 +542,9 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
               whileTap={{ scale: 0.98 }}
               className="w-full flex items-center justify-center gap-2 rounded-xl py-3.5 font-label text-sm uppercase tracking-widest font-bold transition-all disabled:opacity-40"
               style={{
-                backgroundColor: saveSuccess === selectedLead.id ? "rgba(188,255,95,0.15)" : "#bcff5f",
-                color: saveSuccess === selectedLead.id ? "#bcff5f" : "#203600",
-                border: saveSuccess === selectedLead.id ? "1px solid rgba(188,255,95,0.3)" : "none",
+                backgroundColor: saveSuccess === selectedLead.id ? "rgba(59,130,246,0.15)" : "#3b82f6",
+                color: saveSuccess === selectedLead.id ? "#3b82f6" : "#ffffff",
+                border: saveSuccess === selectedLead.id ? "1px solid rgba(59,130,246,0.3)" : "none",
               }}
             >
               <AnimatePresence mode="wait">
@@ -573,7 +573,7 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex-1 flex flex-col items-center justify-center gap-4"
-            style={{ color: "#45464d" }}
+            style={{ color: "#334155" }}
           >
             <span className="material-symbols-outlined text-4xl">inbox</span>
             <p className="font-label text-sm uppercase tracking-widest">Seleccioná un lead para clasificar</p>

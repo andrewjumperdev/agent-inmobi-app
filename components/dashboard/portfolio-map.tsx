@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 
@@ -11,31 +11,31 @@ export function PortfolioMap() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
       className="relative overflow-hidden rounded-xl p-6 md:p-8"
-      style={{ backgroundColor: "#131b2e" }}
+      style={{ backgroundColor: "#0c0c14" }}
     >
       {/* Header */}
       <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h2
             className="font-headline text-2xl font-bold"
-            style={{ color: "#dae2fd" }}
+            style={{ color: "#f1f5f9" }}
           >
             Portfolio Propagation
           </h2>
-          <p className="mt-1 text-sm" style={{ color: "#909097" }}>
+          <p className="mt-1 text-sm" style={{ color: "#64748b" }}>
             Mapa de calor en tiempo real — adquisición de leads por zona.
           </p>
         </div>
         <div className="flex gap-3">
           <button
             className="rounded-lg px-4 py-2 font-label text-xs uppercase tracking-widest transition-colors"
-            style={{ backgroundColor: "#222a3d", color: "#c6c6cd" }}
+            style={{ backgroundColor: "#222a3d", color: "#94a3b8" }}
           >
             Exportar
           </button>
           <button
             className="rounded-lg px-4 py-2 font-label text-xs font-bold uppercase tracking-widest transition-all hover:scale-[1.02]"
-            style={{ backgroundColor: "#bcff5f", color: "#203600" }}
+            style={{ backgroundColor: "#3b82f6", color: "#ffffff" }}
           >
             Analytics
           </button>
@@ -45,14 +45,14 @@ export function PortfolioMap() {
       {/* Visualization */}
       <div
         className="relative flex h-56 w-full items-center justify-center overflow-hidden rounded-xl"
-        style={{ backgroundColor: "#0b1326" }}
+        style={{ backgroundColor: "#060609" }}
       >
         {/* Grid pattern */}
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage:
-              "linear-gradient(#bcff5f 1px, transparent 1px), linear-gradient(90deg, #bcff5f 1px, transparent 1px)",
+              "linear-gradient(#3b82f6 1px, transparent 1px), linear-gradient(90deg, #3b82f6 1px, transparent 1px)",
             backgroundSize: "32px 32px",
           }}
         />
@@ -60,7 +60,7 @@ export function PortfolioMap() {
         {/* Animated corner glows */}
         <motion.div
           className="pointer-events-none absolute left-1/4 top-1/3 h-32 w-32 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(188,255,95,0.12) 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)" }}
           animate={{ scale: [1, 1.4, 1], opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -77,7 +77,7 @@ export function PortfolioMap() {
             <motion.div
               key={i}
               className="w-3 flex-1 rounded-t-sm"
-              style={{ backgroundColor: `rgba(188,255,95,${0.15 + (h / 100) * 0.85})` }}
+              style={{ backgroundColor: `rgba(59,130,246,${0.15 + (h / 100) * 0.85})` }}
               initial={{ height: 0 }}
               animate={{ height: `${h}%` }}
               transition={{
@@ -93,7 +93,7 @@ export function PortfolioMap() {
         <div className="absolute bottom-3 left-0 right-0 flex justify-center">
           <motion.span
             className="font-label text-[10px] uppercase tracking-widest"
-            style={{ color: "#45464d" }}
+            style={{ color: "#334155" }}
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2.5, repeat: Infinity }}
           >
@@ -109,9 +109,9 @@ export function PortfolioMap() {
             <div key={zone} className="flex items-center gap-2">
               <div
                 className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: `rgba(188,255,95,${0.3 + i * 0.14})` }}
+                style={{ backgroundColor: `rgba(59,130,246,${0.3 + i * 0.14})` }}
               />
-              <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#45464d" }}>
+              <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#334155" }}>
                 {zone}
               </span>
             </div>

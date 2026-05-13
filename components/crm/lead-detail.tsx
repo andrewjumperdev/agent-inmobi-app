@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -30,9 +30,9 @@ function timeAgo(dateStr: string | null) {
 function InfoRow({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="material-symbols-outlined text-sm w-5 text-center" style={{ color: "#45464d" }}>{icon}</span>
-      <span className="font-label text-[10px] uppercase tracking-widest w-20 shrink-0" style={{ color: "#45464d" }}>{label}</span>
-      <span className="text-sm" style={{ color: "#c6c6cd" }}>{value}</span>
+      <span className="material-symbols-outlined text-sm w-5 text-center" style={{ color: "#334155" }}>{icon}</span>
+      <span className="font-label text-[10px] uppercase tracking-widest w-20 shrink-0" style={{ color: "#334155" }}>{label}</span>
+      <span className="text-sm" style={{ color: "#94a3b8" }}>{value}</span>
     </div>
   );
 }
@@ -47,7 +47,7 @@ function StageSelector({
 }) {
   return (
     <div className="space-y-2">
-      <p className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#909097" }}>Etapa del pipeline</p>
+      <p className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#64748b" }}>Etapa del pipeline</p>
       <div className="flex flex-wrap gap-1.5">
         {STAGES.map((stage) => {
           const active = current === stage.id;
@@ -58,8 +58,8 @@ function StageSelector({
               className="flex items-center gap-1.5 rounded-full px-2.5 py-1 font-label text-[10px] uppercase tracking-widest transition-all"
               style={{
                 backgroundColor: active ? `${stage.color}18` : "rgba(188,198,224,0.04)",
-                color: active ? stage.color : "#45464d",
-                border: active ? `1px solid ${stage.color}40` : "1px solid rgba(69,70,77,0.2)",
+                color: active ? stage.color : "#334155",
+                border: active ? `1px solid ${stage.color}40` : "1px solid rgba(255,255,255,0.06)",
               }}
             >
               <span className="material-symbols-outlined text-xs">{stage.icon}</span>
@@ -87,18 +87,18 @@ function NoteComposer({ initialNotes }: { initialNotes: string | null }) {
 
   return (
     <div className="space-y-2">
-      <p className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#909097" }}>Notas</p>
+      <p className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#64748b" }}>Notas</p>
       {initialNotes && (
         <div
           className="rounded-xl px-3 py-2.5 text-xs leading-relaxed"
-          style={{ backgroundColor: "#0b1326", color: "#909097", border: "1px solid rgba(69,70,77,0.2)" }}
+          style={{ backgroundColor: "#060609", color: "#64748b", border: "1px solid rgba(255,255,255,0.06)" }}
         >
           {initialNotes}
         </div>
       )}
       <div
         className="flex gap-2 rounded-xl p-2"
-        style={{ backgroundColor: "#0b1326", border: "1px solid rgba(69,70,77,0.3)" }}
+        style={{ backgroundColor: "#060609", border: "1px solid rgba(255,255,255,0.08)" }}
       >
         <textarea
           value={note}
@@ -106,15 +106,15 @@ function NoteComposer({ initialNotes }: { initialNotes: string | null }) {
           placeholder="Agregar nota…"
           rows={2}
           className="flex-1 resize-none bg-transparent text-xs outline-none placeholder:opacity-30"
-          style={{ color: "#dae2fd", lineHeight: "1.5" }}
+          style={{ color: "#f1f5f9", lineHeight: "1.5" }}
         />
         <button
           onClick={save}
           disabled={!note.trim()}
           className="self-end flex h-7 w-7 items-center justify-center rounded-lg transition-all disabled:opacity-30"
           style={{
-            backgroundColor: note.trim() ? "#bcff5f" : "#1e2a42",
-            color: note.trim() ? "#203600" : "#45464d",
+            backgroundColor: note.trim() ? "#3b82f6" : "#1e2a42",
+            color: note.trim() ? "#ffffff" : "#334155",
           }}
         >
           {saved ? (
@@ -136,7 +136,7 @@ function QuickActions({ lead }: { lead: Lead }) {
     { icon: "chat",          label: "WhatsApp", href: waLink,                  color: "#25d366" },
     { icon: "phone",         label: "Llamar",   href: `tel:${lead.phone}`,    color: "#818cf8" },
     { icon: "mail",          label: "Email",    href: lead.email ? `mailto:${lead.email}` : null, color: "#fb923c" },
-    { icon: "calendar_month", label: "Agendar", href: null,                    color: "#bcff5f" },
+    { icon: "calendar_month", label: "Agendar", href: null,                    color: "#3b82f6" },
   ];
 
   return (
@@ -191,14 +191,14 @@ export function LeadDetail({
       className="flex flex-col shrink-0 overflow-y-auto"
       style={{
         width: "320px",
-        borderLeft: "1px solid rgba(69,70,77,0.25)",
-        backgroundColor: "#0f172a",
+        borderLeft: "1px solid rgba(255,255,255,0.07)",
+        backgroundColor: "#080812",
       }}
     >
       {/* Header */}
       <div
         className="flex items-start justify-between gap-3 px-5 py-4 sticky top-0 z-10"
-        style={{ backgroundColor: "#131b2e", borderBottom: "1px solid rgba(69,70,77,0.25)" }}
+        style={{ backgroundColor: "#0c0c14", borderBottom: "1px solid rgba(255,255,255,0.07)" }}
       >
         <div className="flex items-center gap-3">
           <div
@@ -208,7 +208,7 @@ export function LeadDetail({
             {(lead.name ?? "?").charAt(0).toUpperCase()}
           </div>
           <div>
-            <h3 className="font-headline text-sm font-bold" style={{ color: "#dae2fd" }}>
+            <h3 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>
               {lead.name ?? "Sin nombre"}
             </h3>
             <div className="flex items-center gap-1.5 mt-0.5">
@@ -221,7 +221,7 @@ export function LeadDetail({
                 </span>
               )}
               {lead.operation_type && (
-                <span className="font-label text-[10px]" style={{ color: "#45464d" }}>
+                <span className="font-label text-[10px]" style={{ color: "#334155" }}>
                   {OP_LABEL[lead.operation_type] ?? lead.operation_type}
                 </span>
               )}
@@ -231,7 +231,7 @@ export function LeadDetail({
         <button
           onClick={onClose}
           className="rounded-lg p-1.5 transition-colors hover:bg-white/5 mt-0.5"
-          style={{ color: "#45464d" }}
+          style={{ color: "#334155" }}
         >
           <span className="material-symbols-outlined text-base">close</span>
         </button>
@@ -245,9 +245,9 @@ export function LeadDetail({
         {/* Contact info */}
         <div
           className="rounded-xl p-4 space-y-3"
-          style={{ backgroundColor: "#131b2e" }}
+          style={{ backgroundColor: "#0c0c14" }}
         >
-          <p className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#909097" }}>Contacto</p>
+          <p className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#64748b" }}>Contacto</p>
           <InfoRow icon="phone" label="Teléfono" value={lead.phone} />
           {lead.email && <InfoRow icon="mail" label="Email" value={lead.email} />}
           <InfoRow icon={SOURCE_ICON[lead.source ?? ""] ?? "person"} label="Fuente" value={lead.source ?? "Directo"} />
@@ -267,9 +267,9 @@ export function LeadDetail({
         {/* Property interest */}
         <div
           className="rounded-xl p-4 space-y-3"
-          style={{ backgroundColor: "#131b2e" }}
+          style={{ backgroundColor: "#0c0c14" }}
         >
-          <p className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#909097" }}>Interés</p>
+          <p className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#64748b" }}>Interés</p>
           {lead.zone_interest && <InfoRow icon="location_on" label="Zona" value={lead.zone_interest} />}
           {lead.property_type && <InfoRow icon="home" label="Tipo" value={lead.property_type} />}
           <InfoRow
@@ -297,7 +297,7 @@ export function LeadDetail({
         {/* Pipeline stage */}
         <div
           className="rounded-xl p-4"
-          style={{ backgroundColor: "#131b2e" }}
+          style={{ backgroundColor: "#0c0c14" }}
         >
           <StageSelector
             current={lead.pipeline_stage ?? "nuevo"}
@@ -308,7 +308,7 @@ export function LeadDetail({
         {/* Notes */}
         <div
           className="rounded-xl p-4"
-          style={{ backgroundColor: "#131b2e" }}
+          style={{ backgroundColor: "#0c0c14" }}
         >
           <NoteComposer initialNotes={lead.notes} />
         </div>

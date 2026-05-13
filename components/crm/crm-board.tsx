@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useOptimistic, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,9 +16,9 @@ export const STAGES: {
   color: string;
   bg: string;
 }[] = [
-  { id: "nuevo",        label: "Nuevo",        icon: "fiber_new",       color: "#bec6e0", bg: "rgba(188,198,224,0.07)" },
+  { id: "nuevo",        label: "Nuevo",        icon: "fiber_new",       color: "#e2e8f0", bg: "rgba(188,198,224,0.07)" },
   { id: "contactado",   label: "Contactado",   icon: "phone_in_talk",   color: "#818cf8", bg: "rgba(129,140,248,0.07)" },
-  { id: "calificado",   label: "Calificado",   icon: "verified",        color: "#bcff5f", bg: "rgba(188,255,95,0.07)"  },
+  { id: "calificado",   label: "Calificado",   icon: "verified",        color: "#3b82f6", bg: "rgba(59,130,246,0.07)"  },
   { id: "cita",         label: "Cita",         icon: "calendar_month",  color: "#fb923c", bg: "rgba(251,146,60,0.07)"  },
   { id: "negociacion",  label: "Negociación",  icon: "handshake",       color: "#eab308", bg: "rgba(234,179,8,0.07)"   },
   { id: "cerrado",      label: "Cerrado",      icon: "check_circle",    color: "#22c55e", bg: "rgba(34,197,94,0.07)"   },
@@ -40,7 +40,7 @@ const MOCK_LEADS: Lead[] = [
 export const URGENCY_COLOR: Record<string, { bg: string; text: string; label: string }> = {
   hot:  { bg: "rgba(239,68,68,0.12)",   text: "#ef4444", label: "Caliente" },
   warm: { bg: "rgba(234,179,8,0.12)",   text: "#eab308", label: "Tibio"    },
-  cold: { bg: "rgba(188,198,224,0.12)", text: "#bec6e0", label: "Frío"     },
+  cold: { bg: "rgba(188,198,224,0.12)", text: "#e2e8f0", label: "Frío"     },
 };
 
 export const OP_LABEL: Record<string, string> = {
@@ -86,8 +86,8 @@ function KanbanColumn({
       <div
         className="flex items-center justify-between rounded-xl px-3 py-2.5 sticky top-0 z-10"
         style={{
-          backgroundColor: dragOver ? stage.bg : "#0b1326",
-          border: dragOver ? `1px solid ${stage.color}40` : "1px solid rgba(69,70,77,0.2)",
+          backgroundColor: dragOver ? stage.bg : "#060609",
+          border: dragOver ? `1px solid ${stage.color}40` : "1px solid rgba(255,255,255,0.06)",
           transition: "all 0.18s ease",
         }}
       >
@@ -191,22 +191,22 @@ export function CrmBoard({ leads: realLeads }: { leads: Lead[] }) {
       {/* ── Top bar ─────────────────────────────────────────── */}
       <div
         className="flex flex-wrap items-center gap-3 px-4 md:px-8 py-4 shrink-0"
-        style={{ borderBottom: "1px solid rgba(69,70,77,0.2)" }}
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
       >
         {/* Summary pills */}
         <div className="flex items-center gap-2">
           {[
-            { label: "Total", value: total, color: "#bec6e0" },
+            { label: "Total", value: total, color: "#e2e8f0" },
             { label: "Calientes", value: hot, color: "#ef4444" },
             { label: "Cerrados", value: closed, color: "#22c55e" },
           ].map((s) => (
             <div
               key={s.label}
               className="flex items-center gap-1.5 rounded-full px-3 py-1"
-              style={{ backgroundColor: "rgba(188,198,224,0.06)", border: "1px solid rgba(69,70,77,0.2)" }}
+              style={{ backgroundColor: "rgba(188,198,224,0.06)", border: "1px solid rgba(255,255,255,0.06)" }}
             >
               <span className="font-headline text-sm font-bold" style={{ color: s.color }}>{s.value}</span>
-              <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#45464d" }}>{s.label}</span>
+              <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#334155" }}>{s.label}</span>
             </div>
           ))}
         </div>
@@ -216,20 +216,20 @@ export function CrmBoard({ leads: realLeads }: { leads: Lead[] }) {
         {/* Search */}
         <div
           className="flex items-center gap-2 rounded-xl px-3 py-2"
-          style={{ backgroundColor: "#131b2e", border: "1px solid rgba(69,70,77,0.3)", minWidth: "200px" }}
+          style={{ backgroundColor: "#0c0c14", border: "1px solid rgba(255,255,255,0.08)", minWidth: "200px" }}
         >
-          <span className="material-symbols-outlined text-sm" style={{ color: "#45464d" }}>search</span>
+          <span className="material-symbols-outlined text-sm" style={{ color: "#334155" }}>search</span>
           <input
             type="text"
             placeholder="Buscar lead…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="bg-transparent text-sm outline-none w-full"
-            style={{ color: "#dae2fd" }}
+            style={{ color: "#f1f5f9" }}
           />
           {search && (
             <button onClick={() => setSearch("")}>
-              <span className="material-symbols-outlined text-xs" style={{ color: "#45464d" }}>close</span>
+              <span className="material-symbols-outlined text-xs" style={{ color: "#334155" }}>close</span>
             </button>
           )}
         </div>
@@ -242,9 +242,9 @@ export function CrmBoard({ leads: realLeads }: { leads: Lead[] }) {
               onClick={() => setFilter(f)}
               className="rounded-lg px-3 py-1.5 font-label text-[10px] uppercase tracking-widest transition-all"
               style={{
-                backgroundColor: filter === f ? "rgba(188,255,95,0.12)" : "transparent",
-                color: filter === f ? "#bcff5f" : "#909097",
-                border: filter === f ? "1px solid rgba(188,255,95,0.25)" : "1px solid transparent",
+                backgroundColor: filter === f ? "rgba(59,130,246,0.12)" : "transparent",
+                color: filter === f ? "#3b82f6" : "#64748b",
+                border: filter === f ? "1px solid rgba(59,130,246,0.25)" : "1px solid transparent",
               }}
             >
               {f === "all" ? "Todos" : f === "hot" ? "Calientes" : "Calificados"}
@@ -257,7 +257,7 @@ export function CrmBoard({ leads: realLeads }: { leads: Lead[] }) {
       {useMock && (
         <div
           className="mx-4 md:mx-8 mt-4 rounded-xl border px-4 py-3 text-sm flex items-center gap-2 shrink-0"
-          style={{ borderColor: "rgba(188,255,95,0.2)", backgroundColor: "rgba(188,255,95,0.05)", color: "#bcff5f" }}
+          style={{ borderColor: "rgba(59,130,246,0.2)", backgroundColor: "rgba(59,130,246,0.05)", color: "#3b82f6" }}
         >
           <span className="material-symbols-outlined text-sm">info</span>
           Datos de demostración — conectá tu fuente de leads para ver datos reales.

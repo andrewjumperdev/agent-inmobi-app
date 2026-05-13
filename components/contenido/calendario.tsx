@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -78,22 +78,22 @@ function SlotCard({
       <div
         className="flex flex-col rounded-xl border p-3"
         style={{
-          borderColor: "rgba(69,70,77,0.2)",
-          backgroundColor: "#0f172a",
+          borderColor: "rgba(255,255,255,0.06)",
+          backgroundColor: "#080812",
           opacity: 0.4,
         }}
       >
         <div className="flex items-center justify-between">
           <span
             className="font-label text-xs uppercase tracking-widest"
-            style={{ color: "#909097" }}
+            style={{ color: "#64748b" }}
           >
             {shortLabel}
           </span>
         </div>
         <p
           className="mt-3 text-xs italic"
-          style={{ color: "#909097" }}
+          style={{ color: "#64748b" }}
         >
           Descanso
         </p>
@@ -111,26 +111,26 @@ function SlotCard({
       className="flex flex-col rounded-xl border p-3 transition-all"
       style={{
         borderColor: isToday
-          ? "rgba(188,255,95,0.35)"
+          ? "rgba(59,130,246,0.35)"
           : hasContent
           ? `${pillarColor}30`
-          : "rgba(69,70,77,0.3)",
+          : "rgba(255,255,255,0.08)",
         backgroundColor: isToday
-          ? "rgba(188,255,95,0.04)"
-          : "#171f33",
+          ? "rgba(59,130,246,0.04)"
+          : "#10101c",
       }}
     >
       {/* Day header */}
       <div className="flex items-center justify-between">
         <span
           className="font-label text-xs uppercase tracking-widest"
-          style={{ color: isToday ? "#bcff5f" : "#909097" }}
+          style={{ color: isToday ? "#3b82f6" : "#64748b" }}
         >
           {shortLabel}
           {isToday && (
             <span
               className="ml-1.5 rounded-full px-1.5 py-0.5 font-label text-[9px]"
-              style={{ backgroundColor: "rgba(188,255,95,0.15)", color: "#bcff5f" }}
+              style={{ backgroundColor: "rgba(59,130,246,0.15)", color: "#3b82f6" }}
             >
               HOY
             </span>
@@ -139,7 +139,7 @@ function SlotCard({
         <span
           className="material-symbols-outlined text-sm"
           style={{
-            color: hasContent ? "#22c55e" : "#909097",
+            color: hasContent ? "#22c55e" : "#64748b",
             fontVariationSettings: hasContent ? "'FILL' 1" : "'FILL' 0",
           }}
         >
@@ -151,15 +151,15 @@ function SlotCard({
       <div className="mt-2 flex items-center gap-1.5 flex-wrap">
         <div
           className="flex items-center gap-1 rounded-md px-1.5 py-0.5"
-          style={{ backgroundColor: "rgba(69,70,77,0.3)" }}
+          style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
         >
           <span
             className="material-symbols-outlined text-xs"
-            style={{ color: "#909097", fontVariationSettings: "'FILL' 1" }}
+            style={{ color: "#64748b", fontVariationSettings: "'FILL' 1" }}
           >
             {FORMAT_ICONS[slot.format]}
           </span>
-          <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#909097" }}>
+          <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#64748b" }}>
             {FORMAT_LABELS[slot.format]}
           </span>
         </div>
@@ -174,7 +174,7 @@ function SlotCard({
       </div>
 
       {/* Label */}
-      <p className="mt-2 text-xs font-medium" style={{ color: "#dae2fd" }}>
+      <p className="mt-2 text-xs font-medium" style={{ color: "#f1f5f9" }}>
         {slot.label}
       </p>
 
@@ -182,7 +182,7 @@ function SlotCard({
       {hasContent ? (
         <p
           className="mt-2 line-clamp-2 text-[11px] leading-relaxed"
-          style={{ color: "#909097" }}
+          style={{ color: "#64748b" }}
         >
           {pieza!.content.slice(0, 100)}…
         </p>
@@ -191,9 +191,9 @@ function SlotCard({
           onClick={() => onGenerate?.(slot.format, slot.pillar)}
           className="mt-3 flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 font-label text-[10px] uppercase tracking-widest transition-all"
           style={{
-            borderColor: "rgba(188,255,95,0.2)",
-            backgroundColor: "rgba(188,255,95,0.04)",
-            color: "#bcff5f",
+            borderColor: "rgba(59,130,246,0.2)",
+            backgroundColor: "rgba(59,130,246,0.04)",
+            color: "#3b82f6",
           }}
         >
           <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -294,11 +294,11 @@ export function Calendario({
         <div>
           <h2
             className="font-headline text-xl font-bold"
-            style={{ color: "#dae2fd" }}
+            style={{ color: "#f1f5f9" }}
           >
             Calendario semanal
           </h2>
-          <p className="mt-1 text-sm" style={{ color: "#909097" }}>
+          <p className="mt-1 text-sm" style={{ color: "#64748b" }}>
             Plan de contenido para la semana — 4 a 5 piezas
           </p>
         </div>
@@ -307,20 +307,20 @@ export function Calendario({
         <div className="shrink-0 text-right">
           <p
             className="font-headline text-2xl font-bold"
-            style={{ color: "#bcff5f" }}
+            style={{ color: "#3b82f6" }}
           >
             {completed}/{totalSlots}
           </p>
-          <p className="text-xs" style={{ color: "#909097" }}>
+          <p className="text-xs" style={{ color: "#64748b" }}>
             piezas listas
           </p>
           <div
             className="mt-1.5 h-1.5 w-24 overflow-hidden rounded-full"
-            style={{ backgroundColor: "rgba(69,70,77,0.4)" }}
+            style={{ backgroundColor: "rgba(255,255,255,0.10)" }}
           >
             <motion.div
               className="h-full rounded-full"
-              style={{ backgroundColor: "#bcff5f" }}
+              style={{ backgroundColor: "#3b82f6" }}
               initial={{ width: 0 }}
               animate={{ width: `${pct}%` }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -350,13 +350,13 @@ export function Calendario({
       <div
         className="rounded-xl border p-4"
         style={{
-          borderColor: "rgba(69,70,77,0.3)",
-          backgroundColor: "#171f33",
+          borderColor: "rgba(255,255,255,0.08)",
+          backgroundColor: "#10101c",
         }}
       >
         <p
           className="mb-3 font-label text-xs uppercase tracking-widest"
-          style={{ color: "#909097" }}
+          style={{ color: "#64748b" }}
         >
           Distribución de pilares esta semana
         </p>
@@ -372,12 +372,12 @@ export function Calendario({
                     className="h-2 w-2 shrink-0 rounded-full"
                     style={{ backgroundColor: PILLAR_COLORS[p] }}
                   />
-                  <span className="text-xs" style={{ color: "#909097" }}>
+                  <span className="text-xs" style={{ color: "#64748b" }}>
                     {PILLAR_LABELS[p]}
                   </span>
                   <span
                     className="ml-auto font-label text-xs font-bold"
-                    style={{ color: "#dae2fd" }}
+                    style={{ color: "#f1f5f9" }}
                   >
                     {count}x
                   </span>
@@ -395,8 +395,8 @@ export function Calendario({
           animate={{ opacity: 1 }}
           className="flex items-center gap-2 rounded-xl border px-4 py-3"
           style={{
-            borderColor: "rgba(188,255,95,0.2)",
-            backgroundColor: "rgba(188,255,95,0.05)",
+            borderColor: "rgba(59,130,246,0.2)",
+            backgroundColor: "rgba(59,130,246,0.05)",
           }}
         >
           <div className="flex gap-1">
@@ -404,13 +404,13 @@ export function Calendario({
               <motion.span
                 key={i}
                 className="h-1.5 w-1.5 rounded-full"
-                style={{ backgroundColor: "#bcff5f" }}
+                style={{ backgroundColor: "#3b82f6" }}
                 animate={{ opacity: [0.3, 1, 0.3] }}
                 transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
               />
             ))}
           </div>
-          <span className="text-sm" style={{ color: "#bcff5f" }}>
+          <span className="text-sm" style={{ color: "#3b82f6" }}>
             Generando contenido para {generating}…
           </span>
         </motion.div>

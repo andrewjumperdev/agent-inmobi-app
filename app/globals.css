@@ -9,19 +9,19 @@
   --font-headline: var(--font-manrope);
   --font-label: var(--font-space-grotesk);
 
-  /* Landing page color tokens */
-  --color-lp-bg: #0b1326;
-  --color-lp-surface: #171f33;
-  --color-lp-surface-low: #131b2e;
-  --color-lp-surface-high: #222a3d;
-  --color-lp-surface-highest: #2d3449;
-  --color-lp-accent: #bcff5f;
-  --color-lp-accent-dim: #95e400;
-  --color-lp-accent-on: #203600;
-  --color-lp-text: #dae2fd;
-  --color-lp-muted: #c6c6cd;
-  --color-lp-border: #45464d;
-  --color-lp-outline: #909097;
+  /* KORE AI — color tokens */
+  --color-lp-bg: #060609;
+  --color-lp-surface: #10101c;
+  --color-lp-surface-low: #0c0c14;
+  --color-lp-surface-high: #161624;
+  --color-lp-surface-highest: #1e1e2e;
+  --color-lp-accent: #3b82f6;
+  --color-lp-accent-dim: #60a5fa;
+  --color-lp-accent-on: #ffffff;
+  --color-lp-text: #f1f5f9;
+  --color-lp-muted: #94a3b8;
+  --color-lp-border: #1e2030;
+  --color-lp-outline: #475569;
 
   /* Base shadcn tokens */
   --color-background: var(--background);

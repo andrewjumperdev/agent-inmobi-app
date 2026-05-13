@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,7 +29,7 @@ function TypingDots() {
         <motion.span
           key={i}
           className="block h-1.5 w-1.5 rounded-full"
-          style={{ backgroundColor: "#bcff5f" }}
+          style={{ backgroundColor: "#3b82f6" }}
           animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1, 0.8] }}
           transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.18 }}
         />
@@ -198,35 +198,35 @@ export function AriaWidget({ userProfile }: { userProfile: UserProfile }) {
             style={{
               width: "360px",
               height: "480px",
-              backgroundColor: "#0f172a",
+              backgroundColor: "#080812",
               border: "1px solid rgba(69,70,77,0.5)",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(188,255,95,0.05)",
+              boxShadow: "0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(59,130,246,0.05)",
             }}
           >
             {/* Panel header */}
             <div
               className="flex items-center justify-between px-4 py-3 shrink-0"
-              style={{ backgroundColor: "#131b2e", borderBottom: "1px solid rgba(69,70,77,0.3)" }}
+              style={{ backgroundColor: "#0c0c14", borderBottom: "1px solid rgba(255,255,255,0.08)" }}
             >
               <div className="flex items-center gap-2.5">
                 <div
                   className="flex h-7 w-7 items-center justify-center rounded-full"
-                  style={{ backgroundColor: "rgba(188,255,95,0.12)", border: "1px solid rgba(188,255,95,0.25)" }}
+                  style={{ backgroundColor: "rgba(59,130,246,0.12)", border: "1px solid rgba(59,130,246,0.25)" }}
                 >
-                  <Sparkles size={12} style={{ color: "#bcff5f" }} />
+                  <Sparkles size={12} style={{ color: "#3b82f6" }} />
                 </div>
                 <div>
-                  <p className="font-headline text-xs font-bold" style={{ color: "#dae2fd" }}>
+                  <p className="font-headline text-xs font-bold" style={{ color: "#f1f5f9" }}>
                     ARIA
                   </p>
                   <div className="flex items-center gap-1">
                     <motion.span
                       className="h-1.5 w-1.5 rounded-full"
-                      style={{ backgroundColor: "#bcff5f" }}
+                      style={{ backgroundColor: "#3b82f6" }}
                       animate={{ opacity: [1, 0.3, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     />
-                    <span className="font-label text-[9px] uppercase tracking-widest" style={{ color: "#45464d" }}>
+                    <span className="font-label text-[9px] uppercase tracking-widest" style={{ color: "#334155" }}>
                       En línea
                     </span>
                   </div>
@@ -235,7 +235,7 @@ export function AriaWidget({ userProfile }: { userProfile: UserProfile }) {
               <button
                 onClick={() => setOpen(false)}
                 className="rounded-lg p-1.5 transition-colors hover:bg-white/5"
-                style={{ color: "#909097" }}
+                style={{ color: "#64748b" }}
               >
                 <ChevronDown size={14} />
               </button>
@@ -256,17 +256,17 @@ export function AriaWidget({ userProfile }: { userProfile: UserProfile }) {
                     {isAI && (
                       <div
                         className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
-                        style={{ backgroundColor: "rgba(188,255,95,0.1)", border: "1px solid rgba(188,255,95,0.2)" }}
+                        style={{ backgroundColor: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.2)" }}
                       >
-                        <Sparkles size={10} style={{ color: "#bcff5f" }} />
+                        <Sparkles size={10} style={{ color: "#3b82f6" }} />
                       </div>
                     )}
                     <div
                       className="max-w-[82%] rounded-2xl px-3 py-2 text-sm leading-relaxed"
                       style={
                         isAI
-                          ? { backgroundColor: "#171f33", color: "#dae2fd", borderRadius: "4px 16px 16px 16px" }
-                          : { backgroundColor: "#bcff5f", color: "#203600", fontWeight: 500, borderRadius: "16px 4px 16px 16px" }
+                          ? { backgroundColor: "#10101c", color: "#f1f5f9", borderRadius: "4px 16px 16px 16px" }
+                          : { backgroundColor: "#3b82f6", color: "#ffffff", fontWeight: 500, borderRadius: "16px 4px 16px 16px" }
                       }
                     >
                       {msg.streaming && msg.content === "" ? (
@@ -277,7 +277,7 @@ export function AriaWidget({ userProfile }: { userProfile: UserProfile }) {
                           {msg.streaming && (
                             <motion.span
                               className="ml-0.5 inline-block h-3 w-0.5 rounded-full align-middle"
-                              style={{ backgroundColor: isAI ? "#bcff5f" : "#203600" }}
+                              style={{ backgroundColor: isAI ? "#3b82f6" : "#ffffff" }}
                               animate={{ opacity: [1, 0, 1] }}
                               transition={{ duration: 0.7, repeat: Infinity }}
                             />
@@ -294,13 +294,13 @@ export function AriaWidget({ userProfile }: { userProfile: UserProfile }) {
             {/* Input */}
             <div
               className="shrink-0 px-3 py-3"
-              style={{ borderTop: "1px solid rgba(69,70,77,0.3)" }}
+              style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
             >
               <div
                 className="flex items-end gap-2 rounded-xl border p-2 transition-all"
                 style={{
-                  borderColor: input ? "rgba(188,255,95,0.35)" : "rgba(69,70,77,0.4)",
-                  backgroundColor: "#171f33",
+                  borderColor: input ? "rgba(59,130,246,0.35)" : "rgba(255,255,255,0.10)",
+                  backgroundColor: "#10101c",
                 }}
               >
                 <textarea
@@ -312,7 +312,7 @@ export function AriaWidget({ userProfile }: { userProfile: UserProfile }) {
                   rows={1}
                   disabled={loading}
                   className="flex-1 resize-none bg-transparent text-sm outline-none placeholder:opacity-30 disabled:opacity-40"
-                  style={{ color: "#dae2fd", maxHeight: "80px", lineHeight: "1.5" }}
+                  style={{ color: "#f1f5f9", maxHeight: "80px", lineHeight: "1.5" }}
                 />
                 <motion.button
                   type="button"
@@ -322,8 +322,8 @@ export function AriaWidget({ userProfile }: { userProfile: UserProfile }) {
                   whileTap={{ scale: 0.92 }}
                   className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all disabled:opacity-30"
                   style={{
-                    backgroundColor: input.trim() ? "#bcff5f" : "#222a3d",
-                    color: input.trim() ? "#203600" : "#909097",
+                    backgroundColor: input.trim() ? "#3b82f6" : "#222a3d",
+                    color: input.trim() ? "#ffffff" : "#64748b",
                   }}
                 >
                   <Send size={13} />
@@ -341,8 +341,8 @@ export function AriaWidget({ userProfile }: { userProfile: UserProfile }) {
         whileTap={{ scale: 0.94 }}
         className="relative flex h-14 w-14 items-center justify-center rounded-full shadow-xl"
         style={{
-          backgroundColor: "#bcff5f",
-          boxShadow: "0 8px 32px rgba(188,255,95,0.35)",
+          backgroundColor: "#3b82f6",
+          boxShadow: "0 8px 32px rgba(59,130,246,0.35)",
         }}
         aria-label="Abrir ARIA"
       >
@@ -355,7 +355,7 @@ export function AriaWidget({ userProfile }: { userProfile: UserProfile }) {
               exit={{ rotate: 90, opacity: 0 }}
               transition={{ duration: 0.15 }}
             >
-              <X size={20} style={{ color: "#203600" }} />
+              <X size={20} style={{ color: "#ffffff" }} />
             </motion.span>
           ) : (
             <motion.span
@@ -365,7 +365,7 @@ export function AriaWidget({ userProfile }: { userProfile: UserProfile }) {
               exit={{ rotate: -90, opacity: 0 }}
               transition={{ duration: 0.15 }}
             >
-              <Sparkles size={20} style={{ color: "#203600" }} />
+              <Sparkles size={20} style={{ color: "#ffffff" }} />
             </motion.span>
           )}
         </AnimatePresence>
@@ -378,7 +378,7 @@ export function AriaWidget({ userProfile }: { userProfile: UserProfile }) {
               animate={{ scale: 1 }}
               exit={{ scale: 0 }}
               className="absolute -right-0.5 -top-0.5 h-3.5 w-3.5 rounded-full border-2"
-              style={{ backgroundColor: "#ef4444", borderColor: "#0b1326" }}
+              style={{ backgroundColor: "#ef4444", borderColor: "#060609" }}
             />
           )}
         </AnimatePresence>

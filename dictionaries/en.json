@@ -1,87 +1,128 @@
 {
   "nav": {
-    "brand": "InMobi AI OS",
-    "portfolio": "Portfolio",
-    "insights": "Insights",
-    "ops": "Operations"
+    "brand": "KORE AI",
+    "how": "How It Works",
+    "features": "Features",
+    "results": "Results",
+    "cta": "Get Demo"
   },
   "hero": {
-    "eyebrow": "Predictive Real Estate Intelligence",
-    "headline1": "Not an academy.",
-    "headline2": "An Operating System",
-    "headline3": "that runs with you.",
-    "description": "Deploy a proprietary AI infrastructure that automates property acquisition, lead nurturing, and deal closing. While others teach, we install and operate.",
-    "cta_primary": "Implement Now",
-    "cta_secondary": "View Case Studies"
-  },
-  "agents": {
-    "agent01": "Content Agent",
-    "agent02": "Ads Optimizer",
-    "agent03": "Lead Engine",
-    "agent04": "Strategy Core"
+    "badge": "Now live across LATAM",
+    "headline1": "More deals.",
+    "headline2": "Less admin.",
+    "headline3": "Zero missed leads.",
+    "description": "KORE AI responds, qualifies, and follows up on every lead automatically — 24/7. Your team only talks to buyers who are ready to close.",
+    "cta_primary": "Watch Live Demo",
+    "cta_secondary": "See How It Works",
+    "stat1_value": "+43%",
+    "stat1_label": "more appointments",
+    "stat2_value": "< 30s",
+    "stat2_label": "response time",
+    "stat3_value": "100%",
+    "stat3_label": "leads contacted"
   },
   "social_proof": {
     "leads_value": "+2.4k",
-    "leads_label": "Verified Leads/Month",
+    "leads_label": "Monthly Verified Leads",
     "portfolio_value": "$124M",
     "portfolio_label": "Portfolio Managed",
-    "reliability_value": "4.9/5",
-    "reliability_label": "System Reliability",
+    "reliability_value": "4.9",
+    "reliability_label": "Client Score",
     "automation_value": "85%",
     "automation_label": "Automation Rate"
   },
-  "comparison": {
-    "title": "The 'Old Way' vs. The Operating System",
-    "subtitle": "Why keep buying courses when you can install results?",
-    "old_title": "Academies & Coaching",
-    "new_title": "InMobi AI OS",
-    "new_badge": "Recommended",
-    "old_items": [
-      "They give you theory, you do the dirty work.",
-      "6 to 12-month learning curve.",
-      "Complete dependence on your time and energy.",
-      "No real technology integration."
-    ],
-    "new_items": [
-      "Infrastructure ready to operate in 14 days.",
-      "AI agents running 24/7 without rest.",
-      "Data-driven decisions, not gut feelings.",
-      "Permanent 'Done-With-You' support."
+  "problem": {
+    "eyebrow": "The problem costing you deals",
+    "title": "Every minute you take to respond, you lose the lead.",
+    "subtitle": "Real estate is competitive. Whoever responds first wins. Most agencies are set up to lose.",
+    "items": [
+      { "icon": "timer_off", "stat": "78%", "title": "Leads without response", "desc": "78% of leads buy from whoever responds first. After 5 minutes, you've already lost them to a competitor." },
+      { "icon": "sync_disabled", "stat": "3x", "title": "Inconsistent follow-up", "desc": "Salespeople forget, get overwhelmed, or misread priorities. Cold leads get colder — and eventually dead." },
+      { "icon": "person_off", "stat": "24/7", "title": "Total team dependency", "desc": "If your agent is in a showing, on vacation, or asleep — your business stops. Every hour offline costs you money." },
+      { "icon": "visibility_off", "stat": "0", "title": "No pipeline visibility", "desc": "You don't know how many leads you lost this week, why, or where the bottleneck is. You can't fix what you can't see." }
     ]
   },
-  "phases": {
-    "eyebrow": "Implementation Path",
-    "title": "7-Phase OS Integration",
-    "subtitle": "From base architecture to massive scale. A surgical process of digital transformation.",
+  "solution": {
+    "eyebrow": "How it works",
+    "title": "Your sales team that never sleeps.",
+    "subtitle": "KORE AI handles every step from first contact to booked appointment — automatically.",
+    "steps": [
+      { "num": "01", "title": "Lead comes in", "desc": "From Meta Ads, WhatsApp, your website or property portals. Every lead is captured automatically, no manual entry." },
+      { "num": "02", "title": "AI responds instantly", "desc": "Personalized response in under 30 seconds, 24/7 — via WhatsApp and email. While competitors are asleep, you're closing." },
+      { "num": "03", "title": "Automatic qualification", "desc": "The system detects intent, budget, and timeline. Only qualified, high-intent leads reach your team." },
+      { "num": "04", "title": "Appointment booked", "desc": "AI schedules directly into your calendar. The lead picks a slot. You show up. Zero coordination overhead." },
+      { "num": "05", "title": "Persistent follow-up", "desc": "If they don't close on the first call, the system follows up automatically with the right message at the right time — until they do." }
+    ]
+  },
+  "features": {
+    "eyebrow": "Everything in one place",
+    "title": "Operate like a company 10x your size.",
+    "subtitle": "Without hiring a single extra person.",
     "items": [
-      { "title": "Data Audit", "desc": "We scan your current ecosystem to identify bottlenecks and lead leaks." },
-      { "title": "Core Structure", "desc": "Installation of the central operating system and predictive CRM." },
-      { "title": "Agent Deployment", "desc": "We activate multi-channel nurturing and prospecting bots." },
-      { "title": "Ads Optimizer v1", "desc": "Launch of high-impact AI-managed campaigns to attract premium sellers." },
-      { "title": "Closing Protocol", "desc": "Script refinement and schedule automation for your consultants." },
-      { "title": "Executive Dashboard", "desc": "Full ROI visibility in real time. No spreadsheets, only live dashboards." },
-      { "title": "Autonomous Scale", "desc": "The system learns from every interaction and optimizes to lower acquisition costs." }
+      { "icon": "smart_toy", "title": "Conversational AI", "desc": "Responds to leads via WhatsApp and email with the same quality as your best salesperson — in seconds.", "badge": "" },
+      { "icon": "people", "title": "CRM + Lead Scoring", "desc": "Automatic prioritization. Your team always knows exactly who to call first and why.", "badge": "Popular" },
+      { "icon": "calendar_month", "title": "Auto Scheduling", "desc": "Lead picks a time slot. Appointment appears in your calendar. Zero manual coordination.", "badge": "" },
+      { "icon": "notifications_active", "title": "AI Follow-up", "desc": "Automatic WhatsApp and email sequences that run until you get a response. Nothing falls through the cracks.", "badge": "" },
+      { "icon": "campaign", "title": "AI Ad Copy", "desc": "Generate and optimize ad copy for Meta and Google in seconds. More leads, less budget wasted.", "badge": "" },
+      { "icon": "insights", "title": "Executive Dashboard", "desc": "Real-time metrics. ROI, conversion rate, response speed — everything you need to make data-driven decisions.", "badge": "New" }
+    ]
+  },
+  "results": {
+    "eyebrow": "Real results",
+    "title": "What changes when you use KORE AI.",
+    "before_label": "Without KORE AI",
+    "after_label": "With KORE AI",
+    "items": [
+      { "metric": "Response time", "before": "2–4 hours", "after": "< 30 seconds" },
+      { "metric": "Leads contacted", "before": "40%", "after": "100%" },
+      { "metric": "Appointments / week", "before": "3–5", "after": "12–18" },
+      { "metric": "Admin time per lead", "before": "25 min", "after": "< 3 min" }
+    ],
+    "testimonial": "We were losing leads every single day — people just wouldn't get a callback in time. With KORE AI, every lead gets a response in under a minute, day or night. We closed 40% more deals in the first month.",
+    "testimonial_name": "Matías Rodríguez",
+    "testimonial_role": "Director, Grupo RE Max Córdoba"
+  },
+  "comparison": {
+    "title": "Keep doing the same thing — or scale with AI.",
+    "subtitle": "The gap between agencies that grow and those that survive is operational speed.",
+    "old_title": "Without automation",
+    "new_title": "With KORE AI",
+    "new_badge": "Recommended",
+    "old_items": [
+      "Leads go unanswered after hours. You lose them to whoever responds first.",
+      "Manual follow-up: forgotten, delayed, or done wrong.",
+      "Your team buried in admin tasks instead of closing deals.",
+      "No visibility into your pipeline, conversion rate, or ROI."
+    ],
+    "new_items": [
+      "Instant response 24/7 via WhatsApp and email. Every lead, every time.",
+      "Automatic follow-up sequences until the deal closes or is disqualified.",
+      "Your team only closes — AI handles qualification, scheduling, and follow-up.",
+      "Real-time dashboard with every metric you need to make smart decisions."
     ]
   },
   "done_with_you": {
-    "title": "You're not alone in the cockpit.",
-    "description": "Unlike software you subscribe to and forget, or a course you never finish, we are your technology partners. We install the architecture, configure your agents, and operate by your side.",
-    "support_badge": "Strategic Support Active",
+    "eyebrow": "Live in 14 days",
+    "title": "We install it. We configure it. We run it.",
+    "description": "This isn't software you figure out alone. Our team sets up KORE AI inside your operation, configures every AI agent for your specific market and property types, and stays on to optimize monthly.",
+    "support_badge": "Active support included",
     "response_time": "Response time: < 5 min",
     "items": [
-      { "title": "1:1 Strategic Support", "desc": "Weekly optimization sessions to tune your growth engine." },
-      { "title": "AI Maintenance", "desc": "We update your AI models monthly so they never become obsolete." }
+      { "title": "Dedicated onboarding", "desc": "We configure the system for your agency from scratch. Zero technical setup required on your end." },
+      { "title": "Monthly optimization", "desc": "We review your metrics and improve your AI agents every month so your conversion rate keeps climbing." }
     ],
-    "cta": "Schedule an Architecture Call"
+    "cta": "Schedule Free Diagnosis"
   },
   "cta_final": {
-    "title": "Ready for the command shift?",
-    "description": "We accept only 5 new implementations per month to guarantee deployment quality. Secure your spot now.",
-    "cta": "Implement Now",
-    "disclaimer": "Risk-Free Pilot Phase Available"
+    "eyebrow": "Ready in 14 days",
+    "title": "Your next deal shouldn't depend on who's available.",
+    "description": "We implement KORE AI inside your agency and guarantee measurable results within 30 days.",
+    "cta": "Request Free Demo",
+    "sub_cta": "or schedule a free 30-min diagnosis call →",
+    "disclaimer": "No long-term contracts · Support included · Results in 30 days"
   },
   "footer": {
-    "copyright": "© 2025 InMobi AI. All rights reserved.",
+    "copyright": "© 2025 KORE AI. All rights reserved.",
     "privacy": "Privacy",
     "terms": "Terms",
     "security": "Security"

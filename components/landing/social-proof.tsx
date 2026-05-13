@@ -38,7 +38,7 @@ export function SocialProofBar({ dict }: { dict: Dictionary }) {
   const stats = [
     { value: dict.social_proof.leads_value, label: dict.social_proof.leads_label },
     { value: dict.social_proof.portfolio_value, label: dict.social_proof.portfolio_label },
-    { value: dict.social_proof.reliability_value, label: dict.social_proof.reliability_label, suffix: "/5" },
+    { value: dict.social_proof.reliability_value, label: dict.social_proof.reliability_label, suffix: "/5" as string | undefined },
     { value: dict.social_proof.automation_value, label: dict.social_proof.automation_label },
   ];
 

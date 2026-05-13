@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -38,12 +38,12 @@ function FormatSelector({
             className="flex flex-col items-center gap-2 rounded-xl border p-3 transition-all"
             style={{
               borderColor: active
-                ? "rgba(188,255,95,0.5)"
-                : "rgba(69,70,77,0.4)",
+                ? "rgba(59,130,246,0.5)"
+                : "rgba(255,255,255,0.10)",
               backgroundColor: active
-                ? "rgba(188,255,95,0.07)"
-                : "#171f33",
-              color: active ? "#bcff5f" : "#909097",
+                ? "rgba(59,130,246,0.07)"
+                : "#10101c",
+              color: active ? "#3b82f6" : "#64748b",
             }}
           >
             <span
@@ -91,8 +91,8 @@ function PillarSelector({
             style={{
               borderColor: active
                 ? `${color}60`
-                : "rgba(69,70,77,0.4)",
-              backgroundColor: active ? `${color}10` : "#171f33",
+                : "rgba(255,255,255,0.10)",
+              backgroundColor: active ? `${color}10` : "#10101c",
             }}
           >
             <span
@@ -102,13 +102,13 @@ function PillarSelector({
             <div>
               <p
                 className="font-label text-xs font-bold uppercase tracking-widest"
-                style={{ color: active ? color : "#dae2fd" }}
+                style={{ color: active ? color : "#f1f5f9" }}
               >
                 {PILLAR_LABELS[p]}
               </p>
               <p
                 className="mt-0.5 text-[11px] leading-snug"
-                style={{ color: "#909097" }}
+                style={{ color: "#64748b" }}
               >
                 {PILLAR_DESCRIPTIONS[p]}
               </p>
@@ -149,30 +149,30 @@ function OutputCard({
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
       className="rounded-2xl border"
       style={{
-        borderColor: "rgba(188,255,95,0.2)",
-        backgroundColor: "#0f172a",
+        borderColor: "rgba(59,130,246,0.2)",
+        backgroundColor: "#080812",
       }}
     >
       {/* Header */}
       <div
         className="flex items-center justify-between border-b px-4 py-3"
-        style={{ borderColor: "rgba(69,70,77,0.3)" }}
+        style={{ borderColor: "rgba(255,255,255,0.08)" }}
       >
         <div className="flex items-center gap-2">
           <div
             className="flex h-6 w-6 items-center justify-center rounded-md"
-            style={{ backgroundColor: "rgba(188,255,95,0.12)" }}
+            style={{ backgroundColor: "rgba(59,130,246,0.12)" }}
           >
             <span
               className="material-symbols-outlined text-sm"
-              style={{ color: "#bcff5f", fontVariationSettings: "'FILL' 1" }}
+              style={{ color: "#3b82f6", fontVariationSettings: "'FILL' 1" }}
             >
               auto_awesome
             </span>
           </div>
           <span
             className="font-label text-xs uppercase tracking-widest"
-            style={{ color: "#bcff5f" }}
+            style={{ color: "#3b82f6" }}
           >
             {FORMAT_LABELS[format]} · {PILLAR_LABELS[pillar]}
           </span>
@@ -182,7 +182,7 @@ function OutputCard({
                 <motion.span
                   key={i}
                   className="h-1 w-1 rounded-full"
-                  style={{ backgroundColor: "#bcff5f" }}
+                  style={{ backgroundColor: "#3b82f6" }}
                   animate={{ opacity: [0.3, 1, 0.3] }}
                   transition={{
                     duration: 1,
@@ -203,11 +203,11 @@ function OutputCard({
               style={{
                 borderColor: copied
                   ? "rgba(34,197,94,0.4)"
-                  : "rgba(69,70,77,0.4)",
+                  : "rgba(255,255,255,0.10)",
                 backgroundColor: copied
                   ? "rgba(34,197,94,0.08)"
                   : "transparent",
-                color: copied ? "#22c55e" : "#909097",
+                color: copied ? "#22c55e" : "#64748b",
               }}
             >
               <span className="material-symbols-outlined text-sm">
@@ -219,9 +219,9 @@ function OutputCard({
               onClick={onGuardar}
               className="flex items-center gap-1.5 rounded-lg border px-3 py-1.5 font-label text-xs uppercase tracking-widest transition-all"
               style={{
-                borderColor: "rgba(188,255,95,0.3)",
-                backgroundColor: "rgba(188,255,95,0.07)",
-                color: "#bcff5f",
+                borderColor: "rgba(59,130,246,0.3)",
+                backgroundColor: "rgba(59,130,246,0.07)",
+                color: "#3b82f6",
               }}
             >
               <span className="material-symbols-outlined text-sm">
@@ -237,13 +237,13 @@ function OutputCard({
       <div className="p-4 md:p-6">
         <pre
           className="whitespace-pre-wrap font-sans text-sm leading-relaxed"
-          style={{ color: "#dae2fd" }}
+          style={{ color: "#f1f5f9" }}
         >
           {content}
           {streaming && (
             <motion.span
               className="ml-0.5 inline-block h-4 w-0.5 rounded-full align-middle"
-              style={{ backgroundColor: "#bcff5f" }}
+              style={{ backgroundColor: "#3b82f6" }}
               animate={{ opacity: [1, 0, 1] }}
               transition={{ duration: 0.7, repeat: Infinity }}
             />
@@ -338,11 +338,11 @@ export function Generador({
       <div>
         <h2
           className="font-headline text-xl font-bold"
-          style={{ color: "#dae2fd" }}
+          style={{ color: "#f1f5f9" }}
         >
           Agente de Contenido
         </h2>
-        <p className="mt-1 text-sm" style={{ color: "#909097" }}>
+        <p className="mt-1 text-sm" style={{ color: "#64748b" }}>
           Generá publicaciones para redes sociales adaptadas a tu mercado y
           propiedades.
         </p>
@@ -354,7 +354,7 @@ export function Generador({
         <div>
           <label
             className="mb-2 block font-label text-xs uppercase tracking-widest"
-            style={{ color: "#909097" }}
+            style={{ color: "#64748b" }}
           >
             Formato
           </label>
@@ -365,7 +365,7 @@ export function Generador({
         <div>
           <label
             className="mb-2 block font-label text-xs uppercase tracking-widest"
-            style={{ color: "#909097" }}
+            style={{ color: "#64748b" }}
           >
             Pilar de contenido
           </label>
@@ -377,7 +377,7 @@ export function Generador({
           <div>
             <label
               className="mb-1.5 block font-label text-xs uppercase tracking-widest"
-              style={{ color: "#909097" }}
+              style={{ color: "#64748b" }}
             >
               Contexto / Propiedad
             </label>
@@ -388,18 +388,18 @@ export function Generador({
               rows={3}
               className="w-full resize-none rounded-xl border px-4 py-3 text-sm outline-none transition-all placeholder:opacity-30"
               style={{
-                backgroundColor: "#171f33",
+                backgroundColor: "#10101c",
                 borderColor: context
-                  ? "rgba(188,255,95,0.3)"
-                  : "rgba(69,70,77,0.4)",
-                color: "#dae2fd",
+                  ? "rgba(59,130,246,0.3)"
+                  : "rgba(255,255,255,0.10)",
+                color: "#f1f5f9",
               }}
             />
           </div>
           <div>
             <label
               className="mb-1.5 block font-label text-xs uppercase tracking-widest"
-              style={{ color: "#909097" }}
+              style={{ color: "#64748b" }}
             >
               Zona / Mercado
             </label>
@@ -410,16 +410,16 @@ export function Generador({
               placeholder="Ej: Palermo, CABA"
               className="w-full rounded-xl border px-4 py-3 text-sm outline-none transition-all placeholder:opacity-30"
               style={{
-                backgroundColor: "#171f33",
+                backgroundColor: "#10101c",
                 borderColor: zona
-                  ? "rgba(188,255,95,0.3)"
-                  : "rgba(69,70,77,0.4)",
-                color: "#dae2fd",
+                  ? "rgba(59,130,246,0.3)"
+                  : "rgba(255,255,255,0.10)",
+                color: "#f1f5f9",
               }}
             />
             <p
               className="mt-1.5 text-xs"
-              style={{ color: "#909097" }}
+              style={{ color: "#64748b" }}
             >
               Opcional — personaliza el contenido a tu mercado
             </p>
@@ -435,9 +435,9 @@ export function Generador({
         whileTap={!streaming ? { scale: 0.98 } : {}}
         className="flex w-full items-center justify-center gap-2 rounded-xl py-3.5 font-label text-sm font-bold uppercase tracking-widest transition-all disabled:opacity-50"
         style={{
-          backgroundColor: streaming ? "rgba(188,255,95,0.15)" : "#bcff5f",
-          color: streaming ? "#bcff5f" : "#203600",
-          border: streaming ? "1px solid rgba(188,255,95,0.3)" : "none",
+          backgroundColor: streaming ? "rgba(59,130,246,0.15)" : "#3b82f6",
+          color: streaming ? "#3b82f6" : "#ffffff",
+          border: streaming ? "1px solid rgba(59,130,246,0.3)" : "none",
         }}
       >
         <span

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { locales, type Locale } from "@/lib/i18n/get-dictionary";
 
 export async function generateStaticParams() {
@@ -6,7 +6,7 @@ export async function generateStaticParams() {
 }
 
 export const metadata: Metadata = {
-  title: "InMobi AI OS — Predictive Real Estate Intelligence",
+  title: "KORE AI — Predictive Real Estate Intelligence",
   description:
     "Deploy a proprietary AI infrastructure that automates property acquisition, lead nurturing, and deal closing.",
 };

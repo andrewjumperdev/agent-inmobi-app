@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 
@@ -20,28 +20,28 @@ export function DashboardKPI() {
       {/* Main KPI */}
       <div
         className="group relative overflow-hidden rounded-xl p-8 md:col-span-8"
-        style={{ backgroundColor: "#131b2e" }}
+        style={{ backgroundColor: "#0c0c14" }}
       >
         {/* Background icon */}
         <div className="absolute right-4 top-4 opacity-5 transition-opacity group-hover:opacity-10">
-          <span className="material-symbols-outlined" style={{ fontSize: "96px", color: "#bcff5f" }}>
+          <span className="material-symbols-outlined" style={{ fontSize: "96px", color: "#3b82f6" }}>
             hub
           </span>
         </div>
 
         <span
           className="font-label mb-2 block text-xs uppercase tracking-widest"
-          style={{ color: "#bcff5f" }}
+          style={{ color: "#3b82f6" }}
         >
           System Pulse
         </span>
         <h1
           className="font-headline text-5xl font-extrabold tracking-tighter"
-          style={{ color: "#dae2fd" }}
+          style={{ color: "#f1f5f9" }}
         >
           94.2%
         </h1>
-        <p className="mt-2 text-sm" style={{ color: "#909097" }}>
+        <p className="mt-2 text-sm" style={{ color: "#64748b" }}>
           Eficiencia global de IA en todos los nodos activos.
         </p>
 
@@ -54,13 +54,13 @@ export function DashboardKPI() {
             <div key={stat.label}>
               <span
                 className="font-label block text-[10px] uppercase tracking-widest"
-                style={{ color: "#45464d" }}
+                style={{ color: "#334155" }}
               >
                 {stat.label}
               </span>
               <p
                 className="text-2xl font-bold font-headline"
-                style={{ color: stat.accent ? "#bcff5f" : "#dae2fd" }}
+                style={{ color: stat.accent ? "#3b82f6" : "#f1f5f9" }}
               >
                 {stat.value}
               </p>
@@ -72,18 +72,18 @@ export function DashboardKPI() {
       {/* Live AI Feed */}
       <div
         className="flex flex-col rounded-xl p-6 md:col-span-4"
-        style={{ backgroundColor: "#131b2e" }}
+        style={{ backgroundColor: "#0c0c14" }}
       >
         <div className="mb-4 flex items-center justify-between">
           <span
             className="font-label text-xs uppercase tracking-widest"
-            style={{ color: "#909097" }}
+            style={{ color: "#64748b" }}
           >
             Live AI Feed
           </span>
           <motion.span
             className="h-2 w-2 rounded-full"
-            style={{ backgroundColor: "#bcff5f" }}
+            style={{ backgroundColor: "#3b82f6" }}
             animate={{ opacity: [1, 0.2, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           />
@@ -98,19 +98,19 @@ export function DashboardKPI() {
               transition={{ delay: i * 0.08, duration: 0.4 }}
               className="flex gap-3 border-l pl-3 text-xs"
               style={{
-                borderColor: item.accent ? "rgba(188,255,95,0.4)" : "rgba(69,70,77,0.4)",
+                borderColor: item.accent ? "rgba(59,130,246,0.4)" : "rgba(255,255,255,0.10)",
               }}
             >
               <span
                 className="font-label shrink-0"
-                style={{ color: "#45464d" }}
+                style={{ color: "#334155" }}
               >
                 {item.time}
               </span>
-              <p style={{ color: "#c6c6cd" }}>
+              <p style={{ color: "#94a3b8" }}>
                 <span
                   className="font-semibold"
-                  style={{ color: item.accent ? "#bcff5f" : "#bec6e0" }}
+                  style={{ color: item.accent ? "#3b82f6" : "#e2e8f0" }}
                 >
                   {item.highlight}
                 </span>{" "}
