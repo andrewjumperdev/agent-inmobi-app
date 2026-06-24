@@ -6,7 +6,7 @@ import { createProxyClient } from "@/lib/supabase/proxy";
 const LOCALES = ["en", "es", "fr"] as const;
 
 /** Rutas de landing por locale — accesibles sin sesión, match exacto */
-const LANDING_ROUTES = new Set(LOCALES.map((l) => `/${l}`));
+const LANDING_ROUTES = new Set(["/", ...LOCALES.map((l) => `/${l}`)]);
 
 /**
  * Rutas públicas: accesibles sin sesión (match por prefijo).

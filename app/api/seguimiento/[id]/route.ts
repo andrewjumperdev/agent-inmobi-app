@@ -24,8 +24,9 @@ export async function PATCH(
   }
 
   // Fetch execution — RLS ensures the lead belongs to this user
-  const { data: raw, error: fetchError } = await supabase
-    .from("followup_executions" as "leads")
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: raw, error: fetchError } = await (supabase as any)
+    .from("followup_executions")
     .select("id, current_step, status, lead_id")
     .eq("id", id)
     .single();
@@ -59,8 +60,9 @@ export async function PATCH(
     patch = { status: "cancelled", completed_at: new Date().toISOString() };
   }
 
-  const { data: updated, error: updateError } = await supabase
-    .from("followup_executions" as "leads")
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: updated, error: updateError } = await (supabase as any)
+    .from("followup_executions")
     .update(patch)
     .eq("id", id)
     .select()

@@ -5,9 +5,11 @@ import { usePathname } from "next/navigation";
 import {
   BarChart3,
   FileText,
+  Headset,
   LayoutDashboard,
   Magnet,
   MessageSquareMore,
+  Plug,
   Users,
 } from "lucide-react";
 import {
@@ -28,9 +30,11 @@ const NAV_ITEMS = [
   { label: "Dashboard",   href: "/dashboard",   icon: LayoutDashboard },
   { label: "CRM",         href: "/crm",          icon: Users },
   { label: "Captación",   href: "/captacion",    icon: Magnet },
+  { label: "Atención",    href: "/atencion",     icon: Headset },
   { label: "Contenido",   href: "/contenido",    icon: FileText },
   { label: "Seguimiento", href: "/seguimiento",  icon: MessageSquareMore },
   { label: "Analytics",   href: "/analytics",    icon: BarChart3 },
+  { label: "Integraciones", href: "/integraciones", icon: Plug },
 ];
 
 /* ── KR logomark ─────────────────────────────────────────────── */

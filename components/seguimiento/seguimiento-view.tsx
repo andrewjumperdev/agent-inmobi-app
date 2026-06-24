@@ -255,7 +255,7 @@ function SequenceCard({
                     : i === exec.current_step - 1
                     ? "#3b82f6"
                     : "rgba(255,255,255,0.07)",
-                ringColor: "#08080f",
+                outlineColor: "#08080f",
               }}
             />
           ))}

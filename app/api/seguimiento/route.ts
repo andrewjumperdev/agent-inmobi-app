@@ -7,8 +7,9 @@ export async function GET() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data, error } = await supabase
-    .from("followup_executions" as "leads")
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase as any)
+    .from("followup_executions")
     .select(`
       id,
       lead_id,
@@ -67,8 +68,9 @@ export async function POST(req: NextRequest) {
   let resolvedSequenceId = sequence_id as string | undefined;
 
   if (!resolvedSequenceId) {
-    const { data: defaultSeq } = await supabase
-      .from("followup_sequences" as "leads")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: defaultSeq } = await (supabase as any)
+      .from("followup_sequences")
       .select("id")
       .eq("is_active", true)
       .limit(1)
@@ -85,8 +87,9 @@ export async function POST(req: NextRequest) {
   }
 
   // Check if lead already has an active execution
-  const { data: existing } = await supabase
-    .from("followup_executions" as "leads")
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: existing } = await (supabase as any)
+    .from("followup_executions")
     .select("id")
     .eq("lead_id", lead_id)
     .in("status", ["active", "paused"])
@@ -100,8 +103,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { data: execution, error: insertError } = await supabase
-    .from("followup_executions" as "leads")
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: execution, error: insertError } = await (supabase as any)
+    .from("followup_executions")
     .insert({
       lead_id,
       sequence_id: resolvedSequenceId,

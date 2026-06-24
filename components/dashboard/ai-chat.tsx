@@ -117,7 +117,14 @@ function Bubble({ message }: { message: Message }) {
 }
 
 /* ── Main component ────────────────────────────────────────── */
-export function AIChat({ userProfile }: { userProfile: UserProfile }) {
+export function AIChat({
+  userProfile,
+  endpoint = "/api/chat",
+}: {
+  userProfile: UserProfile;
+  /** BFF endpoint to stream from. Default ARIA/Coach; pass "/api/atencion" for el agente de atención al cliente. */
+  endpoint?: string;
+}) {
   const [messages, setMessages]     = useState<Message[]>([]);
   const [input, setInput]           = useState("");
   const [loading, setLoading]       = useState(false);
@@ -144,7 +151,7 @@ export function AIChat({ userProfile }: { userProfile: UserProfile }) {
       ]);
 
       try {
-        const res = await fetch("/api/chat", {
+        const res = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ messages: history, userProfile }),
@@ -200,7 +207,7 @@ export function AIChat({ userProfile }: { userProfile: UserProfile }) {
         setLoading(false);
       }
     },
-    [userProfile]
+    [userProfile, endpoint]
   );
 
   /* ── Auto-greeting on mount ─────────────────────────────── */
