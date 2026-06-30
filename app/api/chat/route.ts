@@ -14,6 +14,8 @@
 import { getTenantCredentials } from "@/lib/kore/tenant";
 import { runAgent, agentReplyText, KoreError } from "@/lib/kore/client";
 
+export const maxDuration = 60; // el Coach llama a gpt-4o; evita el timeout de 10s de Vercel
+
 /* ── Saludo de apertura (no consume backend; el Coach diagnostica, no saluda) ── */
 const GREETING_FIRST = (name?: string) =>
   `¡Hola${name ? `, ${name}` : ""}! Soy ARIA, tu coach de inteligencia artificial dentro de KORE IA. Para configurar tu sistema necesito entender tu negocio: contame en qué ciudad operás, qué tipo de propiedades manejás y cómo conseguís clientes hoy.`;

@@ -9,6 +9,8 @@
 import { getTenantCredentials } from "@/lib/kore/tenant";
 import { runAgent } from "@/lib/kore/client";
 
+export const maxDuration = 60; // Content agent (gpt-4o); evita el timeout de 10s de Vercel
+
 export type ContentFormat = "reel" | "carrusel" | "historia" | "post";
 export type ContentPillar = "autoridad" | "conversion" | "confianza" | "atraccion";
 

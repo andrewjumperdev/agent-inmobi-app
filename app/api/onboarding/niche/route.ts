@@ -1,17 +1,13 @@
-/** BFF: corre el diagnóstico del Coach con las respuestas del onboarding. */
+/** BFF: el cliente elige su nicho → define las preguntas del Coach. */
 import { getTenantCredentials } from "@/lib/kore/tenant";
 import { koreFetch, KoreError } from "@/lib/kore/client";
-
-// El Coach llama a gpt-4o (puede tardar >10s). Vercel corta las funciones a 10s
-// por defecto → subimos el límite para que el diagnóstico no falle por timeout.
-export const maxDuration = 60;
 
 export async function POST(request: Request) {
   const creds = await getTenantCredentials();
   if (!creds) return Response.json({ error: "no_session" }, { status: 401 });
   try {
     const body = await request.json();
-    const data = await koreFetch("/onboarding/diagnose", {
+    const data = await koreFetch("/onboarding/niche", {
       apiKey: creds.apiKey,
       method: "POST",
       body,

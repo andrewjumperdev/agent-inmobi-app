@@ -10,6 +10,8 @@
 import { getTenantCredentials } from "@/lib/kore/tenant";
 import { koreFetch, KoreError } from "@/lib/kore/client";
 
+export const maxDuration = 60; // gpt-4o + reserva; evita el timeout de 10s de Vercel
+
 const GREETING = (name?: string) =>
   `¡Hola${name ? `, ${name}` : ""}! Soy el asistente de atención al cliente. Contame qué estás buscando y, si querés, coordinamos una demo o llamada. ¿En qué te puedo ayudar?`;
 
