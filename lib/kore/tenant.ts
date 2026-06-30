@@ -13,7 +13,8 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createTenant, KoreError } from "@/lib/kore/client";
 
-const DEFAULT_NICHE = process.env.KORE_DEFAULT_NICHE ?? "real-estate";
+// .trim() defensivo: una env con espacios/tabs (al copiar) rompía la búsqueda de nicho.
+const DEFAULT_NICHE = (process.env.KORE_DEFAULT_NICHE || "real-estate").trim();
 
 export interface TenantCredentials {
   tenantId: string;
