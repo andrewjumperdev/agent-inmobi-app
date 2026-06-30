@@ -1,10 +1,22 @@
 ﻿import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/lib/supabase/server";
-import { DashboardKPI } from "@/components/dashboard/kpi";
-import { AgentGrid } from "@/components/dashboard/agent-grid";
-import { PortfolioMap } from "@/components/dashboard/portfolio-map";
+import { DashboardReal } from "@/components/dashboard/metrics-real";
+import { koreGet } from "@/lib/kore/server";
+import type { MetricsSnapshot } from "@/lib/kore/client";
 import { UserDropdown } from "@/components/cuenta/user-dropdown";
+
+const EMPTY_METRICS: MetricsSnapshot = {
+  leads_new_7d: 0,
+  temperature_distribution: {},
+  auto_classification_rate: 0,
+  cold_share: 0,
+  plaud_leads: 0,
+  open_escalations: 0,
+  mrr_cents: 0,
+  subscription_status: "none",
+  alerts: [],
+};
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -30,6 +42,8 @@ export default async function DashboardPage() {
   };
 
   const p = profile as ProfileRow | null;
+
+  const metrics = await koreGet<MetricsSnapshot>("/metrics", EMPTY_METRICS);
 
   const userName =
     p?.full_name ??
@@ -110,9 +124,15 @@ export default async function DashboardPage() {
 
       {/* Dashboard canvas */}
       <div className="flex-1 space-y-6 p-4 md:p-8">
-        <DashboardKPI />
-        <AgentGrid />
-        <PortfolioMap />
+        <div>
+          <h1 className="text-lg font-bold" style={{ color: "#f1f5f9" }}>
+            Hola, {userName} 👋
+          </h1>
+          <p className="text-sm" style={{ color: "#64748b" }}>
+            Tu pipeline en tiempo real.
+          </p>
+        </div>
+        <DashboardReal metrics={metrics} />
       </div>
 
       {/* Pass context to widget via data attributes for hydration */}

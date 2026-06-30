@@ -1,305 +1,308 @@
-﻿"use client";
+"use client";
 
-import { useState, useOptimistic, useTransition } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import type { Database } from "@/lib/supabase/types";
-import { LeadCard } from "./lead-card";
+import { Plus, Search, Loader2, X } from "lucide-react";
+import type { ContactOut } from "@/lib/kore/client";
 import { LeadDetail } from "./lead-detail";
 
-type Lead = Database["public"]["Tables"]["leads"]["Row"];
+/* ── Etapas = lifecycle_stage del backend ──────────────────────────── */
+const STAGES = [
+  { id: "lead",        label: "Nuevo",     color: "#e2e8f0" },
+  { id: "qualified",   label: "Calificado",color: "#3b82f6" },
+  { id: "in_proposal", label: "Propuesta", color: "#fb923c" },
+  { id: "customer",    label: "Cliente",   color: "#22c55e" },
+  { id: "lost",        label: "Perdido",   color: "#64748b" },
+] as const;
 
-/* ── Pipeline stages ───────────────────────────────────────── */
-export const STAGES: {
-  id: string;
-  label: string;
-  icon: string;
-  color: string;
-  bg: string;
-}[] = [
-  { id: "nuevo",        label: "Nuevo",        icon: "fiber_new",       color: "#e2e8f0", bg: "rgba(188,198,224,0.07)" },
-  { id: "contactado",   label: "Contactado",   icon: "phone_in_talk",   color: "#818cf8", bg: "rgba(129,140,248,0.07)" },
-  { id: "calificado",   label: "Calificado",   icon: "verified",        color: "#3b82f6", bg: "rgba(59,130,246,0.07)"  },
-  { id: "cita",         label: "Cita",         icon: "calendar_month",  color: "#fb923c", bg: "rgba(251,146,60,0.07)"  },
-  { id: "negociacion",  label: "Negociación",  icon: "handshake",       color: "#eab308", bg: "rgba(234,179,8,0.07)"   },
-  { id: "cerrado",      label: "Cerrado",      icon: "check_circle",    color: "#22c55e", bg: "rgba(34,197,94,0.07)"   },
-];
-
-/* ── Mock leads for demo ───────────────────────────────────── */
-const MOCK_LEADS: Lead[] = [
-  { id: "m1",  user_id: "demo", name: "Martín Rodríguez",  phone: "+5491155551111", source: "whatsapp",   urgency: "hot",  operation_type: "compra",    score: "qualified",   pipeline_stage: "nuevo",       budget_min: 80000,  budget_max: 120000, zone_interest: "Palermo",   last_contact_at: null, next_followup_at: null, notes: null, email: null, property_type: "departamento", tags: null, assigned_property_id: null, source_campaign: null, created_at: new Date(Date.now() - 1000*60*20).toISOString(), updated_at: null },
-  { id: "m2",  user_id: "demo", name: "Ana López",         phone: "+5491155552222", source: "formulario", urgency: "warm", operation_type: "venta",     score: "pending",     pipeline_stage: "nuevo",       budget_min: null,   budget_max: null,   zone_interest: "Belgrano",  last_contact_at: null, next_followup_at: null, notes: null, email: "ana@mail.com", property_type: null, tags: null, assigned_property_id: null, source_campaign: null, created_at: new Date(Date.now() - 1000*60*60).toISOString(), updated_at: null },
-  { id: "m3",  user_id: "demo", name: "Carlos Méndez",     phone: "+5491155553333", source: "landing",    urgency: "cold", operation_type: "inversion", score: "qualified",   pipeline_stage: "contactado",  budget_min: 200000, budget_max: 500000, zone_interest: "Recoleta",  last_contact_at: new Date(Date.now() - 1000*60*60*3).toISOString(), next_followup_at: null, notes: "Interesado en duplex.", email: null, property_type: "casa", tags: null, assigned_property_id: null, source_campaign: null, created_at: new Date(Date.now() - 1000*60*60*5).toISOString(), updated_at: null },
-  { id: "m4",  user_id: "demo", name: "Laura García",      phone: "+5491155554444", source: "referido",   urgency: "hot",  operation_type: "compra",    score: "qualified",   pipeline_stage: "calificado",  budget_min: 150000, budget_max: 250000, zone_interest: "Caballito", last_contact_at: new Date(Date.now() - 1000*60*60*24).toISOString(), next_followup_at: new Date(Date.now() + 1000*60*60*24*2).toISOString(), notes: "Quiere 3 ambientes, piso alto.", email: "laura@mail.com", property_type: "departamento", tags: null, assigned_property_id: null, source_campaign: null, created_at: new Date(Date.now() - 1000*60*60*48).toISOString(), updated_at: null },
-  { id: "m5",  user_id: "demo", name: "Diego Torres",      phone: "+5491155555555", source: "whatsapp",   urgency: "warm", operation_type: "compra",    score: "pending",     pipeline_stage: "calificado",  budget_min: 50000,  budget_max: 80000,  zone_interest: "Flores",    last_contact_at: null, next_followup_at: null, notes: null, email: null, property_type: null, tags: null, assigned_property_id: null, source_campaign: null, created_at: new Date(Date.now() - 1000*60*60*72).toISOString(), updated_at: null },
-  { id: "m6",  user_id: "demo", name: "Valentina Cruz",    phone: "+5491155556666", source: "formulario", urgency: "hot",  operation_type: "compra",    score: "qualified",   pipeline_stage: "cita",        budget_min: 100000, budget_max: 180000, zone_interest: "Nuñez",     last_contact_at: new Date(Date.now() - 1000*60*60*12).toISOString(), next_followup_at: new Date(Date.now() + 1000*60*60*24).toISOString(), notes: "Cita confirmada el viernes 14h.", email: "val@mail.com", property_type: "departamento", tags: null, assigned_property_id: null, source_campaign: null, created_at: new Date(Date.now() - 1000*60*60*96).toISOString(), updated_at: null },
-  { id: "m7",  user_id: "demo", name: "Ramiro Vega",       phone: "+5491155557777", source: "landing",    urgency: "warm", operation_type: "venta",     score: "qualified",   pipeline_stage: "negociacion", budget_min: null,   budget_max: null,   zone_interest: "San Telmo", last_contact_at: new Date(Date.now() - 1000*60*60*6).toISOString(), next_followup_at: null, notes: "Negociando precio de tasación.", email: null, property_type: "PH", tags: null, assigned_property_id: null, source_campaign: null, created_at: new Date(Date.now() - 1000*60*60*120).toISOString(), updated_at: null },
-  { id: "m8",  user_id: "demo", name: "Sofía Beltrán",     phone: "+5491155558888", source: "referido",   urgency: "cold", operation_type: "inversion", score: "qualified",   pipeline_stage: "cerrado",     budget_min: 300000, budget_max: 600000, zone_interest: "Puerto Madero", last_contact_at: new Date(Date.now() - 1000*60*60*24*3).toISOString(), next_followup_at: null, notes: "Compra confirmada. Escritura pendiente.", email: "sofia@mail.com", property_type: "departamento", tags: null, assigned_property_id: null, source_campaign: null, created_at: new Date(Date.now() - 1000*60*60*24*10).toISOString(), updated_at: null },
-];
-
-/* ── Urgency / score color maps ────────────────────────────── */
-export const URGENCY_COLOR: Record<string, { bg: string; text: string; label: string }> = {
-  hot:  { bg: "rgba(239,68,68,0.12)",   text: "#ef4444", label: "Caliente" },
-  warm: { bg: "rgba(234,179,8,0.12)",   text: "#eab308", label: "Tibio"    },
-  cold: { bg: "rgba(188,198,224,0.12)", text: "#e2e8f0", label: "Frío"     },
+const TEMP: Record<string, { label: string; color: string }> = {
+  hot:   { label: "Caliente", color: "#ef4444" },
+  warm:  { label: "Tibio",    color: "#eab308" },
+  cold:  { label: "Frío",     color: "#94a3b8" },
+  unset: { label: "Sin calificar", color: "#475569" },
 };
 
-export const OP_LABEL: Record<string, string> = {
-  compra: "Comprador", venta: "Vendedor", inversion: "Inversor",
-};
+function initials(name: string | null, phone: string | null) {
+  if (name) return name.trim().slice(0, 2).toUpperCase();
+  if (phone) return phone.slice(-2);
+  return "··";
+}
 
-export const SOURCE_ICON: Record<string, string> = {
-  whatsapp: "chat", formulario: "article", landing: "web", directo: "person", referido: "group",
-};
-
-/* ── Column ────────────────────────────────────────────────── */
-function KanbanColumn({
-  stage,
-  leads,
-  onSelect,
-  selectedId,
-  onDrop,
-  dragOver,
-  onDragOver,
-  onDragLeave,
-}: {
-  stage: typeof STAGES[number];
-  leads: Lead[];
-  onSelect: (lead: Lead) => void;
-  selectedId: string | null;
-  onDrop: (stageId: string, leadId: string) => void;
-  dragOver: boolean;
-  onDragOver: (e: React.DragEvent) => void;
-  onDragLeave: () => void;
-}) {
+/* ── Card ───────────────────────────────────────────────────────────── */
+function ContactCard({ c, color, onClick }: { c: ContactOut; color: string; onClick: () => void }) {
+  const t = TEMP[c.temperature] ?? TEMP.unset;
   return (
-    <div
-      className="flex flex-col gap-2 min-w-[220px] w-[220px]"
-      onDragOver={(e) => { e.preventDefault(); onDragOver(e); }}
-      onDragLeave={onDragLeave}
-      onDrop={(e) => {
-        e.preventDefault();
-        const id = e.dataTransfer.getData("lead_id");
-        if (id) onDrop(stage.id, id);
-      }}
+    <motion.div
+      layout
+      draggable
+      onDragStart={(e) => (e as unknown as DragEvent).dataTransfer?.setData("contact_id", c.id)}
+      onClick={onClick}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      className="cursor-pointer rounded-xl border p-3 transition-colors hover:border-[rgba(59,130,246,0.4)]"
+      style={{ backgroundColor: "#0c0c14", borderColor: "rgba(255,255,255,0.07)" }}
     >
-      {/* Column header */}
-      <div
-        className="flex items-center justify-between rounded-xl px-3 py-2.5 sticky top-0 z-10"
-        style={{
-          backgroundColor: dragOver ? stage.bg : "#060609",
-          border: dragOver ? `1px solid ${stage.color}40` : "1px solid rgba(255,255,255,0.06)",
-          transition: "all 0.18s ease",
-        }}
-      >
-        <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-sm" style={{ color: stage.color }}>{stage.icon}</span>
-          <span className="font-label text-[11px] uppercase tracking-widest font-bold" style={{ color: stage.color }}>
-            {stage.label}
-          </span>
-        </div>
-        <span
-          className="flex h-5 w-5 items-center justify-center rounded-full font-headline text-[10px] font-bold"
-          style={{ backgroundColor: `${stage.color}18`, color: stage.color }}
+      <div className="flex items-center gap-2.5">
+        <div
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[11px] font-bold"
+          style={{ backgroundColor: `${color}1a`, color }}
         >
-          {leads.length}
+          {initials(c.full_name, c.phone)}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold" style={{ color: "#f1f5f9" }}>
+            {c.full_name || c.phone || c.email || "Sin nombre"}
+          </p>
+          <p className="truncate text-[11px]" style={{ color: "#64748b" }}>
+            {c.attributes?.company
+              ? `${c.attributes.company}${c.attributes.role ? ` · ${c.attributes.role}` : ""}`
+              : c.phone || c.email || "—"}
+          </p>
+        </div>
+      </div>
+      <div className="mt-2 flex items-center gap-1.5">
+        <span
+          className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
+          style={{ backgroundColor: `${t.color}1f`, color: t.color }}
+        >
+          {t.label}
         </span>
       </div>
-
-      {/* Cards */}
-      <div
-        className="flex flex-col gap-2 rounded-xl p-2 min-h-[120px] transition-all"
-        style={{
-          backgroundColor: dragOver ? `${stage.color}06` : "transparent",
-          border: dragOver ? `1px dashed ${stage.color}30` : "1px solid transparent",
-        }}
-      >
-        <AnimatePresence>
-          {leads.map((lead, i) => (
-            <LeadCard
-              key={lead.id}
-              lead={lead}
-              index={i}
-              selected={selectedId === lead.id}
-              stageColor={stage.color}
-              onClick={() => onSelect(lead)}
-            />
-          ))}
-        </AnimatePresence>
-
-        {leads.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-6 gap-1">
-            <span className="material-symbols-outlined text-2xl" style={{ color: "#1e2a42" }}>inbox</span>
-            <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#1e2a42" }}>vacío</span>
-          </div>
-        )}
-      </div>
-    </div>
+    </motion.div>
   );
 }
 
-/* ── Main board ────────────────────────────────────────────── */
-export function CrmBoard({ leads: realLeads }: { leads: Lead[] }) {
-  const useMock = realLeads.length === 0;
-  const baseLeads = useMock ? MOCK_LEADS : realLeads;
-
-  const [optimisticLeads, updateOptimistic] = useOptimistic(
-    baseLeads,
-    (state, { leadId, newStage }: { leadId: string; newStage: string }) =>
-      state.map((l) => (l.id === leadId ? { ...l, pipeline_stage: newStage } : l))
-  );
-
-  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [dragOverStage, setDragOverStage] = useState<string | null>(null);
-  const [, startTransition] = useTransition();
-  const [filter, setFilter] = useState<"all" | "hot" | "calificado">("all");
+/* ── Board ──────────────────────────────────────────────────────────── */
+export function CrmBoard({ contacts: initial }: { contacts: ContactOut[] }) {
+  const router = useRouter();
+  const [contacts, setContacts] = useState<ContactOut[]>(initial);
   const [search, setSearch] = useState("");
+  const [dragStage, setDragStage] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [selected, setSelected] = useState<ContactOut | null>(null);
 
-  function handleDrop(stageId: string, leadId: string) {
-    setDragOverStage(null);
-    const lead = optimisticLeads.find((l) => l.id === leadId);
-    if (!lead || lead.pipeline_stage === stageId) return;
-
-    startTransition(() => {
-      updateOptimistic({ leadId, newStage: stageId });
-      // In production: call server action to update Supabase
+  async function moveTo(stageId: string, contactId: string) {
+    setDragStage(null);
+    const prev = contacts;
+    const target = contacts.find((c) => c.id === contactId);
+    if (!target || target.lifecycle_stage === stageId) return;
+    // optimista
+    setContacts((cs) => cs.map((c) => (c.id === contactId ? { ...c, lifecycle_stage: stageId } : c)));
+    const res = await fetch(`/api/crm/contacts/${contactId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lifecycle_stage: stageId }),
     });
+    if (!res.ok) setContacts(prev); // revertir
   }
 
-  const filtered = optimisticLeads.filter((l) => {
-    if (filter === "hot" && l.urgency !== "hot") return false;
-    if (filter === "calificado" && l.score !== "qualified") return false;
-    if (search) {
-      const q = search.toLowerCase();
-      return (
-        l.name?.toLowerCase().includes(q) ||
-        l.phone?.includes(q) ||
-        l.zone_interest?.toLowerCase().includes(q)
-      );
-    }
-    return true;
+  const filtered = contacts.filter((c) => {
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return (
+      c.full_name?.toLowerCase().includes(q) ||
+      c.phone?.includes(q) ||
+      c.email?.toLowerCase().includes(q)
+    );
   });
+  const byStage = (id: string) => filtered.filter((c) => (c.lifecycle_stage || "lead") === id);
 
-  const leadsForStage = (stageId: string) =>
-    filtered.filter((l) => (l.pipeline_stage ?? "nuevo") === stageId);
-
-  const total = optimisticLeads.length;
-  const hot   = optimisticLeads.filter((l) => l.urgency === "hot").length;
-  const closed = optimisticLeads.filter((l) => l.pipeline_stage === "cerrado").length;
+  const total = contacts.length;
+  const hot = contacts.filter((c) => c.temperature === "hot").length;
+  const customers = contacts.filter((c) => c.lifecycle_stage === "customer").length;
 
   return (
-    <div className="flex flex-col flex-1 min-h-0">
-      {/* ── Top bar ─────────────────────────────────────────── */}
+    <div className="flex flex-1 flex-col min-h-0">
+      {/* Top bar */}
       <div
-        className="flex flex-wrap items-center gap-3 px-4 md:px-8 py-4 shrink-0"
+        className="flex flex-wrap items-center gap-3 px-4 py-4 md:px-8 shrink-0"
         style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
       >
-        {/* Summary pills */}
         <div className="flex items-center gap-2">
           {[
             { label: "Total", value: total, color: "#e2e8f0" },
             { label: "Calientes", value: hot, color: "#ef4444" },
-            { label: "Cerrados", value: closed, color: "#22c55e" },
+            { label: "Clientes", value: customers, color: "#22c55e" },
           ].map((s) => (
             <div
               key={s.label}
               className="flex items-center gap-1.5 rounded-full px-3 py-1"
               style={{ backgroundColor: "rgba(188,198,224,0.06)", border: "1px solid rgba(255,255,255,0.06)" }}
             >
-              <span className="font-headline text-sm font-bold" style={{ color: s.color }}>{s.value}</span>
-              <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#334155" }}>{s.label}</span>
+              <span className="text-sm font-bold" style={{ color: s.color }}>{s.value}</span>
+              <span className="text-[10px] uppercase tracking-widest" style={{ color: "#334155" }}>{s.label}</span>
             </div>
           ))}
         </div>
-
         <div className="flex-1" />
-
-        {/* Search */}
         <div
           className="flex items-center gap-2 rounded-xl px-3 py-2"
-          style={{ backgroundColor: "#0c0c14", border: "1px solid rgba(255,255,255,0.08)", minWidth: "200px" }}
+          style={{ backgroundColor: "#0c0c14", border: "1px solid rgba(255,255,255,0.08)", minWidth: 200 }}
         >
-          <span className="material-symbols-outlined text-sm" style={{ color: "#334155" }}>search</span>
+          <Search size={14} style={{ color: "#334155" }} />
           <input
-            type="text"
-            placeholder="Buscar lead…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent text-sm outline-none w-full"
+            placeholder="Buscar…"
+            className="w-full bg-transparent text-sm outline-none"
             style={{ color: "#f1f5f9" }}
           />
-          {search && (
-            <button onClick={() => setSearch("")}>
-              <span className="material-symbols-outlined text-xs" style={{ color: "#334155" }}>close</span>
-            </button>
-          )}
         </div>
-
-        {/* Filters */}
-        <div className="flex gap-1">
-          {(["all", "hot", "calificado"] as const).map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className="rounded-lg px-3 py-1.5 font-label text-[10px] uppercase tracking-widest transition-all"
-              style={{
-                backgroundColor: filter === f ? "rgba(59,130,246,0.12)" : "transparent",
-                color: filter === f ? "#3b82f6" : "#64748b",
-                border: filter === f ? "1px solid rgba(59,130,246,0.25)" : "1px solid transparent",
-              }}
-            >
-              {f === "all" ? "Todos" : f === "hot" ? "Calientes" : "Calificados"}
-            </button>
-          ))}
-        </div>
+        <button
+          onClick={() => setShowForm(true)}
+          className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold"
+          style={{ backgroundColor: "#3b82f6", color: "#fff" }}
+        >
+          <Plus size={15} /> Nuevo lead
+        </button>
       </div>
 
-      {/* ── Demo banner ─────────────────────────────────────── */}
-      {useMock && (
-        <div
-          className="mx-4 md:mx-8 mt-4 rounded-xl border px-4 py-3 text-sm flex items-center gap-2 shrink-0"
-          style={{ borderColor: "rgba(59,130,246,0.2)", backgroundColor: "rgba(59,130,246,0.05)", color: "#3b82f6" }}
-        >
-          <span className="material-symbols-outlined text-sm">info</span>
-          Datos de demostración — conectá tu fuente de leads para ver datos reales.
-        </div>
-      )}
-
-      {/* ── Kanban ──────────────────────────────────────────── */}
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-        {/* Board scroll area */}
-        <div className="flex-1 overflow-x-auto overflow-y-auto p-4 md:p-8">
-          <div className="flex gap-4 items-start pb-4" style={{ minWidth: "max-content" }}>
-            {STAGES.map((stage) => (
-              <KanbanColumn
+      {/* Kanban + panel de detalle */}
+      <div className="flex flex-1 min-h-0">
+        <div className="flex-1 overflow-auto p-4 md:p-8">
+        {total === 0 && (
+          <div
+            className="mb-4 rounded-xl border px-4 py-3 text-sm"
+            style={{ borderColor: "rgba(59,130,246,0.2)", backgroundColor: "rgba(59,130,246,0.05)", color: "#3b82f6" }}
+          >
+            Todavía no hay leads. Conectá WhatsApp en <b>Integraciones</b> o cargá uno con “Nuevo lead”.
+          </div>
+        )}
+        <div className="flex gap-4 items-start" style={{ minWidth: "max-content" }}>
+          {STAGES.map((stage) => {
+            const items = byStage(stage.id);
+            return (
+              <div
                 key={stage.id}
-                stage={stage}
-                leads={leadsForStage(stage.id)}
-                onSelect={(lead) => setSelectedLead(lead)}
-                selectedId={selectedLead?.id ?? null}
-                onDrop={handleDrop}
-                dragOver={dragOverStage === stage.id}
-                onDragOver={() => setDragOverStage(stage.id)}
-                onDragLeave={() => setDragOverStage(null)}
-              />
-            ))}
+                className="flex w-[230px] min-w-[230px] flex-col gap-2"
+                onDragOver={(e) => { e.preventDefault(); setDragStage(stage.id); }}
+                onDragLeave={() => setDragStage(null)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const id = e.dataTransfer.getData("contact_id");
+                  if (id) moveTo(stage.id, id);
+                }}
+              >
+                <div
+                  className="flex items-center justify-between rounded-xl px-3 py-2.5"
+                  style={{
+                    backgroundColor: dragStage === stage.id ? `${stage.color}10` : "#060609",
+                    border: `1px solid ${dragStage === stage.id ? stage.color + "40" : "rgba(255,255,255,0.06)"}`,
+                  }}
+                >
+                  <span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: stage.color }}>
+                    {stage.label}
+                  </span>
+                  <span
+                    className="flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold"
+                    style={{ backgroundColor: `${stage.color}18`, color: stage.color }}
+                  >
+                    {items.length}
+                  </span>
+                </div>
+                <div
+                  className="flex min-h-[120px] flex-col gap-2 rounded-xl p-2"
+                  style={{ border: dragStage === stage.id ? `1px dashed ${stage.color}30` : "1px solid transparent" }}
+                >
+                  <AnimatePresence>
+                    {items.map((c) => (
+                      <ContactCard key={c.id} c={c} color={stage.color} onClick={() => setSelected(c)} />
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </div>
+            );
+          })}
           </div>
         </div>
 
-        {/* Detail panel */}
+        {/* Panel de detalle */}
         <AnimatePresence>
-          {selectedLead && (
+          {selected && (
             <LeadDetail
-              lead={selectedLead}
-              onClose={() => setSelectedLead(null)}
-              onStageChange={(newStage) => {
-                startTransition(() => {
-                  updateOptimistic({ leadId: selectedLead.id, newStage });
-                  setSelectedLead({ ...selectedLead, pipeline_stage: newStage });
-                });
-              }}
+              contact={selected}
+              onClose={() => setSelected(null)}
+              onStageChanged={(id, s) =>
+                setContacts((cs) => cs.map((c) => (c.id === id ? { ...c, lifecycle_stage: s } : c)))
+              }
             />
           )}
         </AnimatePresence>
+      </div>
+
+      {showForm && (
+        <NewLeadModal
+          onClose={() => setShowForm(false)}
+          onCreated={() => { setShowForm(false); router.refresh(); }}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ── Alta manual ────────────────────────────────────────────────────── */
+function NewLeadModal({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function submit() {
+    if (!phone && !email) { setError("Cargá un teléfono o un email."); return; }
+    setBusy(true); setError(null);
+    const res = await fetch("/api/crm/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ full_name: name || null, phone: phone || null, email: email || null, channel: "manual", source: "crm" }),
+    });
+    setBusy(false);
+    if (res.ok) onCreated();
+    else setError("No se pudo crear el lead.");
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.6)" }} onClick={onClose}>
+      <div
+        className="w-full max-w-sm rounded-2xl border p-6"
+        style={{ backgroundColor: "#10101c", borderColor: "rgba(69,70,77,0.5)" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-4 flex items-center justify-between">
+          <p className="text-sm font-bold" style={{ color: "#f1f5f9" }}>Nuevo lead</p>
+          <button onClick={onClose}><X size={16} style={{ color: "#64748b" }} /></button>
+        </div>
+        <div className="flex flex-col gap-3">
+          {[
+            { v: name, set: setName, ph: "Nombre" },
+            { v: phone, set: setPhone, ph: "Teléfono (+549…)" },
+            { v: email, set: setEmail, ph: "Email" },
+          ].map((f, i) => (
+            <input
+              key={i}
+              value={f.v}
+              onChange={(e) => f.set(e.target.value)}
+              placeholder={f.ph}
+              className="rounded-xl border px-3 py-2.5 text-sm outline-none"
+              style={{ backgroundColor: "#0c0c14", borderColor: "rgba(255,255,255,0.08)", color: "#f1f5f9" }}
+            />
+          ))}
+          {error && <p className="text-xs" style={{ color: "#f87171" }}>{error}</p>}
+          <button
+            onClick={submit}
+            disabled={busy}
+            className="mt-1 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold disabled:opacity-50"
+            style={{ backgroundColor: "#3b82f6", color: "#fff" }}
+          >
+            {busy ? <Loader2 size={15} className="animate-spin" /> : <Plus size={15} />}
+            Crear lead
+          </button>
+          <p className="text-center text-[11px]" style={{ color: "#475569" }}>
+            La IA hace el primer contacto automáticamente.
+          </p>
+        </div>
       </div>
     </div>
   );

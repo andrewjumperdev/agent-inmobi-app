@@ -138,6 +138,56 @@ export function createTenant(input: {
   return koreFetch<TenantCreated>("/tenants", { method: "POST", body: input });
 }
 
+/** Contacto del CRM (GET /contacts). */
+export interface ContactOut {
+  id: string;
+  full_name: string | null;
+  email: string | null;
+  phone: string | null;
+  lifecycle_stage: string; // lead | qualified | in_proposal | customer | lost
+  temperature: string; // unset | cold | warm | hot
+  attributes: Record<string, string>; // role, company, pain, … capturados por el agente
+  last_activity_at: string | null;
+  created_at: string;
+}
+
+/** Mensaje de la conversación de un contacto (GET /contacts/{id}/messages). */
+export interface MessageOut {
+  id: string;
+  direction: string; // inbound | outbound | system
+  role: string;
+  author_agent: string | null;
+  body: string;
+  created_at: string;
+}
+
+/** Snapshot de métricas del orquestador (GET /metrics, §08). */
+export interface MetricsSnapshot {
+  leads_new_7d: number;
+  temperature_distribution: Record<string, number>;
+  auto_classification_rate: number;
+  cold_share: number;
+  plaud_leads: number;
+  open_escalations: number;
+  mrr_cents: number;
+  subscription_status: string;
+  alerts: { metric: string; issue: string; action: string }[];
+}
+
+/** Escalación / cola humana (GET /escalations, P3). */
+export interface EscalationOut {
+  id: string;
+  reason: string;
+  status: string;
+  source_agent: string | null;
+  contact_id: string | null;
+  title: string;
+  executive_summary: string;
+  payload: Record<string, unknown>;
+  created_at: string;
+  resolved_at: string | null;
+}
+
 /** Extrae el texto conversacional de un AgentRunOut, robusto a la forma del agente. */
 export function agentReplyText(run: AgentRunOut): string {
   const out = run.output ?? {};

@@ -1,28 +1,11 @@
 ﻿import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { createClient } from "@/lib/supabase/server";
 import { CrmBoard } from "@/components/crm/crm-board";
-import type { Database } from "@/lib/supabase/types";
-
-type Lead = Database["public"]["Tables"]["leads"]["Row"];
+import { koreGet } from "@/lib/kore/server";
+import type { ContactOut } from "@/lib/kore/client";
 
 export default async function CrmPage() {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: leads } = user
-    ? await supabase
-        .from("leads")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(200)
-    : { data: [] };
-
-  const safeLeads: Lead[] = (leads ?? []) as Lead[];
+  const contacts = await koreGet<ContactOut[]>("/contacts", []);
 
   return (
     <div
@@ -56,7 +39,7 @@ export default async function CrmPage() {
         </span>
       </header>
 
-      <CrmBoard leads={safeLeads} />
+      <CrmBoard contacts={contacts} />
     </div>
   );
 }
