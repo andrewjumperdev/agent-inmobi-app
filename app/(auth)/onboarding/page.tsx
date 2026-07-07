@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2, Sparkles, Check, ArrowRight, Building2, Scale, Home, GraduationCap, Briefcase } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 
 const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
@@ -113,13 +112,9 @@ export default function OnboardingPage() {
       }
       const d = (await res.json()) as DiagnoseResult;
 
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (supabase as any).from("profiles").update({ onboarding_completed: true }).eq("id", user.id);
-      }
-
+      // onboarding_completed se marca server-side en /api/onboarding/diagnose
+      // (service role) — así el middleware que gatea /dashboard lo ve siempre,
+      // sin depender de un write RLS desde el navegador.
       setResult(d);
       setPhase("result");
     } catch (err) {
