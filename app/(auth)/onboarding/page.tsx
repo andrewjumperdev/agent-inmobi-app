@@ -233,9 +233,12 @@ export default function OnboardingPage() {
                 ))}
               </div>
             </div>
-            <button onClick={() => router.push("/dashboard")} className="inline-flex h-12 items-center justify-center gap-2 rounded-xl text-base font-bold uppercase tracking-tight" style={{ backgroundColor: "#3b82f6", color: "#fff" }}>
+            {/* Navegación DURA (full reload) a propósito: fuerza una nueva
+                evaluación del middleware con el flag ya seteado y evita cualquier
+                estado trabado del router del cliente. */}
+            <a href="/dashboard" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl text-base font-bold uppercase tracking-tight no-underline" style={{ backgroundColor: "#3b82f6", color: "#fff" }}>
               Ir a mi dashboard <ArrowRight size={18} />
-            </button>
+            </a>
           </motion.div>
         )}
       </div>
