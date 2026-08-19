@@ -87,7 +87,10 @@
   --color-app-surface: var(--app-surface);
   --color-app-surface-hover: var(--app-surface-hover);
   --color-app-border: var(--app-border);
+  --color-app-border-strong: var(--app-border-strong);
   --color-app-topbar: var(--app-topbar);
+  --color-app-rail: var(--app-rail);
+  --color-app-label: var(--app-label);
 
   /* Temperatura del pipeline. Paleta VALIDADA por modo (ver comentario en
      :root/.dark) — no cambiar un hex sin volver a correr el validador. */
@@ -104,23 +107,25 @@
      puro: antes ambos eran oklch(1 0 0) y en modo claro las tarjetas se
      fundían con el fondo, sin ninguna jerarquía visual. */
   --background: oklch(0.976 0.002 250);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0f172a;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  /* 4.76:1 sobre blanco — alcanza para texto secundario real. Los rótulos
+     puramente decorativos usan --app-label, que es más claro. */
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #c0392f;
+  --border: rgba(15, 23, 42, 0.09);
+  --input: rgba(15, 23, 42, 0.14);
+  --ring: #2a78d6;
   --chart-1: oklch(0.65 0.18 240);
   --chart-2: oklch(0.72 0.17 142);
   --chart-3: oklch(0.79 0.17 70);
@@ -139,32 +144,40 @@
   /* Semantic: verde — activo, conectado.
      Paso oscurecido para modo claro: el original (L 0.72) daba 2.34:1 sobre
      blanco y los iconos de estado se veían lavados. Ahora 3.41:1. */
-  --success: oklch(0.62 0.17 142);
-  --success-foreground: oklch(0.985 0 0);
-  --success-muted: oklch(0.96 0.04 142);
+  --success: #2f8a4d;
+  --success-foreground: #ffffff;
+  --success-muted: #e8f4ec;
 
   /* Semantic: ámbar — tibio, estado intermedio.
      Mismo caso: L 0.79 daba 1.99:1 sobre blanco. Ahora 3.20:1. */
-  --warning: oklch(0.66 0.15 70);
-  --warning-foreground: oklch(0.2 0 0);
-  --warning-muted: oklch(0.97 0.04 70);
+  --warning: #a76f00;
+  --warning-foreground: #ffffff;
+  --warning-muted: #fdf3e0;
 
   /* Semantic: azul — información, datos */
-  --info: oklch(0.65 0.18 240);
-  --info-foreground: oklch(0.985 0 0);
-  --info-muted: oklch(0.95 0.04 240);
+  --info: #2a78d6;
+  --info-foreground: #ffffff;
+  --info-muted: #e8f1fc;
 
   /* Semantic: púrpura — IA, módulos */
-  --ai: oklch(0.65 0.22 295);
-  --ai-foreground: oklch(0.985 0 0);
-  --ai-muted: oklch(0.95 0.05 295);
+  --ai: #7c3aed;
+  --ai-foreground: #ffffff;
+  --ai-muted: #f1eafe;
 
   /* ── Dashboard (modo claro / "mañana") ─────────────────────────── */
   --app-canvas: #f6f7f9;
   --app-surface: #ffffff;
   --app-surface-hover: #f2f4f7;
+  /* Superficie del sidebar: apenas distinta del blanco de las tarjetas, para
+     separar navegación de contenido sin una línea dura. */
+  --app-rail: #fbfbfc;
   --app-border: rgba(15, 23, 42, 0.09);
+  --app-border-strong: rgba(15, 23, 42, 0.14);
   --app-topbar: rgba(255, 255, 255, 0.85);
+  /* Tinta de etiqueta: para eyebrows y encabezados de columna. Contrasta 2.6:1,
+     insuficiente para texto que carga significado — se usa SOLO en rótulos
+     decorativos; los datos van en --muted-foreground o más oscuro. */
+  --app-label: #94a3b8;
 
   /* Temperatura — VALIDADA sobre la superficie #ffffff:
        chroma ✓ · CVD ΔE 15.3 ✓ · visión normal ΔE 20.8 ✓
@@ -183,25 +196,26 @@
 .dark {
   color-scheme: dark;
 
-  /* Base tokens */
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  /* Base tokens — familia slate, como el modo claro. No es una inversión: cada
+     paso se eligió contra la superficie oscura y se verificó por contraste. */
+  --background: #0a0e14;
+  --foreground: #e8edf5;
+  --card: #121821;
+  --card-foreground: #e8edf5;
+  --popover: #121821;
+  --popover-foreground: #e8edf5;
+  --primary: #e8edf5;
+  --primary-foreground: #0f172a;
+  --secondary: #1a212c;
+  --secondary-foreground: #e8edf5;
+  --muted: #1a212c;
+  --muted-foreground: #9aa8bd;
+  --accent: #1a212c;
+  --accent-foreground: #e8edf5;
+  --destructive: #f0766f;
+  --border: rgba(148, 163, 184, 0.14);
+  --input: rgba(148, 163, 184, 0.22);
+  --ring: #5b9df5;
   --chart-1: oklch(0.72 0.18 240);
   --chart-2: oklch(0.75 0.17 142);
   --chart-3: oklch(0.82 0.17 70);
@@ -217,31 +231,37 @@
   --sidebar-ring: oklch(0.556 0 0);
 
   /* Semantic dark: verde */
-  --success: oklch(0.75 0.17 142);
-  --success-foreground: oklch(0.1 0 0);
-  --success-muted: oklch(0.22 0.05 142);
+  --success: #4ab87a;
+  --success-foreground: #06140c;
+  --success-muted: #16281e;
 
   /* Semantic dark: ámbar */
-  --warning: oklch(0.82 0.17 70);
-  --warning-foreground: oklch(0.1 0 0);
-  --warning-muted: oklch(0.22 0.05 70);
+  --warning: #e0a63c;
+  --warning-foreground: #14100a;
+  --warning-muted: #2b2417;
 
   /* Semantic dark: azul */
-  --info: oklch(0.72 0.18 240);
-  --info-foreground: oklch(0.1 0 0);
-  --info-muted: oklch(0.22 0.05 240);
+  --info: #5b9df5;
+  --info-foreground: #06111f;
+  --info-muted: #16233a;
 
   /* Semantic dark: púrpura/IA */
-  --ai: oklch(0.72 0.22 295);
-  --ai-foreground: oklch(0.1 0 0);
-  --ai-muted: oklch(0.22 0.07 295);
+  --ai: #a78bfa;
+  --ai-foreground: #10061f;
+  --ai-muted: #241a3a;
 
   /* ── Dashboard (modo oscuro / "noche") ─────────────────────────── */
-  --app-canvas: #08080c;
-  --app-surface: #101018;
-  --app-surface-hover: #161622;
-  --app-border: rgba(255, 255, 255, 0.08);
-  --app-topbar: rgba(12, 12, 20, 0.85);
+  /* Neutros con el mismo sesgo azul que el modo claro (familia slate), no
+     grises puros: si el oscuro fuera neutro, el azul de marca se vería
+     desaturado al lado y los dos modos no leerían como el mismo producto. */
+  --app-canvas: #0a0e14;
+  --app-surface: #121821;
+  --app-surface-hover: #1a212c;
+  --app-rail: #0e141c;
+  --app-border: rgba(148, 163, 184, 0.14);
+  --app-border-strong: rgba(148, 163, 184, 0.22);
+  --app-topbar: rgba(10, 14, 20, 0.85);
+  --app-label: #7d8da3;
 
   /* Temperatura — pasos PROPIOS del modo oscuro (no es un flip automático
      del claro), validados sobre la superficie #101018:

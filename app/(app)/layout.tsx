@@ -6,6 +6,8 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { koreGet } from "@/lib/kore/server";
+import type { MetricsSnapshot } from "@/lib/kore/client";
 
 export default async function AppLayout({
   children,
@@ -25,6 +27,17 @@ export default async function AppLayout({
         .single()
     : { data: null };
 
+  // Una sola lectura para los contadores del sidebar: /metrics ya trae el total
+  // de contactos (suma de la distribución de temperatura) y la cola humana, así
+  // que no hace falta pedir la lista de contactos en cada página.
+  const metrics = await koreGet<MetricsSnapshot | null>("/metrics", null);
+  const navCounts = {
+    crm: metrics
+      ? Object.values(metrics.temperature_distribution || {}).reduce((a, b) => a + b, 0)
+      : 0,
+    seguimiento: metrics?.open_escalations ?? 0,
+  };
+
   const userProfile = {
     name:
       (profile as { full_name?: string } | null)?.full_name ??
@@ -40,7 +53,7 @@ export default async function AppLayout({
   return (
     <TooltipProvider>
       <SidebarProvider defaultOpen>
-        <AppSidebar userName={userProfile.name} />
+        <AppSidebar userName={userProfile.name} counts={navCounts} />
         <SidebarInset>
           <main className="flex flex-1 flex-col min-h-svh">{children}</main>
         </SidebarInset>

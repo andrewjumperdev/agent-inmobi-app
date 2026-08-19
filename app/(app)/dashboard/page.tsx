@@ -2,9 +2,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { DashboardReal } from "@/components/dashboard/metrics-real";
 import { koreGet } from "@/lib/kore/server";
-import type { MetricsSnapshot } from "@/lib/kore/client";
+import type { ContactOut, MetricsSnapshot } from "@/lib/kore/client";
 import { UserDropdown } from "@/components/cuenta/user-dropdown";
 import { Greeting } from "@/components/dashboard/greeting";
+import Link from "next/link";
 
 const EMPTY_METRICS: MetricsSnapshot = {
   leads_new_7d: 0,
@@ -45,7 +46,12 @@ export default async function DashboardPage() {
 
   const p = profile as ProfileRow | null;
 
-  const metrics = await koreGet<MetricsSnapshot>("/metrics", EMPTY_METRICS);
+  // Las dos lecturas en paralelo: son independientes y secuenciarlas sumaría
+  // el round-trip de una a la otra en el render del servidor.
+  const [metrics, contacts] = await Promise.all([
+    koreGet<MetricsSnapshot>("/metrics", EMPTY_METRICS),
+    koreGet<ContactOut[]>("/contacts", []),
+  ]);
 
   const userName =
     p?.full_name ??
@@ -54,6 +60,17 @@ export default async function DashboardPage() {
     "usuario";
 
   const isFirstTime = !(p?.onboarding_completed ?? false);
+
+  const hotCount = contacts.filter((c) => c.temperature === "hot").length;
+  const summary = [
+    `${metrics.leads_new_7d} lead${metrics.leads_new_7d === 1 ? "" : "s"} esta semana`,
+    hotCount > 0 ? `${hotCount} ${hotCount === 1 ? "está caliente" : "están calientes"}` : null,
+    metrics.open_escalations > 0
+      ? `${metrics.open_escalations} ${metrics.open_escalations === 1 ? "espera" : "esperan"} tu decisión`
+      : null,
+  ]
+    .filter(Boolean)
+    .join(". ") + ".";
 
   const navUser = {
     name: p?.full_name ?? user?.user_metadata?.full_name ?? user?.email?.split("@")[0],
@@ -82,14 +99,27 @@ export default async function DashboardPage() {
       </PageHeader>
 
       {/* Lienzo del dashboard */}
-      <div className="flex-1 space-y-6 p-4 md:p-8">
-        <div className="space-y-1">
-          <Greeting name={userName} />
-          <p className="text-sm text-muted-foreground">
-            Así viene tu pipeline hoy.
-          </p>
+      <div className="flex-1 space-y-4 p-4 md:p-7">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <Greeting name={userName} />
+            {/* Resumen en una frase: los mismos números que las tarjetas, pero
+                leídos como una situación. Es lo que alguien contestaría si le
+                preguntaran "¿cómo viene?" — las tarjetas responden el detalle. */}
+            <p className="mt-[3px] font-headline text-[13px] text-muted-foreground">
+              {summary}
+            </p>
+          </div>
+          {/* Solo acciones reales. El mockup incluía "Exportar", que no existe:
+              un botón que no hace nada es peor que su ausencia. */}
+          <Link
+            href="/crm"
+            className="rounded-[9px] bg-info px-3.5 py-[7px] font-headline text-xs font-bold text-white transition-opacity hover:opacity-90"
+          >
+            Ver CRM
+          </Link>
         </div>
-        <DashboardReal metrics={metrics} />
+        <DashboardReal metrics={metrics} contacts={contacts} />
       </div>
 
       {/* Pass context to widget via data attributes for hydration */}

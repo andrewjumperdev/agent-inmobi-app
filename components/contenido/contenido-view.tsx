@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Generador } from "./generador";
 import { Calendario } from "./calendario";
@@ -15,12 +15,72 @@ const TABS = [
 
 type TabId = (typeof TABS)[number]["id"];
 
+/** Forma en que el backend devuelve una pieza (app/api/v1/content.py). */
+interface PiezaRemota {
+  id: string;
+  format: PiezaGuardada["format"];
+  pillar: PiezaGuardada["pillar"];
+  content: string;
+  context: string;
+  zona: string;
+  created_at: string;
+}
+
+const desdeApi = (p: PiezaRemota): PiezaGuardada => ({
+  id: p.id,
+  format: p.format,
+  pillar: p.pillar,
+  content: p.content,
+  context: p.context,
+  zona: p.zona,
+  createdAt: new Date(p.created_at),
+});
+
 export function ContenidoView() {
   const [activeTab, setActiveTab] = useState<TabId>("generador");
   const [banco, setBanco] = useState<PiezaGuardada[]>([]);
 
-  function guardar(pieza: PiezaGuardada) {
+  // El banco vive en el servidor. Antes era estado del navegador y se perdía
+  // al refrescar, junto con el costo de haberlo generado.
+  useEffect(() => {
+    let vigente = true;
+    fetch("/api/contenido/piezas")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((d: PiezaRemota[]) => {
+        if (vigente && Array.isArray(d)) setBanco(d.map(desdeApi));
+      })
+      .catch(() => {
+        /* sin banco se puede seguir generando; no vale romper la pantalla */
+      });
+    return () => {
+      vigente = false;
+    };
+  }, []);
+
+  async function guardar(pieza: PiezaGuardada) {
+    // Optimista: la pieza aparece ya, y si el guardado falla se retira. Quien
+    // acaba de generar algo espera verlo en el banco en el acto.
     setBanco((prev) => [pieza, ...prev]);
+    try {
+      const res = await fetch("/api/contenido/piezas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          format: pieza.format,
+          pillar: pieza.pillar,
+          content: pieza.content,
+          context: pieza.context,
+          zona: pieza.zona,
+        }),
+      });
+      if (!res.ok) throw new Error("save");
+      const guardada = (await res.json()) as PiezaRemota;
+      // Se reemplaza por la del servidor para quedarnos con su id real: sin eso
+      // un borrado posterior apuntaría a un id que no existe en la base.
+      setBanco((prev) => prev.map((p) => (p.id === pieza.id ? desdeApi(guardada) : p)));
+    } catch {
+      setBanco((prev) => prev.filter((p) => p.id !== pieza.id));
+    }
   }
 
   return (
@@ -39,7 +99,7 @@ export function ContenidoView() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className="relative flex items-center gap-2 px-4 py-3 font-label text-xs uppercase tracking-widest transition-colors"
+              className="relative flex items-center gap-2 px-4 py-3 font-label text-[10px] font-semibold uppercase tracking-[0.16em] transition-colors"
               style={{ color: active ? "var(--info)" : "var(--muted-foreground)" }}
             >
               <span

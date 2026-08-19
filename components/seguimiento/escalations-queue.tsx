@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, X, Loader2, Inbox } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, X, Loader2, Inbox } from "lucide-react";
 import type { EscalationOut } from "@/lib/kore/client";
 
 const REASON: Record<string, { label: string; color: string }> = {
@@ -24,6 +24,62 @@ function timeAgo(iso: string) {
   if (s < 3600) return `hace ${Math.floor(s / 60)} min`;
   if (s < 86400) return `hace ${Math.floor(s / 3600)} h`;
   return `hace ${Math.floor(s / 86400)} d`;
+}
+
+
+/* ── Detalle de la escalación ─────────────────────────────────────────
+ * El resumen ejecutivo alcanza para triar, no para decidir. La propuesta y los
+ * borradores de contenido viajan enteros en `payload`, así que se muestran acá
+ * en vez de obligar a abrir la base para leerlos.
+ *
+ * Se colapsa por defecto: la cola se recorre de arriba abajo y cinco propuestas
+ * desplegadas la vuelven ilegible. */
+function Detalle({ payload }: { payload: Record<string, unknown> }) {
+  const [open, setOpen] = useState(false);
+
+  const proposal = payload?.proposal as Record<string, unknown> | undefined;
+  const drafts = payload?.drafts as unknown[] | undefined;
+  const hasDetail = Boolean(proposal || drafts?.length);
+  if (!hasDetail) return null;
+
+  return (
+    <div className="mt-3 border-t border-app-border pt-3">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex items-center gap-1 font-label text-[9.5px] font-semibold uppercase tracking-wider text-info transition-opacity hover:opacity-80"
+      >
+        {open ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+        {open ? "Ocultar" : proposal ? "Ver la propuesta" : "Ver los borradores"}
+      </button>
+
+      {open && (
+        <div className="mt-3 space-y-3">
+          {proposal &&
+            Object.entries(proposal)
+              .filter(([, v]) => v !== null && v !== "" && typeof v !== "object")
+              .map(([k, v]) => (
+                <div key={k}>
+                  <p className="font-label text-[9px] uppercase tracking-[0.16em] text-app-label">
+                    {k.replace(/_/g, " ")}
+                  </p>
+                  <p className="mt-0.5 whitespace-pre-wrap font-headline text-[13px] leading-relaxed text-foreground">
+                    {String(v)}
+                  </p>
+                </div>
+              ))}
+
+          {drafts?.map((d, i) => (
+            <div key={i} className="rounded-xl bg-app-surface-hover p-3">
+              <p className="whitespace-pre-wrap font-headline text-[13px] leading-relaxed text-foreground">
+                {typeof d === "string" ? d : JSON.stringify(d, null, 2)}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export function EscalationsQueue({ items: initial }: { items: EscalationOut[] }) {
@@ -47,19 +103,27 @@ export function EscalationsQueue({ items: initial }: { items: EscalationOut[] })
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20">
-        <Inbox size={40} style={{ color: "var(--muted-foreground)" }} />
-        <p className="text-sm" style={{ color: "var(--muted-foreground)" }}>
-          No hay nada esperando a un humano. La IA está manejando todo ✓
-        </p>
+      <div className="flex flex-1 flex-col items-center justify-center gap-4 px-4 py-24 text-center">
+        <span className="flex size-12 items-center justify-center rounded-2xl bg-success/10">
+          <Inbox size={22} className="text-success" aria-hidden />
+        </span>
+        <div>
+          <p className="font-headline text-lg font-extrabold tracking-[-0.02em] text-foreground">
+            La cola está vacía
+          </p>
+          <p className="mt-1 font-headline text-[13px] text-muted-foreground">
+            No hay nada esperando una decisión tuya. Los agentes están atendiendo solos.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-3 p-4 md:p-8">
-      <p className="text-sm" style={{ color: "var(--muted-foreground)" }}>
-        {items.length} {items.length === 1 ? "caso requiere" : "casos requieren"} tu atención. La IA preparó cada uno.
+    <div className="mx-auto w-full max-w-3xl space-y-3 p-4 md:p-7">
+      <p className="font-headline text-[13px] text-muted-foreground">
+        {items.length} {items.length === 1 ? "caso requiere" : "casos requieren"} tu
+        atención. Los agentes prepararon cada uno; falta que decidas vos.
       </p>
       <AnimatePresence>
         {items.map((e) => {
@@ -71,33 +135,36 @@ export function EscalationsQueue({ items: initial }: { items: EscalationOut[] })
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="rounded-2xl border p-4"
-              style={{ backgroundColor: "var(--app-surface)", borderColor: "var(--app-border)" }}
+              className="rounded-2xl border border-app-border bg-app-surface p-[18px] transition-colors hover:bg-app-surface-hover"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="mb-1.5 flex items-center gap-2">
                     <span
-                      className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
-                      style={{ backgroundColor: `${r.color}1f`, color: r.color }}
+                      className="rounded-full px-2 py-0.5 font-label text-[9.5px] font-semibold uppercase tracking-wider"
+                      style={{
+                        backgroundColor: `color-mix(in oklab, ${r.color} 13%, transparent)`,
+                        color: r.color,
+                      }}
                     >
                       {r.label}
                     </span>
-                    <span className="text-[11px]" style={{ color: "var(--muted-foreground)" }}>{timeAgo(e.created_at)}</span>
+                    <span className="font-headline text-[11px] text-muted-foreground">{timeAgo(e.created_at)}</span>
                   </div>
-                  <p className="text-sm font-semibold" style={{ color: "var(--foreground)" }}>{e.title}</p>
+                  <p className="font-headline text-[13.5px] font-bold text-foreground">{e.title}</p>
                   {e.executive_summary && (
-                    <p className="mt-1 text-sm leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
+                    <p className="mt-1 font-headline text-[13px] leading-relaxed text-muted-foreground">
                       {e.executive_summary}
                     </p>
                   )}
+                  <Detalle payload={e.payload} />
                 </div>
                 <div className="flex shrink-0 gap-2">
                   <button
                     onClick={() => resolve(e.id, "resolved")}
                     disabled={busy === e.id}
-                    title="Resuelto"
-                    className="flex h-9 w-9 items-center justify-center rounded-xl disabled:opacity-40"
+                    title="Resuelto" aria-label="Marcar como resuelto"
+                    className="flex size-9 items-center justify-center rounded-[9px] transition-opacity hover:opacity-80 disabled:opacity-40"
                     style={{ backgroundColor: "color-mix(in oklab, var(--success) 12%, transparent)", color: "var(--success)" }}
                   >
                     {busy === e.id ? <Loader2 size={15} className="animate-spin" /> : <Check size={16} />}
@@ -105,8 +172,8 @@ export function EscalationsQueue({ items: initial }: { items: EscalationOut[] })
                   <button
                     onClick={() => resolve(e.id, "dismissed")}
                     disabled={busy === e.id}
-                    title="Descartar"
-                    className="flex h-9 w-9 items-center justify-center rounded-xl disabled:opacity-40"
+                    title="Descartar" aria-label="Descartar"
+                    className="flex size-9 items-center justify-center rounded-[9px] transition-opacity hover:opacity-80 disabled:opacity-40"
                     style={{ backgroundColor: "color-mix(in oklab, var(--destructive) 10%, transparent)", color: "var(--destructive)" }}
                   >
                     <X size={16} />

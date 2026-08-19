@@ -72,16 +72,16 @@ export function SettingsCard({
   const configured = Boolean(data?.configured);
 
   return (
-    <div className="max-w-xl rounded-2xl border p-6" style={{ backgroundColor: "var(--app-surface-hover)", borderColor: "var(--border)" }}>
+    <div className="max-w-xl rounded-2xl border border-app-border bg-app-surface p-[18px]">
       <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl" style={{ backgroundColor: "color-mix(in oklab, var(--info) 12%, transparent)", border: "1px solid color-mix(in oklab, var(--info) 25%, transparent)" }}>
+        <div className="flex size-[34px] items-center justify-center rounded-[11px]" style={{ backgroundColor: "color-mix(in oklab, var(--info) 12%, transparent)", border: "1px solid color-mix(in oklab, var(--info) 25%, transparent)" }}>
           {icon}
         </div>
         <div className="flex-1">
-          <p className="font-headline text-sm font-bold" style={{ color: "var(--foreground)" }}>{title}</p>
-          <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>{subtitle}</p>
+          <p className="font-headline text-[13.5px] font-bold text-foreground">{title}</p>
+          <p className="font-headline text-[11.5px] text-muted-foreground">{subtitle}</p>
         </div>
-        <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: configured ? "var(--success)" : "var(--muted-foreground)" }}>
+        <span className="flex items-center gap-1 font-label text-[9.5px] font-semibold uppercase tracking-wider" style={{ color: configured ? "var(--success)" : "var(--app-label)" }}>
           {configured ? <CheckCircle2 size={14} /> : <AlertTriangle size={14} style={{ color: "var(--warning)" }} />}
           {configured ? "Conectado" : "Sin conectar"}
         </span>
@@ -108,13 +108,13 @@ export function SettingsCard({
         })}
       </div>
 
-      {hint && <p className="mt-3 text-xs leading-relaxed" style={{ color: "var(--muted-foreground)" }}>{hint}</p>}
-      {msg && <p className="mt-2 text-xs" style={{ color: "var(--muted-foreground)" }}>{msg}</p>}
+      {hint && <p className="mt-3 font-headline text-[11.5px] leading-relaxed text-muted-foreground">{hint}</p>}
+      {msg && <p className="mt-2 font-headline text-[11.5px] text-muted-foreground">{msg}</p>}
 
       <button
         onClick={save}
         disabled={busy}
-        className="mt-4 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold disabled:opacity-50"
+        className="mt-4 inline-flex items-center gap-2 rounded-[9px] px-4 py-2.5 font-headline text-xs font-bold transition-opacity hover:opacity-90 disabled:opacity-50"
         style={{ backgroundColor: "var(--info)", color: "#fff" }}
       >
         {busy ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Guardar

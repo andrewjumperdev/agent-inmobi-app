@@ -26,7 +26,7 @@ export function Greeting({ name }: { name: string }) {
 
   return (
     <h1
-      className="text-xl font-bold tracking-tight text-foreground"
+      className="font-headline text-[21px] font-extrabold leading-tight tracking-[-0.02em] text-foreground"
       suppressHydrationWarning
     >
       {greeting}, {name}

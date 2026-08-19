@@ -171,6 +171,8 @@ export interface ContactOut {
   created_at: string;
   /** Hasta cuándo el agente NO responde a este contacto. null = lo atiende el agente. */
   paused_until: string | null;
+  /** Último mensaje ENTRANTE. null si la persona todavía no escribió. */
+  last_message: string | null;
 }
 
 /** Mensaje de la conversación de un contacto (GET /contacts/{id}/messages). */

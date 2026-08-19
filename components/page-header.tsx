@@ -26,7 +26,7 @@ export function PageHeader({
   children?: React.ReactNode;
 }) {
   return (
-    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-app-border bg-app-topbar px-4 backdrop-blur-md md:px-6">
+    <header className="sticky top-0 z-30 flex h-[60px] shrink-0 items-center gap-3 border-b border-app-border bg-app-topbar px-4 backdrop-blur-md md:px-6">
       <SidebarTrigger className="-ml-1 text-muted-foreground" />
       <Separator orientation="vertical" className="h-4 opacity-40" />
 
@@ -39,11 +39,11 @@ export function PageHeader({
           {icon}
         </span>
       )}
-      <h1 className="font-headline text-sm font-bold uppercase tracking-tighter text-foreground">
+      <h1 className="font-headline text-[13px] font-extrabold uppercase tracking-[0.02em] text-foreground">
         {title}
       </h1>
       {subtitle && (
-        <span className="hidden font-label text-[10px] uppercase tracking-widest text-muted-foreground sm:inline">
+        <span className="hidden font-label text-[9.5px] font-semibold uppercase tracking-[0.18em] text-app-label sm:inline">
           {subtitle}
         </span>
       )}

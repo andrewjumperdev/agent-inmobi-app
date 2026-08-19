@@ -41,21 +41,21 @@ function ContactCard({ c, color, onClick }: { c: ContactOut; color: string; onCl
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.96 }}
-      className="cursor-pointer rounded-xl border p-3 transition-colors hover:border-[color-mix(in oklab, var(--info) 40%, transparent)]"
+      className="cursor-pointer rounded-xl border border-app-border bg-app-surface p-3 transition-colors hover:bg-app-surface-hover"
       style={{ backgroundColor: "var(--app-surface)", borderColor: "var(--app-border)" }}
     >
       <div className="flex items-center gap-2.5">
         <div
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[11px] font-bold"
+          className="flex size-8 shrink-0 items-center justify-center rounded-lg font-headline text-[11px] font-bold"
           style={{ backgroundColor: `${color}1a`, color }}
         >
           {initials(c.full_name, c.phone)}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold" style={{ color: "var(--foreground)" }}>
+          <p className="truncate font-headline text-[13px] font-bold text-foreground">
             {c.full_name || c.phone || c.email || "Sin nombre"}
           </p>
-          <p className="truncate text-[11px]" style={{ color: "var(--muted-foreground)" }}>
+          <p className="truncate font-headline text-[11px] text-muted-foreground">
             {c.attributes?.company
               ? `${c.attributes.company}${c.attributes.role ? ` · ${c.attributes.role}` : ""}`
               : c.phone || c.email || "—"}
@@ -64,7 +64,7 @@ function ContactCard({ c, color, onClick }: { c: ContactOut; color: string; onCl
       </div>
       <div className="mt-2 flex items-center gap-1.5">
         <span
-          className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
+          className="rounded-full px-2 py-0.5 font-label text-[9.5px] font-semibold uppercase tracking-wider"
           style={{ backgroundColor: `${t.color}1f`, color: t.color }}
         >
           {t.label}
@@ -131,8 +131,8 @@ export function CrmBoard({ contacts: initial }: { contacts: ContactOut[] }) {
               className="flex items-center gap-1.5 rounded-full px-3 py-1"
               style={{ backgroundColor: "rgba(188,198,224,0.06)", border: "1px solid var(--app-border)" }}
             >
-              <span className="text-sm font-bold" style={{ color: s.color }}>{s.value}</span>
-              <span className="text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>{s.label}</span>
+              <span className="font-headline text-[15px] font-extrabold" style={{ color: s.color }}>{s.value}</span>
+              <span className="font-label text-[9.5px] font-semibold uppercase tracking-[0.16em] text-app-label">{s.label}</span>
             </div>
           ))}
         </div>
@@ -146,13 +146,13 @@ export function CrmBoard({ contacts: initial }: { contacts: ContactOut[] }) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar…"
-            className="w-full bg-transparent text-sm outline-none"
+            className="w-full bg-transparent font-headline text-[13px] outline-none placeholder:text-app-label"
             style={{ color: "var(--foreground)" }}
           />
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold"
+          className="inline-flex items-center gap-1.5 rounded-[9px] px-3.5 py-2 font-headline text-xs font-bold transition-opacity hover:opacity-90"
           style={{ backgroundColor: "var(--info)", color: "#fff" }}
         >
           <Plus size={15} /> Nuevo lead
@@ -192,11 +192,11 @@ export function CrmBoard({ contacts: initial }: { contacts: ContactOut[] }) {
                     border: `1px solid ${dragStage === stage.id ? stage.color + "40" : "var(--app-border)"}`,
                   }}
                 >
-                  <span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: stage.color }}>
+                  <span className="font-label text-[10px] font-bold uppercase tracking-[0.16em]" style={{ color: stage.color }}>
                     {stage.label}
                   </span>
                   <span
-                    className="flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold"
+                    className="flex size-5 items-center justify-center rounded-full font-label text-[10px] font-bold"
                     style={{ backgroundColor: `${stage.color}18`, color: stage.color }}
                   >
                     {items.length}
@@ -271,7 +271,7 @@ function NewLeadModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-sm font-bold" style={{ color: "var(--foreground)" }}>Nuevo lead</p>
+          <p className="font-headline text-[15px] font-extrabold tracking-[-0.02em] text-foreground">Nuevo lead</p>
           <button onClick={onClose}><X size={16} style={{ color: "var(--muted-foreground)" }} /></button>
         </div>
         <div className="flex flex-col gap-3">
