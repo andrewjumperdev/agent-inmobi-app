@@ -1,10 +1,11 @@
-import { ComingSoon } from "@/components/ui/coming-soon";
+import { PageHeader } from "@/components/page-header";
+import { Fuentes } from "@/components/captacion/fuentes";
 
 export default function CaptacionPage() {
   return (
-    <ComingSoon
-      title="Captación"
-      description="Ingesta automática de leads desde Meta Ads, portales inmobiliarios y formularios web. Por ahora podés cargar leads manualmente y conectar WhatsApp desde el CRM e Integraciones."
-    />
+    <div className="flex min-h-svh flex-1 flex-col bg-app-canvas text-foreground">
+      <PageHeader title="Captación" subtitle="Fuentes de leads" icon="campaign" />
+      <Fuentes />
+    </div>
   );
 }
