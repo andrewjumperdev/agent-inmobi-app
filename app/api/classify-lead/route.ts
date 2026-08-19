@@ -1,13 +1,17 @@
 /**
- * /api/classify-lead — AI-powered lead classification
+ * /api/classify-lead — clasificación de leads con IA
  *
- * Provider: same AI_PROVIDER env flag as /api/chat
- *   AI_PROVIDER=mock      → instant mock classification (default)
+ * Provider: mismo flag AI_PROVIDER que /api/chat
+ *   AI_PROVIDER=mock      → clasificación mock instantánea (default)
  *   AI_PROVIDER=groq      → Groq llama-3.3-70b
- *   AI_PROVIDER=anthropic → Claude Sonnet
+ *   AI_PROVIDER=anthropic → Claude Haiku
  *
- * Returns JSON: { operation_type, urgency, score, zone_interest }
+ * Devuelve JSON: { operation_type, urgency, score, zone_interest }
+ *
+ * Requiere sesión: con un proveedor real detrás, sin este chequeo el endpoint
+ * es una pasarela de LLM gratis para cualquiera que conozca la URL.
  */
+import { createClient } from "@/lib/supabase/server";
 
 const PROVIDER = process.env.AI_PROVIDER ?? "mock";
 
@@ -62,6 +66,12 @@ function mockClassify(data: {
 /* ── POST ─────────────────────────────────────────────────── */
 export async function POST(request: Request) {
   try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return Response.json({ error: "no_session" }, { status: 401 });
+
     const body = await request.json() as {
       name?: string;
       phone?: string;

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { CuentaView } from "@/components/cuenta/cuenta-view";
+import { PageHeader } from "@/components/page-header";
 
 export default async function CuentaPage() {
   const supabase = await createClient();
@@ -19,19 +20,23 @@ export default async function CuentaPage() {
     .single();
 
   return (
-    <CuentaView
-      profile={profile ?? {
-        full_name: null,
-        email: null,
-        avatar_url: null,
-        company_name: null,
-        phone: null,
-        subscription_plan: null,
-        subscription_status: null,
-        trial_ends_at: null,
-        created_at: null,
-      }}
-      authEmail={user.email ?? ""}
-    />
+    <div className="flex min-h-svh flex-1 flex-col bg-app-canvas text-foreground">
+      <PageHeader title="Mi cuenta" subtitle="Perfil y suscripción" icon="account_circle" />
+
+      <CuentaView
+        profile={profile ?? {
+          full_name: null,
+          email: null,
+          avatar_url: null,
+          company_name: null,
+          phone: null,
+          subscription_plan: null,
+          subscription_status: null,
+          trial_ends_at: null,
+          created_at: null,
+        }}
+        authEmail={user.email ?? ""}
+      />
+    </div>
   );
 }

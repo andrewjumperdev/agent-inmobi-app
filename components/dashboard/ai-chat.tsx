@@ -34,7 +34,7 @@ function TypingDots() {
         <motion.span
           key={i}
           className="block h-1.5 w-1.5 rounded-full"
-          style={{ backgroundColor: "#3b82f6" }}
+          style={{ backgroundColor: "var(--info)" }}
           animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1, 0.8] }}
           transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
         />
@@ -58,9 +58,9 @@ function Bubble({ message }: { message: Message }) {
       {isAI && (
         <div
           className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full"
-          style={{ backgroundColor: "rgba(59,130,246,0.12)", border: "1px solid rgba(59,130,246,0.2)" }}
+          style={{ backgroundColor: "color-mix(in oklab, var(--info) 12%, transparent)", border: "1px solid color-mix(in oklab, var(--info) 20%, transparent)" }}
         >
-          <Sparkles size={14} style={{ color: "#3b82f6" }} />
+          <Sparkles size={14} style={{ color: "var(--info)" }} />
         </div>
       )}
 
@@ -75,12 +75,12 @@ function Bubble({ message }: { message: Message }) {
         style={
           isAI
             ? {
-                backgroundColor: "#10101c",
-                border: "1px solid rgba(69,70,77,0.5)",
-                color: "#f1f5f9",
+                backgroundColor: "var(--app-surface-hover)",
+                border: "1px solid var(--border)",
+                color: "var(--foreground)",
               }
             : {
-                backgroundColor: "#3b82f6",
+                backgroundColor: "var(--info)",
                 color: "#ffffff",
                 fontWeight: 500,
               }
@@ -94,7 +94,7 @@ function Bubble({ message }: { message: Message }) {
             {message.streaming && (
               <motion.span
                 className="ml-0.5 inline-block h-3.5 w-0.5 rounded-full align-middle"
-                style={{ backgroundColor: isAI ? "#3b82f6" : "#ffffff" }}
+                style={{ backgroundColor: isAI ? "var(--info)" : "#ffffff" }}
                 animate={{ opacity: [1, 0, 1] }}
                 transition={{ duration: 0.8, repeat: Infinity }}
               />
@@ -107,9 +107,9 @@ function Bubble({ message }: { message: Message }) {
       {!isAI && (
         <div
           className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full"
-          style={{ backgroundColor: "#222a3d", border: "1px solid rgba(69,70,77,0.5)" }}
+          style={{ backgroundColor: "var(--muted)", border: "1px solid var(--border)" }}
         >
-          <User size={14} style={{ color: "#94a3b8" }} />
+          <User size={14} style={{ color: "var(--muted-foreground)" }} />
         </div>
       )}
     </motion.div>
@@ -255,32 +255,32 @@ export function AIChat({
       className="flex flex-col"
       style={{
         height: "calc(100svh - 56px)", /* subtract top bar */
-        backgroundColor: "#060609",
+        backgroundColor: "var(--app-canvas)",
       }}
     >
       {/* Header */}
       <div
         className="flex items-center gap-3 border-b px-6 py-3 shrink-0"
-        style={{ borderColor: "rgba(255,255,255,0.08)", backgroundColor: "#080812" }}
+        style={{ borderColor: "var(--app-border)", backgroundColor: "var(--app-topbar)" }}
       >
         <div
           className="flex h-8 w-8 items-center justify-center rounded-full"
-          style={{ backgroundColor: "rgba(59,130,246,0.12)", border: "1px solid rgba(59,130,246,0.25)" }}
+          style={{ backgroundColor: "color-mix(in oklab, var(--info) 12%, transparent)", border: "1px solid color-mix(in oklab, var(--info) 25%, transparent)" }}
         >
-          <Sparkles size={14} style={{ color: "#3b82f6" }} />
+          <Sparkles size={14} style={{ color: "var(--info)" }} />
         </div>
         <div>
-          <p className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>
+          <p className="font-headline text-sm font-bold" style={{ color: "var(--foreground)" }}>
             ARIA
           </p>
           <div className="flex items-center gap-1.5">
             <motion.span
               className="h-1.5 w-1.5 rounded-full"
-              style={{ backgroundColor: "#3b82f6" }}
+              style={{ backgroundColor: "var(--info)" }}
               animate={{ opacity: [1, 0.4, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#64748b" }}>
+            <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>
               AI OS — En línea
             </span>
           </div>
@@ -300,14 +300,14 @@ export function AIChat({
       {/* Input */}
       <div
         className="shrink-0 border-t px-4 py-4 md:px-8 lg:px-16 xl:px-32"
-        style={{ borderColor: "rgba(255,255,255,0.08)", backgroundColor: "#060609" }}
+        style={{ borderColor: "var(--app-border)", backgroundColor: "var(--app-canvas)" }}
       >
         <div
           className="flex items-end gap-3 rounded-2xl border p-3 transition-all"
           style={{
-            borderColor: input ? "rgba(59,130,246,0.35)" : "rgba(69,70,77,0.5)",
-            backgroundColor: "#10101c",
-            boxShadow: input ? "0 0 0 1px rgba(59,130,246,0.1)" : "none",
+            borderColor: input ? "color-mix(in oklab, var(--info) 35%, transparent)" : "var(--border)",
+            backgroundColor: "var(--app-surface-hover)",
+            boxShadow: input ? "0 0 0 1px color-mix(in oklab, var(--info) 10%, transparent)" : "none",
           }}
         >
           <textarea
@@ -320,7 +320,7 @@ export function AIChat({
             disabled={loading}
             className="flex-1 resize-none bg-transparent text-sm outline-none placeholder:opacity-30 disabled:opacity-50"
             style={{
-              color: "#f1f5f9",
+              color: "var(--foreground)",
               maxHeight: "120px",
               lineHeight: "1.5",
             }}
@@ -333,8 +333,8 @@ export function AIChat({
             whileTap={{ scale: 0.94 }}
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-all disabled:opacity-30"
             style={{
-              backgroundColor: input.trim() ? "#3b82f6" : "#222a3d",
-              color: input.trim() ? "#ffffff" : "#64748b",
+              backgroundColor: input.trim() ? "var(--info)" : "var(--muted)",
+              color: input.trim() ? "#ffffff" : "var(--muted-foreground)",
             }}
           >
             <Send size={15} />

@@ -40,10 +40,10 @@ const RULES: Rule[] = [
 
 function getStrength(pw: string) {
   const passed = RULES.filter((r) => r.test(pw)).length;
-  if (passed <= 1) return { score: 1, label: "Muy débil", color: "#ef4444" };
-  if (passed === 2) return { score: 2, label: "Débil",    color: "#f97316" };
-  if (passed === 3) return { score: 3, label: "Buena",    color: "#eab308" };
-  return              { score: 4, label: "Fuerte",        color: "#3b82f6" };
+  if (passed <= 1) return { score: 1, label: "Muy débil", color: "var(--destructive)" };
+  if (passed === 2) return { score: 2, label: "Débil",    color: "var(--warning)" };
+  if (passed === 3) return { score: 3, label: "Buena",    color: "var(--warning)" };
+  return              { score: 4, label: "Fuerte",        color: "var(--info)" };
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -164,12 +164,12 @@ function LoginContent() {
   return (
     <div
       className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center px-4 py-12"
-      style={{ backgroundColor: "#060609", color: "#f1f5f9" }}
+      style={{ backgroundColor: "var(--app-canvas)", color: "var(--foreground)" }}
     >
       {/* Ambient glows */}
       <motion.div
         className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[600px] w-[600px] rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, color-mix(in oklab, var(--info) 6%, transparent) 0%, transparent 70%)" }}
         animate={{ scale: [1, 1.15, 1], opacity: [0.6, 1, 0.6] }}
         transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -185,7 +185,7 @@ function LoginContent() {
         className="pointer-events-none absolute inset-0 opacity-[0.025]"
         style={{
           backgroundImage:
-            "linear-gradient(#3b82f6 1px, transparent 1px), linear-gradient(90deg, #3b82f6 1px, transparent 1px)",
+            "linear-gradient(var(--info) 1px, transparent 1px), linear-gradient(90deg, var(--info) 1px, transparent 1px)",
           backgroundSize: "48px 48px",
         }}
       />
@@ -198,11 +198,11 @@ function LoginContent() {
         >
           <span
             className="font-headline text-2xl font-black uppercase tracking-tighter"
-            style={{ color: "#3b82f6" }}
+            style={{ color: "var(--info)" }}
           >
             KORE AI
           </span>
-          <p className="text-sm" style={{ color: "#94a3b8" }}>
+          <p className="text-sm" style={{ color: "var(--muted-foreground)" }}>
             {mode === "signin"
               ? "Accedé a tu sistema operativo"
               : "Creá tu cuenta y desplegá tu OS"}
@@ -213,13 +213,13 @@ function LoginContent() {
         <motion.div
           initial="hidden" animate="visible" custom={0.1} variants={fadeUp}
           className="rounded-2xl border p-8 flex flex-col gap-5"
-          style={{ backgroundColor: "#10101c", borderColor: "rgba(69,70,77,0.5)" }}
+          style={{ backgroundColor: "var(--app-surface-hover)", borderColor: "var(--border)" }}
         >
           {/* Callback error banner */}
           {callbackError && (
             <div
               className="rounded-lg border px-4 py-3 text-sm"
-              style={{ borderColor: "rgba(255,180,171,0.3)", backgroundColor: "rgba(147,0,10,0.2)", color: "#ffb4ab" }}
+              style={{ borderColor: "rgba(255,180,171,0.3)", backgroundColor: "rgba(147,0,10,0.2)", color: "var(--destructive)" }}
             >
               Algo salió mal. Intentá de nuevo.
             </div>
@@ -233,7 +233,7 @@ function LoginContent() {
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 className="overflow-hidden rounded-lg border px-4 py-3 text-sm flex items-start gap-2"
-                style={{ borderColor: "rgba(59,130,246,0.3)", backgroundColor: "rgba(59,130,246,0.08)", color: "#3b82f6" }}
+                style={{ borderColor: "color-mix(in oklab, var(--info) 30%, transparent)", backgroundColor: "color-mix(in oklab, var(--info) 8%, transparent)", color: "var(--info)" }}
               >
                 <Check className="mt-0.5 shrink-0" size={14} />
                 {success}
@@ -244,7 +244,7 @@ function LoginContent() {
           {/* Mode tabs */}
           <div
             className="flex rounded-xl p-1 gap-1"
-            style={{ backgroundColor: "#060609" }}
+            style={{ backgroundColor: "var(--app-canvas)" }}
           >
             {(["signin", "signup"] as const).map((m) => (
               <button
@@ -253,8 +253,8 @@ function LoginContent() {
                 onClick={() => switchMode(m)}
                 className="flex-1 rounded-lg py-2 text-sm font-headline font-bold uppercase tracking-tight transition-all duration-200"
                 style={{
-                  backgroundColor: mode === m ? "#3b82f6" : "transparent",
-                  color: mode === m ? "#ffffff" : "#94a3b8",
+                  backgroundColor: mode === m ? "var(--info)" : "transparent",
+                  color: mode === m ? "#ffffff" : "var(--muted-foreground)",
                 }}
               >
                 {m === "signin" ? "Ingresar" : "Registrarse"}
@@ -268,10 +268,10 @@ function LoginContent() {
             disabled={loading !== null}
             onClick={signInGoogle}
             className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border text-[15px] font-medium transition-colors active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50"
-            style={{ borderColor: "rgba(69,70,77,0.6)", backgroundColor: "#222a3d", color: "#f1f5f9" }}
+            style={{ borderColor: "rgba(69,70,77,0.6)", backgroundColor: "var(--muted)", color: "var(--foreground)" }}
           >
             {loading === "google"
-              ? <Loader2 className="size-5 animate-spin" style={{ color: "#94a3b8" }} />
+              ? <Loader2 className="size-5 animate-spin" style={{ color: "var(--muted-foreground)" }} />
               : <GoogleIcon className="size-5 shrink-0" />
             }
             {loading === "google" ? "Redirigiendo…" : "Continuar con Google"}
@@ -279,9 +279,9 @@ function LoginContent() {
 
           {/* Divider */}
           <div className="flex items-center gap-3">
-            <div className="h-px flex-1" style={{ backgroundColor: "#334155" }} />
-            <span className="text-xs" style={{ color: "#64748b" }}>o con email</span>
-            <div className="h-px flex-1" style={{ backgroundColor: "#334155" }} />
+            <div className="h-px flex-1" style={{ backgroundColor: "var(--muted-foreground)" }} />
+            <span className="text-xs" style={{ color: "var(--muted-foreground)" }}>o con email</span>
+            <div className="h-px flex-1" style={{ backgroundColor: "var(--muted-foreground)" }} />
           </div>
 
           {/* Form — slides on mode switch */}
@@ -351,7 +351,7 @@ function LoginContent() {
                         <div
                           key={i}
                           className="h-1 flex-1 rounded-full transition-all duration-300"
-                          style={{ backgroundColor: i <= strength.score ? strength.color : "#2d3449" }}
+                          style={{ backgroundColor: i <= strength.score ? strength.color : "var(--muted)" }}
                         />
                       ))}
                     </div>
@@ -364,12 +364,12 @@ function LoginContent() {
                         return (
                           <div key={rule.id} className="flex items-center gap-1.5">
                             {pass
-                              ? <Check size={10} style={{ color: "#3b82f6", flexShrink: 0 }} />
-                              : <X size={10} style={{ color: "#64748b", flexShrink: 0 }} />
+                              ? <Check size={10} style={{ color: "var(--info)", flexShrink: 0 }} />
+                              : <X size={10} style={{ color: "var(--muted-foreground)", flexShrink: 0 }} />
                             }
                             <span
                               className="text-[10px]"
-                              style={{ color: pass ? "#3b82f6" : "#64748b" }}
+                              style={{ color: pass ? "var(--info)" : "var(--muted-foreground)" }}
                             >
                               {rule.label}
                             </span>
@@ -417,7 +417,7 @@ function LoginContent() {
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                     className="overflow-hidden rounded-lg border px-4 py-3 text-sm flex items-start gap-2"
-                    style={{ borderColor: "rgba(255,180,171,0.3)", backgroundColor: "rgba(147,0,10,0.2)", color: "#ffb4ab" }}
+                    style={{ borderColor: "rgba(255,180,171,0.3)", backgroundColor: "rgba(147,0,10,0.2)", color: "var(--destructive)" }}
                   >
                     <X className="mt-0.5 shrink-0" size={13} />
                     {error}
@@ -429,10 +429,10 @@ function LoginContent() {
               <motion.button
                 type="submit"
                 disabled={!canSubmit || loading !== null}
-                whileHover={canSubmit && !loading ? { scale: 1.02, boxShadow: "0 0 28px rgba(59,130,246,0.4)" } : {}}
+                whileHover={canSubmit && !loading ? { scale: 1.02, boxShadow: "0 0 28px color-mix(in oklab, var(--info) 40%, transparent)" } : {}}
                 whileTap={{ scale: 0.97 }}
                 className="h-12 w-full rounded-xl font-headline text-base font-bold uppercase tracking-tight transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                style={{ backgroundColor: "#3b82f6", color: "#ffffff" }}
+                style={{ backgroundColor: "var(--info)", color: "#ffffff" }}
               >
                 {loading === "email"
                   ? <Loader2 className="mx-auto size-5 animate-spin" style={{ color: "#ffffff" }} />
@@ -467,7 +467,7 @@ function LoginContent() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="font-label text-[11px] uppercase tracking-widest" style={{ color: "#94a3b8" }}>
+      <label className="font-label text-[11px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>
         {label}
       </label>
       {children}
@@ -477,7 +477,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function Hint({ children, color }: { children: React.ReactNode; color: "red" | "green" }) {
   return (
-    <p className="text-xs" style={{ color: color === "red" ? "#ef4444" : "#3b82f6" }}>
+    <p className="text-xs" style={{ color: color === "red" ? "var(--destructive)" : "var(--info)" }}>
       {children}
     </p>
   );
@@ -487,8 +487,8 @@ function StatusIcon({ ok }: { ok: boolean }) {
   return (
     <span className="absolute right-3 top-1/2 -translate-y-1/2">
       {ok
-        ? <Check size={13} style={{ color: "#3b82f6" }} />
-        : <X size={13} style={{ color: "#ef4444" }} />
+        ? <Check size={13} style={{ color: "var(--info)" }} />
+        : <X size={13} style={{ color: "var(--destructive)" }} />
       }
     </span>
   );
@@ -501,7 +501,7 @@ function ToggleVisibility({ show, onToggle }: { show: boolean; onToggle: () => v
       tabIndex={-1}
       onClick={onToggle}
       className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-80 transition-opacity"
-      style={{ color: "#64748b" }}
+      style={{ color: "var(--muted-foreground)" }}
     >
       {show ? <EyeOff size={15} /> : <Eye size={15} />}
     </button>
@@ -511,14 +511,14 @@ function ToggleVisibility({ show, onToggle }: { show: boolean; onToggle: () => v
 function inputStyle(state: "idle" | "ok" | "err" | "warn"): React.CSSProperties {
   const borders: Record<string, string> = {
     idle: "rgba(69,70,77,0.6)",
-    ok:   "rgba(59,130,246,0.45)",
-    err:  "rgba(239,68,68,0.6)",
-    warn: "rgba(234,179,8,0.5)",
+    ok:   "color-mix(in oklab, var(--info) 45%, transparent)",
+    err:  "color-mix(in oklab, var(--destructive) 60%, transparent)",
+    warn: "color-mix(in oklab, var(--warning) 50%, transparent)",
   };
   return {
     borderColor: borders[state],
-    color: "#f1f5f9",
-    backgroundColor: "#080812",
+    color: "var(--foreground)",
+    backgroundColor: "var(--app-topbar)",
   };
 }
 

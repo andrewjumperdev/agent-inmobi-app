@@ -1,5 +1,17 @@
 ﻿"use client";
 
+/**
+ * ⚠️ Contiene datos de demo (`showMock`). Componente huérfano: la ruta
+ * `app/(app)/captacion/page.tsx` renderiza <ComingSoon />, así que hoy no llega
+ * a ningún cliente.
+ *
+ * A diferencia de components/analytics/analytics-view.tsx, acá el mock solo
+ * aparece cuando no hay leads reales y va acompañado de un aviso visible en la
+ * UI. Si esta vista se conecta de verdad, hay que decidir explícitamente si ese
+ * relleno se queda: un dashboard vacío es información honesta; uno con leads
+ * inventados de ejemplo puede confundirse con datos propios.
+ */
+
 import { motion } from "framer-motion";
 import type { Database } from "@/lib/supabase/types";
 import type { Kpis } from "./captacion-view";
@@ -8,9 +20,9 @@ type Lead = Database["public"]["Tables"]["leads"]["Row"];
 
 /* ── Color maps ────────────────────────────────────────────── */
 const URGENCY_COLOR: Record<string, { bg: string; text: string; label: string }> = {
-  hot:  { bg: "rgba(239,68,68,0.12)",  text: "#ef4444", label: "Caliente" },
-  warm: { bg: "rgba(234,179,8,0.12)",  text: "#eab308", label: "Tibio"    },
-  cold: { bg: "rgba(188,198,224,0.12)", text: "#e2e8f0", label: "Frío"     },
+  hot:  { bg: "color-mix(in oklab, var(--destructive) 12%, transparent)",  text: "var(--destructive)", label: "Caliente" },
+  warm: { bg: "color-mix(in oklab, var(--warning) 12%, transparent)",  text: "var(--warning)", label: "Tibio"    },
+  cold: { bg: "rgba(188,198,224,0.12)", text: "var(--foreground)", label: "Frío"     },
 };
 
 const SOURCE_ICON: Record<string, string> = {
@@ -40,19 +52,19 @@ function KpiCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, delay, ease: [0.16, 1, 0.3, 1] }}
       className="relative overflow-hidden rounded-xl p-6"
-      style={{ backgroundColor: "#0c0c14", border: accent ? "1px solid rgba(59,130,246,0.2)" : "1px solid rgba(255,255,255,0.06)" }}
+      style={{ backgroundColor: "var(--app-surface)", border: accent ? "1px solid color-mix(in oklab, var(--info) 20%, transparent)" : "1px solid var(--app-border)" }}
     >
       {accent && (
-        <div className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(59,130,246,0.04) 0%, transparent 60%)" }} />
+        <div className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(135deg, color-mix(in oklab, var(--info) 4%, transparent) 0%, transparent 60%)" }} />
       )}
       <div className="flex items-start justify-between">
         <div>
-          <span className="font-label block text-[10px] uppercase tracking-widest" style={{ color: "#64748b" }}>{label}</span>
-          <p className="font-headline mt-1 text-3xl font-extrabold tracking-tight" style={{ color: accent ? "#3b82f6" : "#f1f5f9" }}>{value}</p>
-          {sub && <p className="mt-1 text-xs" style={{ color: "#334155" }}>{sub}</p>}
+          <span className="font-label block text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>{label}</span>
+          <p className="font-headline mt-1 text-3xl font-extrabold tracking-tight" style={{ color: accent ? "var(--info)" : "var(--foreground)" }}>{value}</p>
+          {sub && <p className="mt-1 text-xs" style={{ color: "var(--muted-foreground)" }}>{sub}</p>}
         </div>
-        <div className="flex h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: accent ? "rgba(59,130,246,0.12)" : "rgba(188,198,224,0.08)" }}>
-          <span className="material-symbols-outlined text-lg" style={{ color: accent ? "#3b82f6" : "#e2e8f0" }}>{icon}</span>
+        <div className="flex h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: accent ? "color-mix(in oklab, var(--info) 12%, transparent)" : "rgba(188,198,224,0.08)" }}>
+          <span className="material-symbols-outlined text-lg" style={{ color: accent ? "var(--info)" : "var(--foreground)" }}>{icon}</span>
         </div>
       </div>
     </motion.div>
@@ -65,10 +77,10 @@ function FunnelBar({ label, value, max, color }: { label: string; value: number;
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between">
-        <span className="font-label text-xs uppercase tracking-widest" style={{ color: "#94a3b8" }}>{label}</span>
+        <span className="font-label text-xs uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>{label}</span>
         <span className="font-headline text-sm font-bold" style={{ color }}>{value}</span>
       </div>
-      <div className="h-2 overflow-hidden rounded-full" style={{ backgroundColor: "#060609" }}>
+      <div className="h-2 overflow-hidden rounded-full" style={{ backgroundColor: "var(--app-canvas)" }}>
         <motion.div
           className="h-full rounded-full"
           style={{ backgroundColor: color }}
@@ -77,7 +89,7 @@ function FunnelBar({ label, value, max, color }: { label: string; value: number;
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         />
       </div>
-      <span className="text-[10px]" style={{ color: "#334155" }}>{pct}% del total</span>
+      <span className="text-[10px]" style={{ color: "var(--muted-foreground)" }}>{pct}% del total</span>
     </div>
   );
 }
@@ -114,7 +126,7 @@ export function CaptacionOverview({ leads, kpis }: { leads: Lead[]; kpis: Kpis }
   return (
     <div className="space-y-8">
       {showMock && (
-        <div className="rounded-xl border px-4 py-3 text-sm flex items-center gap-2" style={{ borderColor: "rgba(59,130,246,0.2)", backgroundColor: "rgba(59,130,246,0.05)", color: "#3b82f6" }}>
+        <div className="rounded-xl border px-4 py-3 text-sm flex items-center gap-2" style={{ borderColor: "color-mix(in oklab, var(--info) 20%, transparent)", backgroundColor: "color-mix(in oklab, var(--info) 5%, transparent)", color: "var(--info)" }}>
           <span className="material-symbols-outlined text-sm">info</span>
           Datos de demostración — conectá tu fuente de leads para ver datos reales.
         </div>
@@ -134,16 +146,16 @@ export function CaptacionOverview({ leads, kpis }: { leads: Lead[]; kpis: Kpis }
           initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
           className="rounded-xl p-6 lg:col-span-2"
-          style={{ backgroundColor: "#0c0c14" }}
+          style={{ backgroundColor: "var(--app-surface)" }}
         >
-          <h2 className="font-headline mb-6 text-lg font-bold" style={{ color: "#f1f5f9" }}>
+          <h2 className="font-headline mb-6 text-lg font-bold" style={{ color: "var(--foreground)" }}>
             Funnel de Captación
           </h2>
           <div className="space-y-5">
-            <FunnelBar label="Total captados"   value={displayKpis.total}     max={displayKpis.total} color="#e2e8f0" />
-            <FunnelBar label="Calificados"       value={displayKpis.qualified} max={displayKpis.total} color="#3b82f6" />
-            <FunnelBar label="Calientes"         value={displayKpis.hot}       max={displayKpis.total} color="#ef4444" />
-            <FunnelBar label="Sin clasificar"    value={displayKpis.unclassified} max={displayKpis.total} color="#eab308" />
+            <FunnelBar label="Total captados"   value={displayKpis.total}     max={displayKpis.total} color="var(--foreground)" />
+            <FunnelBar label="Calificados"       value={displayKpis.qualified} max={displayKpis.total} color="var(--info)" />
+            <FunnelBar label="Calientes"         value={displayKpis.hot}       max={displayKpis.total} color="var(--destructive)" />
+            <FunnelBar label="Sin clasificar"    value={displayKpis.unclassified} max={displayKpis.total} color="var(--warning)" />
           </div>
         </motion.div>
 
@@ -152,33 +164,33 @@ export function CaptacionOverview({ leads, kpis }: { leads: Lead[]; kpis: Kpis }
           initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="rounded-xl p-6"
-          style={{ backgroundColor: "#0c0c14" }}
+          style={{ backgroundColor: "var(--app-surface)" }}
         >
-          <h2 className="font-headline mb-6 text-lg font-bold" style={{ color: "#f1f5f9" }}>
+          <h2 className="font-headline mb-6 text-lg font-bold" style={{ color: "var(--foreground)" }}>
             Fuentes
           </h2>
           <div className="space-y-3">
             {mockSources.map(([src, count]) => (
               <div key={src} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-sm" style={{ color: "#3b82f6" }}>
+                  <span className="material-symbols-outlined text-sm" style={{ color: "var(--info)" }}>
                     {SOURCE_ICON[src] ?? "person"}
                   </span>
-                  <span className="font-label text-xs capitalize" style={{ color: "#94a3b8" }}>
+                  <span className="font-label text-xs capitalize" style={{ color: "var(--muted-foreground)" }}>
                     {src}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="h-1.5 w-16 overflow-hidden rounded-full" style={{ backgroundColor: "#060609" }}>
+                  <div className="h-1.5 w-16 overflow-hidden rounded-full" style={{ backgroundColor: "var(--app-canvas)" }}>
                     <motion.div
                       className="h-full rounded-full"
-                      style={{ backgroundColor: "#3b82f6" }}
+                      style={{ backgroundColor: "var(--info)" }}
                       initial={{ width: 0 }}
                       animate={{ width: `${Math.round((count / displayKpis.total) * 100)}%` }}
                       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     />
                   </div>
-                  <span className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>
+                  <span className="font-headline text-sm font-bold" style={{ color: "var(--foreground)" }}>
                     {count}
                   </span>
                 </div>
@@ -193,13 +205,13 @@ export function CaptacionOverview({ leads, kpis }: { leads: Lead[]; kpis: Kpis }
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, delay: 0.36, ease: [0.16, 1, 0.3, 1] }}
         className="rounded-xl p-6"
-        style={{ backgroundColor: "#0c0c14" }}
+        style={{ backgroundColor: "var(--app-surface)" }}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-headline text-lg font-bold" style={{ color: "#f1f5f9" }}>
+          <h2 className="font-headline text-lg font-bold" style={{ color: "var(--foreground)" }}>
             Leads recientes
           </h2>
-          <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#64748b" }}>
+          <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>
             Últimos {mockLeads.length}
           </span>
         </div>
@@ -207,9 +219,9 @@ export function CaptacionOverview({ leads, kpis }: { leads: Lead[]; kpis: Kpis }
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+              <tr style={{ borderBottom: "1px solid var(--app-border)" }}>
                 {["Nombre", "Fuente", "Operación", "Urgencia", "Presupuesto", "Zona"].map((h) => (
-                  <th key={h} className="pb-3 pr-4 text-left font-label text-[10px] uppercase tracking-widest" style={{ color: "#334155" }}>
+                  <th key={h} className="pb-3 pr-4 text-left font-label text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>
                     {h}
                   </th>
                 ))}
@@ -225,24 +237,24 @@ export function CaptacionOverview({ leads, kpis }: { leads: Lead[]; kpis: Kpis }
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 + i * 0.04, duration: 0.3 }}
                     className="group"
-                    style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+                    style={{ borderBottom: "1px solid var(--app-border)" }}
                   >
                     <td className="py-3 pr-4">
                       <div className="flex items-center gap-2">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-headline text-xs font-bold" style={{ backgroundColor: "rgba(188,198,224,0.08)", color: "#e2e8f0" }}>
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-headline text-xs font-bold" style={{ backgroundColor: "rgba(188,198,224,0.08)", color: "var(--foreground)" }}>
                           {(lead.name ?? "?").charAt(0).toUpperCase()}
                         </div>
-                        <span className="font-medium" style={{ color: "#f1f5f9" }}>{lead.name ?? "Sin nombre"}</span>
+                        <span className="font-medium" style={{ color: "var(--foreground)" }}>{lead.name ?? "Sin nombre"}</span>
                       </div>
                     </td>
                     <td className="py-3 pr-4">
                       <div className="flex items-center gap-1">
-                        <span className="material-symbols-outlined text-xs" style={{ color: "#3b82f6" }}>{SOURCE_ICON[lead.source ?? ""] ?? "person"}</span>
-                        <span className="font-label text-xs capitalize" style={{ color: "#64748b" }}>{lead.source ?? "directo"}</span>
+                        <span className="material-symbols-outlined text-xs" style={{ color: "var(--info)" }}>{SOURCE_ICON[lead.source ?? ""] ?? "person"}</span>
+                        <span className="font-label text-xs capitalize" style={{ color: "var(--muted-foreground)" }}>{lead.source ?? "directo"}</span>
                       </div>
                     </td>
                     <td className="py-3 pr-4">
-                      <span className="font-label text-xs" style={{ color: "#94a3b8" }}>
+                      <span className="font-label text-xs" style={{ color: "var(--muted-foreground)" }}>
                         {OP_LABEL[lead.operation_type ?? ""] ?? "—"}
                       </span>
                     </td>
@@ -252,15 +264,15 @@ export function CaptacionOverview({ leads, kpis }: { leads: Lead[]; kpis: Kpis }
                           {urg.label}
                         </span>
                       ) : (
-                        <span style={{ color: "#334155" }}>—</span>
+                        <span style={{ color: "var(--muted-foreground)" }}>—</span>
                       )}
                     </td>
-                    <td className="py-3 pr-4 font-label text-xs" style={{ color: "#64748b" }}>
+                    <td className="py-3 pr-4 font-label text-xs" style={{ color: "var(--muted-foreground)" }}>
                       {lead.budget_min
                         ? `$${Number(lead.budget_min).toLocaleString()} – $${Number(lead.budget_max ?? lead.budget_min).toLocaleString()}`
                         : "—"}
                     </td>
-                    <td className="py-3 pr-4 font-label text-xs" style={{ color: "#64748b" }}>
+                    <td className="py-3 pr-4 font-label text-xs" style={{ color: "var(--muted-foreground)" }}>
                       {lead.zone_interest ?? "—"}
                     </td>
                   </motion.tr>

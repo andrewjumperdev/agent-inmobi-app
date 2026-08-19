@@ -98,37 +98,37 @@ export function WhatsAppConnect() {
   return (
     <div
       className="max-w-xl rounded-2xl border p-6"
-      style={{ backgroundColor: "#10101c", borderColor: "rgba(69,70,77,0.5)" }}
+      style={{ backgroundColor: "var(--app-surface-hover)", borderColor: "var(--border)" }}
     >
       <div className="flex items-center gap-3">
         <div
           className="flex h-11 w-11 items-center justify-center rounded-xl"
-          style={{ backgroundColor: "rgba(34,197,94,0.12)", border: "1px solid rgba(34,197,94,0.25)" }}
+          style={{ backgroundColor: "color-mix(in oklab, var(--success) 12%, transparent)", border: "1px solid color-mix(in oklab, var(--success) 25%, transparent)" }}
         >
-          <MessageCircle size={20} style={{ color: "#22c55e" }} />
+          <MessageCircle size={20} style={{ color: "var(--success)" }} />
         </div>
         <div className="flex-1">
-          <p className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>
+          <p className="font-headline text-sm font-bold" style={{ color: "var(--foreground)" }}>
             WhatsApp
           </p>
           <StatusPill state={state} />
         </div>
       </div>
 
-      <p className="mt-4 text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
+      <p className="mt-4 text-sm leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
         Conectá tu número de WhatsApp para que el agente de atención al cliente
         responda y agende automáticamente. Escaneá el código con{" "}
-        <span style={{ color: "#cbd5e1" }}>WhatsApp → Dispositivos vinculados → Vincular dispositivo</span>.
+        <span style={{ color: "var(--foreground)" }}>WhatsApp → Dispositivos vinculados → Vincular dispositivo</span>.
       </p>
 
       {state === "disabled" && (
-        <p className="mt-4 rounded-lg p-3 text-sm" style={{ backgroundColor: "rgba(234,179,8,0.08)", color: "#eab308" }}>
+        <p className="mt-4 rounded-lg p-3 text-sm" style={{ backgroundColor: "color-mix(in oklab, var(--warning) 8%, transparent)", color: "var(--warning)" }}>
           El servidor de WhatsApp (Evolution API) no está configurado todavía.
         </p>
       )}
 
       {error && (
-        <p className="mt-4 rounded-lg p-3 text-sm" style={{ backgroundColor: "rgba(239,68,68,0.08)", color: "#f87171" }}>
+        <p className="mt-4 rounded-lg p-3 text-sm" style={{ backgroundColor: "color-mix(in oklab, var(--destructive) 8%, transparent)", color: "var(--destructive)" }}>
           {error}
         </p>
       )}
@@ -145,11 +145,11 @@ export function WhatsAppConnect() {
             className="rounded-xl bg-white p-2"
           />
           {pairing && (
-            <p className="text-sm" style={{ color: "#94a3b8" }}>
-              o usá el código: <span className="font-mono" style={{ color: "#f1f5f9" }}>{pairing}</span>
+            <p className="text-sm" style={{ color: "var(--muted-foreground)" }}>
+              o usá el código: <span className="font-mono" style={{ color: "var(--foreground)" }}>{pairing}</span>
             </p>
           )}
-          <div className="flex items-center gap-2 text-xs" style={{ color: "#64748b" }}>
+          <div className="flex items-center gap-2 text-xs" style={{ color: "var(--muted-foreground)" }}>
             <Loader2 size={13} className="animate-spin" /> Esperando a que escanees…
           </div>
         </div>
@@ -163,14 +163,14 @@ export function WhatsAppConnect() {
             onClick={connect}
             disabled={busy || state === "disabled" || state === "loading"}
             className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all disabled:opacity-40"
-            style={{ backgroundColor: "#22c55e", color: "#04130a" }}
+            style={{ backgroundColor: "var(--success)", color: "var(--success-foreground)" }}
           >
             {busy ? <Loader2 size={15} className="animate-spin" /> : <RefreshCw size={15} />}
             {qr ? "Regenerar QR" : "Conectar WhatsApp"}
           </button>
         ) : (
           <>
-            <span className="inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "#22c55e" }}>
+            <span className="inline-flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--success)" }}>
               <CheckCircle2 size={16} /> Conectado
             </span>
             <button
@@ -178,7 +178,7 @@ export function WhatsAppConnect() {
               onClick={disconnect}
               disabled={busy}
               className="ml-auto inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition-all disabled:opacity-40"
-              style={{ borderColor: "rgba(239,68,68,0.3)", color: "#f87171" }}
+              style={{ borderColor: "color-mix(in oklab, var(--destructive) 30%, transparent)", color: "var(--destructive)" }}
             >
               <Power size={14} /> Desvincular
             </button>
@@ -191,12 +191,12 @@ export function WhatsAppConnect() {
 
 function StatusPill({ state }: { state: State | "loading" }) {
   const map: Record<string, { label: string; color: string }> = {
-    open: { label: "Conectado", color: "#22c55e" },
-    connecting: { label: "Esperando escaneo", color: "#eab308" },
-    close: { label: "Desconectado", color: "#64748b" },
-    not_created: { label: "Sin conectar", color: "#64748b" },
-    disabled: { label: "No configurado", color: "#eab308" },
-    loading: { label: "Cargando…", color: "#64748b" },
+    open: { label: "Conectado", color: "var(--success)" },
+    connecting: { label: "Esperando escaneo", color: "var(--warning)" },
+    close: { label: "Desconectado", color: "var(--muted-foreground)" },
+    not_created: { label: "Sin conectar", color: "var(--muted-foreground)" },
+    disabled: { label: "No configurado", color: "var(--warning)" },
+    loading: { label: "Cargando…", color: "var(--muted-foreground)" },
   };
   const s = map[state] ?? map.close;
   return (

@@ -21,6 +21,42 @@ export interface TenantCredentials {
   apiKey: string;
 }
 
+/**
+ * Borra el binding guardado en `profiles` para que el próximo
+ * `getTenantCredentials` vuelva a provisionar.
+ *
+ * Hace falta porque el binding puede quedar apuntando a un tenant que ya no
+ * existe: se recreó la base del backend, se cambió de entorno, se borró un
+ * volumen de Docker. La key queda sintácticamente válida pero el backend
+ * responde 401 para siempre, y como el binding se lee sin validarse nunca, el
+ * error no se cura solo — cada request repite el mismo 401 y la UI muestra
+ * ceros en vez de fallar de forma visible.
+ */
+export async function clearTenantBinding(): Promise<void> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const admin = createAdminClient() as unknown as {
+    from: (t: string) => {
+      update: (v: Record<string, unknown>) => {
+        eq: (col: string, val: string) => Promise<{ error: { message?: string } | null }>;
+      };
+    };
+  };
+  const { error } = await admin
+    .from("profiles")
+    .update({ kore_tenant_id: null, kore_api_key: null })
+    .eq("id", user.id);
+  if (error) {
+    console.error("[clearTenantBinding] no se pudo limpiar el binding:", error);
+    return;
+  }
+  console.warn("[clearTenantBinding] binding inválido descartado; se reprovisionará");
+}
+
 type ProfileRow = {
   kore_tenant_id: string | null;
   kore_api_key: string | null;
@@ -89,6 +125,15 @@ export async function getTenantCredentials(): Promise<TenantCredentials | null> 
     tenant = await createTenant({ name, slug: baseSlug, niche_slug: DEFAULT_NICHE });
   } catch (err) {
     if (!(err instanceof KoreError)) throw err;
+    // Un 401/403 no es una colisión de slug: reintentar con otro slug no
+    // arregla nada y esconde la causa real detrás de un error genérico.
+    if (err.status === 401 || err.status === 403) {
+      console.error("[getTenantCredentials] el backend rechazó el provisioning:", err.message);
+      throw new Error(
+        "El backend rechazó el alta del tenant. Verificá que KORE_PROVISIONING_SECRET " +
+          "sea el mismo en el frontend y en el backend."
+      );
+    }
     // 1) Carrera: otra request pudo haber provisionado en paralelo → releer.
     const again = await read();
     if (again?.kore_tenant_id && again?.kore_api_key) {

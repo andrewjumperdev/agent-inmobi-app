@@ -34,7 +34,7 @@ export function CaptacionView({ leads, kpis }: { leads: Lead[]; kpis: Kpis }) {
       {/* Tab bar */}
       <div
         className="flex gap-1 border-b px-4 md:px-8"
-        style={{ borderColor: "rgba(255,255,255,0.08)", backgroundColor: "#060609" }}
+        style={{ borderColor: "var(--app-border)", backgroundColor: "var(--app-canvas)" }}
       >
         {TABS.map((tab) => {
           const active = activeTab === tab.id;
@@ -43,7 +43,7 @@ export function CaptacionView({ leads, kpis }: { leads: Lead[]; kpis: Kpis }) {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className="relative flex items-center gap-2 px-4 py-3 font-label text-xs uppercase tracking-widest transition-colors"
-              style={{ color: active ? "#3b82f6" : "#64748b" }}
+              style={{ color: active ? "var(--info)" : "var(--muted-foreground)" }}
             >
               <span
                 className="material-symbols-outlined text-sm"
@@ -55,7 +55,7 @@ export function CaptacionView({ leads, kpis }: { leads: Lead[]; kpis: Kpis }) {
               {tab.id === "clasificar" && kpis.unclassified > 0 && (
                 <span
                   className="flex h-4 w-4 items-center justify-center rounded-full font-label text-[9px] font-bold"
-                  style={{ backgroundColor: "#ef4444", color: "#fff" }}
+                  style={{ backgroundColor: "var(--destructive)", color: "#fff" }}
                 >
                   {kpis.unclassified > 9 ? "9+" : kpis.unclassified}
                 </span>
@@ -64,7 +64,7 @@ export function CaptacionView({ leads, kpis }: { leads: Lead[]; kpis: Kpis }) {
                 <motion.div
                   layoutId="tab-underline"
                   className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                  style={{ backgroundColor: "#3b82f6" }}
+                  style={{ backgroundColor: "var(--info)" }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 />
               )}

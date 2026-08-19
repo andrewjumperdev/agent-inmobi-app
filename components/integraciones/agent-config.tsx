@@ -20,7 +20,7 @@ const FIELDS: { key: string; label: string; area?: boolean; rows?: number }[] = 
   { key: "rules", label: "Reglas críticas", area: true, rows: 4 },
 ];
 
-const STYLE = { backgroundColor: "#0c0c14", borderColor: "rgba(255,255,255,0.08)", color: "#f1f5f9" };
+const STYLE = { backgroundColor: "var(--app-surface)", borderColor: "var(--app-border)", color: "var(--foreground)" };
 
 export function AgentConfig() {
   const [form, setForm] = useState<Record<string, string>>({});
@@ -51,30 +51,30 @@ export function AgentConfig() {
   }
 
   return (
-    <div className="max-w-xl rounded-2xl border p-6" style={{ backgroundColor: "#10101c", borderColor: "rgba(69,70,77,0.5)" }}>
+    <div className="max-w-xl rounded-2xl border p-6" style={{ backgroundColor: "var(--app-surface-hover)", borderColor: "var(--border)" }}>
       <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl" style={{ backgroundColor: "rgba(168,85,247,0.12)", border: "1px solid rgba(168,85,247,0.25)" }}>
-          <Bot size={20} style={{ color: "#a855f7" }} />
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl" style={{ backgroundColor: "color-mix(in oklab, var(--ai) 12%, transparent)", border: "1px solid color-mix(in oklab, var(--ai) 25%, transparent)" }}>
+          <Bot size={20} style={{ color: "var(--ai)" }} />
         </div>
         <div className="flex-1">
-          <p className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Agente de WhatsApp</p>
-          <p className="text-xs" style={{ color: "#64748b" }}>Personalizá todo lo que el agente dice y cómo califica/agenda.</p>
+          <p className="font-headline text-sm font-bold" style={{ color: "var(--foreground)" }}>Agente de WhatsApp</p>
+          <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>Personalizá todo lo que el agente dice y cómo califica/agenda.</p>
         </div>
         {configured && (
-          <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: "#22c55e" }}>
+          <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: "var(--success)" }}>
             <CheckCircle2 size={14} /> Personalizado
           </span>
         )}
       </div>
 
-      <p className="mt-3 text-xs" style={{ color: "#475569" }}>
+      <p className="mt-3 text-xs" style={{ color: "var(--muted-foreground)" }}>
         Viene pre-cargado con un ejemplo (FAUSTO). Editá lo que quieras y guardá.
       </p>
 
       <div className="mt-4 flex flex-col gap-3">
         {FIELDS.map((fl) => (
           <div key={fl.key}>
-            <label className="mb-1 block text-[11px] uppercase tracking-widest" style={{ color: "#64748b" }}>{fl.label}</label>
+            <label className="mb-1 block text-[11px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>{fl.label}</label>
             {fl.area ? (
               <textarea
                 rows={fl.rows ?? 3}
@@ -95,13 +95,13 @@ export function AgentConfig() {
         ))}
       </div>
 
-      {msg && <p className="mt-3 text-xs" style={{ color: "#94a3b8" }}>{msg}</p>}
+      {msg && <p className="mt-3 text-xs" style={{ color: "var(--muted-foreground)" }}>{msg}</p>}
 
       <button
         onClick={save}
         disabled={busy}
         className="mt-4 inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold disabled:opacity-50"
-        style={{ backgroundColor: "#3b82f6", color: "#fff" }}
+        style={{ backgroundColor: "var(--info)", color: "#fff" }}
       >
         {busy ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Guardar personalidad
       </button>

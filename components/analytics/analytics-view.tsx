@@ -1,5 +1,30 @@
 ﻿"use client";
 
+/**
+ * ⚠️ MAQUETA — TODOS LOS DATOS DE ESTE ARCHIVO SON INVENTADOS. NO CONECTAR.
+ *
+ * Componente huérfano: `app/(app)/analytics/page.tsx` renderiza <ComingSoon />,
+ * así que hoy ningún cliente ve esto. Se conserva como referencia de diseño
+ * para cuando la feature exista de verdad.
+ *
+ * Antes de darle uso hay que reemplazar TODAS las constantes de abajo por datos
+ * del backend. Ojo con lo que hoy no existe en el backend y no se puede
+ * simplemente "conectar":
+ *   - FUNNEL_DATA      → no hay conteo por etapa del pipeline expuesto.
+ *   - LEADS_OVER_TIME  → generado con Math.random(); no hay serie temporal.
+ *   - SOURCE_DATA      → no hay atribución de fuente agregada.
+ *   - CAMPAIGN_DATA    → no hay integración con Meta/Google Ads. Es ficción.
+ *   - KPIS             → "costo por lead" y "pipeline proyectado" no se calculan
+ *                        en ningún lado.
+ *
+ * Lo que el backend SÍ expone hoy es GET /metrics (MetricsSnapshot): leads de
+ * los últimos 7 días, distribución de temperatura, tasa de clasificación
+ * automática, escalaciones abiertas y MRR. El Dashboard ya lo consume.
+ *
+ * Publicar estos números tal cual sería mostrarle a un cliente que paga métricas
+ * fabricadas sobre su propio negocio.
+ */
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -21,12 +46,12 @@ import {
 
 /* ── Mock data ───────────────────────────────────────────── */
 const FUNNEL_DATA = [
-  { stage: "Nuevo",       leads: 142, fill: "#e2e8f0" },
-  { stage: "Contactado",  leads: 98,  fill: "#818cf8" },
-  { stage: "Calificado",  leads: 67,  fill: "#3b82f6" },
-  { stage: "Cita",        leads: 38,  fill: "#fb923c" },
-  { stage: "Negociación", leads: 21,  fill: "#eab308" },
-  { stage: "Cerrado",     leads: 11,  fill: "#22c55e" },
+  { stage: "Nuevo",       leads: 142, fill: "var(--foreground)" },
+  { stage: "Contactado",  leads: 98,  fill: "var(--ai)" },
+  { stage: "Calificado",  leads: 67,  fill: "var(--info)" },
+  { stage: "Cita",        leads: 38,  fill: "var(--warning)" },
+  { stage: "Negociación", leads: 21,  fill: "var(--warning)" },
+  { stage: "Cerrado",     leads: 11,  fill: "var(--success)" },
 ];
 
 const LEADS_OVER_TIME = Array.from({ length: 30 }, (_, i) => {
@@ -41,10 +66,10 @@ const LEADS_OVER_TIME = Array.from({ length: 30 }, (_, i) => {
 });
 
 const SOURCE_DATA = [
-  { name: "WhatsApp",  value: 38, color: "#22c55e" },
-  { name: "Landing",   value: 27, color: "#3b82f6" },
-  { name: "Formulario",value: 18, color: "#818cf8" },
-  { name: "Referido",  value: 11, color: "#fb923c" },
+  { name: "WhatsApp",  value: 38, color: "var(--success)" },
+  { name: "Landing",   value: 27, color: "var(--info)" },
+  { name: "Formulario",value: 18, color: "var(--ai)" },
+  { name: "Referido",  value: 11, color: "var(--warning)" },
   { name: "Directo",   value: 6,  color: "#6366f1"  },
 ];
 
@@ -70,9 +95,9 @@ function CustomTooltip({
   return (
     <div
       className="rounded-lg px-3 py-2 text-xs shadow-xl"
-      style={{ backgroundColor: "#080812", border: "1px solid rgba(255,255,255,0.10)", color: "#f1f5f9" }}
+      style={{ backgroundColor: "var(--app-topbar)", border: "1px solid var(--app-border)", color: "var(--foreground)" }}
     >
-      <p className="mb-1 font-semibold" style={{ color: "#64748b" }}>
+      <p className="mb-1 font-semibold" style={{ color: "var(--muted-foreground)" }}>
         {label}
       </p>
       {payload.map((p) => (
@@ -108,24 +133,24 @@ function KpiCards() {
           transition={{ delay: i * 0.07, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           className="rounded-xl p-5"
           style={{
-            backgroundColor: "#0c0c14",
+            backgroundColor: "var(--app-surface)",
             border: kpi.accent
-              ? "1px solid rgba(59,130,246,0.2)"
-              : "1px solid rgba(255,255,255,0.05)",
+              ? "1px solid color-mix(in oklab, var(--info) 20%, transparent)"
+              : "1px solid var(--app-border)",
             background: kpi.accent
-              ? "linear-gradient(135deg, rgba(59,130,246,0.06) 0%, #0c0c14 60%)"
-              : "#0c0c14",
+              ? "linear-gradient(135deg, color-mix(in oklab, var(--info) 6%, transparent) 0%, var(--app-surface) 60%)"
+              : "var(--app-surface)",
           }}
         >
           <div className="mb-3 flex items-center justify-between">
             <div
               className="flex h-8 w-8 items-center justify-center rounded-lg"
-              style={{ backgroundColor: kpi.accent ? "#3b82f6" : "rgba(59,130,246,0.08)" }}
+              style={{ backgroundColor: kpi.accent ? "var(--info)" : "color-mix(in oklab, var(--info) 8%, transparent)" }}
             >
               <span
                 className="material-symbols-outlined text-base"
                 style={{
-                  color: kpi.accent ? "#ffffff" : "#3b82f6",
+                  color: kpi.accent ? "#ffffff" : "var(--info)",
                   fontVariationSettings: "'FILL' 1",
                 }}
               >
@@ -134,7 +159,7 @@ function KpiCards() {
             </div>
             <span
               className="flex items-center gap-0.5 text-xs font-semibold"
-              style={{ color: kpi.up ? "#22c55e" : "#ef4444" }}
+              style={{ color: kpi.up ? "var(--success)" : "var(--destructive)" }}
             >
               <span className="material-symbols-outlined text-sm">
                 {kpi.up ? "arrow_upward" : "arrow_downward"}
@@ -142,10 +167,10 @@ function KpiCards() {
               {kpi.change}
             </span>
           </div>
-          <p className="font-headline text-2xl font-bold" style={{ color: "#f1f5f9" }}>
+          <p className="font-headline text-2xl font-bold" style={{ color: "var(--foreground)" }}>
             {kpi.value}
           </p>
-          <p className="mt-0.5 text-xs" style={{ color: "#64748b" }}>
+          <p className="mt-0.5 text-xs" style={{ color: "var(--muted-foreground)" }}>
             {kpi.label}
           </p>
         </motion.div>
@@ -172,16 +197,16 @@ function Section({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay, ease: [0.16, 1, 0.3, 1] }}
       className="rounded-xl p-5"
-      style={{ backgroundColor: "#0c0c14", border: "1px solid rgba(255,255,255,0.05)" }}
+      style={{ backgroundColor: "var(--app-surface)", border: "1px solid var(--app-border)" }}
     >
       <div className="mb-4 flex items-center gap-2">
         <span
           className="material-symbols-outlined text-base"
-          style={{ color: "#3b82f6", fontVariationSettings: "'FILL' 1" }}
+          style={{ color: "var(--info)", fontVariationSettings: "'FILL' 1" }}
         >
           {icon}
         </span>
-        <h2 className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>
+        <h2 className="font-headline text-sm font-bold" style={{ color: "var(--foreground)" }}>
           {title}
         </h2>
       </div>
@@ -202,12 +227,12 @@ function FunnelChart() {
         >
           <CartesianGrid
             horizontal={false}
-            stroke="rgba(255,255,255,0.06)"
+            stroke="var(--app-border)"
             strokeDasharray="3 3"
           />
           <XAxis
             type="number"
-            tick={{ fill: "#64748b", fontSize: 11 }}
+            tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
             axisLine={false}
             tickLine={false}
           />
@@ -215,11 +240,11 @@ function FunnelChart() {
             type="category"
             dataKey="stage"
             width={82}
-            tick={{ fill: "#64748b", fontSize: 11 }}
+            tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
             axisLine={false}
             tickLine={false}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--app-border)" }} />
           <Bar dataKey="leads" radius={[0, 4, 4, 0]} name="Leads">
             {FUNNEL_DATA.map((entry, i) => (
               <Cell key={i} fill={entry.fill} fillOpacity={0.85} />
@@ -237,12 +262,12 @@ function FunnelChart() {
             <div
               key={stage.stage}
               className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5"
-              style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+              style={{ backgroundColor: "var(--app-border)" }}
             >
               <span className="text-[11px]" style={{ color: stage.fill }}>
                 {stage.stage}
               </span>
-              <span className="material-symbols-outlined text-xs" style={{ color: "#334155" }}>
+              <span className="material-symbols-outlined text-xs" style={{ color: "var(--muted-foreground)" }}>
                 arrow_forward
               </span>
               <span className="text-[11px] font-semibold" style={{ color: next.fill }}>
@@ -271,9 +296,9 @@ function TrendChart() {
             onClick={() => setRange(r)}
             className="rounded px-2.5 py-1 font-label text-[10px] uppercase tracking-widest transition-colors"
             style={{
-              backgroundColor: range === r ? "rgba(59,130,246,0.12)" : "transparent",
-              color: range === r ? "#3b82f6" : "#64748b",
-              border: range === r ? "1px solid rgba(59,130,246,0.2)" : "1px solid transparent",
+              backgroundColor: range === r ? "color-mix(in oklab, var(--info) 12%, transparent)" : "transparent",
+              color: range === r ? "var(--info)" : "var(--muted-foreground)",
+              border: range === r ? "1px solid color-mix(in oklab, var(--info) 20%, transparent)" : "1px solid transparent",
             }}
           >
             {r}d
@@ -285,47 +310,47 @@ function TrendChart() {
         <AreaChart data={data} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="gradLeads" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%"  stopColor="#3b82f6" stopOpacity={0.18} />
-              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}    />
+              <stop offset="5%"  stopColor="var(--info)" stopOpacity={0.18} />
+              <stop offset="95%" stopColor="var(--info)" stopOpacity={0}    />
             </linearGradient>
             <linearGradient id="gradCitas" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%"  stopColor="#fb923c" stopOpacity={0.15} />
-              <stop offset="95%" stopColor="#fb923c" stopOpacity={0}    />
+              <stop offset="5%"  stopColor="var(--warning)" stopOpacity={0.15} />
+              <stop offset="95%" stopColor="var(--warning)" stopOpacity={0}    />
             </linearGradient>
           </defs>
-          <CartesianGrid stroke="rgba(255,255,255,0.05)" strokeDasharray="3 3" />
+          <CartesianGrid stroke="var(--app-border)" strokeDasharray="3 3" />
           <XAxis
             dataKey="date"
-            tick={{ fill: "#64748b", fontSize: 10 }}
+            tick={{ fill: "var(--muted-foreground)", fontSize: 10 }}
             axisLine={false}
             tickLine={false}
             interval={range === 30 ? 6 : range === 14 ? 3 : 1}
           />
           <YAxis
-            tick={{ fill: "#64748b", fontSize: 10 }}
+            tick={{ fill: "var(--muted-foreground)", fontSize: 10 }}
             axisLine={false}
             tickLine={false}
           />
-          <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(59,130,246,0.2)" }} />
+          <Tooltip content={<CustomTooltip />} cursor={{ stroke: "color-mix(in oklab, var(--info) 20%, transparent)" }} />
           <Area
             type="monotone"
             dataKey="leads"
             name="Leads"
-            stroke="#3b82f6"
+            stroke="var(--info)"
             strokeWidth={2}
             fill="url(#gradLeads)"
             dot={false}
-            activeDot={{ r: 4, fill: "#3b82f6" }}
+            activeDot={{ r: 4, fill: "var(--info)" }}
           />
           <Area
             type="monotone"
             dataKey="citas"
             name="Citas"
-            stroke="#fb923c"
+            stroke="var(--warning)"
             strokeWidth={1.5}
             fill="url(#gradCitas)"
             dot={false}
-            activeDot={{ r: 3, fill: "#fb923c" }}
+            activeDot={{ r: 3, fill: "var(--warning)" }}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -383,7 +408,7 @@ function SourceChart() {
                   className="h-2.5 w-2.5 shrink-0 rounded-full"
                   style={{ backgroundColor: item.color, opacity: activeIdx === null || activeIdx === i ? 1 : 0.35 }}
                 />
-                <span className="flex-1 text-xs" style={{ color: activeIdx === i ? "#f1f5f9" : "#64748b" }}>
+                <span className="flex-1 text-xs" style={{ color: activeIdx === i ? "var(--foreground)" : "var(--muted-foreground)" }}>
                   {item.name}
                 </span>
                 <span className="font-label text-xs font-semibold" style={{ color: item.color }}>
@@ -414,12 +439,12 @@ function CampaignTable() {
       <div className="overflow-x-auto">
         <table className="w-full min-w-[480px] text-xs">
           <thead>
-            <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            <tr style={{ borderBottom: "1px solid var(--app-border)" }}>
               {["Campaña", "Plataforma", "Leads", "CPL", "CTR", "Estado"].map((h) => (
                 <th
                   key={h}
                   className="pb-2 text-left font-label text-[10px] uppercase tracking-widest"
-                  style={{ color: "#64748b" }}
+                  style={{ color: "var(--muted-foreground)" }}
                 >
                   {h}
                 </th>
@@ -435,9 +460,9 @@ function CampaignTable() {
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25 + i * 0.05 }}
-                  style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
+                  style={{ borderBottom: "1px solid var(--app-border)" }}
                 >
-                  <td className="py-3 pr-3 font-medium" style={{ color: "#f1f5f9" }}>
+                  <td className="py-3 pr-3 font-medium" style={{ color: "var(--foreground)" }}>
                     {row.name}
                   </td>
                   <td className="py-3 pr-3">
@@ -445,32 +470,32 @@ function CampaignTable() {
                       className="rounded px-1.5 py-0.5 font-label text-[9px] uppercase tracking-widest"
                       style={{
                         backgroundColor: row.platform === "Meta" ? "rgba(129,140,248,0.12)" : "rgba(251,146,60,0.12)",
-                        color: row.platform === "Meta" ? "#818cf8" : "#fb923c",
+                        color: row.platform === "Meta" ? "var(--ai)" : "var(--warning)",
                       }}
                     >
                       {row.platform}
                     </span>
                   </td>
-                  <td className="py-3 pr-3 font-semibold" style={{ color: "#3b82f6" }}>
+                  <td className="py-3 pr-3 font-semibold" style={{ color: "var(--info)" }}>
                     {row.leads}
                   </td>
-                  <td className="py-3 pr-3" style={{ color: "#94a3b8" }}>
+                  <td className="py-3 pr-3" style={{ color: "var(--muted-foreground)" }}>
                     ${row.cpl}
                   </td>
-                  <td className="py-3 pr-3" style={{ color: "#94a3b8" }}>
+                  <td className="py-3 pr-3" style={{ color: "var(--muted-foreground)" }}>
                     {row.ctr}
                   </td>
                   <td className="py-3">
                     <span
                       className="flex w-fit items-center gap-1 rounded-full px-2 py-0.5 font-label text-[9px] uppercase tracking-widest"
                       style={{
-                        backgroundColor: isActive ? "rgba(34,197,94,0.12)" : "rgba(255,255,255,0.05)",
-                        color: isActive ? "#22c55e" : "#64748b",
+                        backgroundColor: isActive ? "color-mix(in oklab, var(--success) 12%, transparent)" : "var(--app-border)",
+                        color: isActive ? "var(--success)" : "var(--muted-foreground)",
                       }}
                     >
                       <span
                         className="h-1.5 w-1.5 rounded-full"
-                        style={{ backgroundColor: isActive ? "#22c55e" : "#64748b" }}
+                        style={{ backgroundColor: isActive ? "var(--success)" : "var(--muted-foreground)" }}
                       />
                       {isActive ? "Activa" : "Pausada"}
                     </span>
@@ -496,29 +521,29 @@ export function AnalyticsView() {
   return (
     <div
       className="flex flex-col flex-1 min-h-svh"
-      style={{ backgroundColor: "#060609", color: "#f1f5f9" }}
+      style={{ backgroundColor: "var(--app-canvas)", color: "var(--foreground)" }}
     >
       {/* Header */}
       <header
         className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b px-4 md:px-6"
         style={{
-          backgroundColor: "#080812",
-          borderColor: "rgba(255,255,255,0.08)",
-          boxShadow: "0 0 20px rgba(59,130,246,0.04)",
+          backgroundColor: "var(--app-topbar)",
+          borderColor: "var(--app-border)",
+          boxShadow: "0 0 20px color-mix(in oklab, var(--info) 4%, transparent)",
         }}
       >
         <div className="flex items-center gap-3">
-          <SidebarTrigger className="-ml-1" style={{ color: "#94a3b8" }} />
+          <SidebarTrigger className="-ml-1" style={{ color: "var(--muted-foreground)" }} />
           <Separator orientation="vertical" className="h-4 opacity-30" />
           <span
             className="material-symbols-outlined text-lg"
-            style={{ color: "#3b82f6", fontVariationSettings: "'FILL' 1" }}
+            style={{ color: "var(--info)", fontVariationSettings: "'FILL' 1" }}
           >
             bar_chart_4_bars
           </span>
           <h1
             className="font-headline text-sm font-bold uppercase tracking-tighter"
-            style={{ color: "#f1f5f9" }}
+            style={{ color: "var(--foreground)" }}
           >
             Analytics
           </h1>
@@ -527,7 +552,7 @@ export function AnalyticsView() {
         {/* Period selector */}
         <div
           className="flex items-center gap-0.5 rounded-lg p-1"
-          style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
+          style={{ backgroundColor: "var(--app-border)" }}
         >
           {PERIODS.map((p) => (
             <button
@@ -535,8 +560,8 @@ export function AnalyticsView() {
               onClick={() => setPeriod(p)}
               className="rounded-md px-3 py-1 font-label text-[11px] transition-colors"
               style={{
-                backgroundColor: period === p ? "#0c0c14" : "transparent",
-                color: period === p ? "#3b82f6" : "#64748b",
+                backgroundColor: period === p ? "var(--app-surface)" : "transparent",
+                color: period === p ? "var(--info)" : "var(--muted-foreground)",
                 boxShadow: period === p ? "0 1px 4px rgba(0,0,0,0.3)" : "none",
               }}
             >

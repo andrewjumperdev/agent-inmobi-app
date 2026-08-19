@@ -79,11 +79,31 @@
   --color-ai: var(--ai);
   --color-ai-foreground: var(--ai-foreground);
   --color-ai-muted: var(--ai-muted);
+
+  /* Superficies del dashboard: el plano de página y las tarjetas que van encima.
+     Se separan de --background/--card para que el dashboard tenga profundidad
+     propia sin repintar los componentes shadcn del resto de la app. */
+  --color-app-canvas: var(--app-canvas);
+  --color-app-surface: var(--app-surface);
+  --color-app-surface-hover: var(--app-surface-hover);
+  --color-app-border: var(--app-border);
+  --color-app-topbar: var(--app-topbar);
+
+  /* Temperatura del pipeline. Paleta VALIDADA por modo (ver comentario en
+     :root/.dark) — no cambiar un hex sin volver a correr el validador. */
+  --color-temp-hot: var(--temp-hot);
+  --color-temp-warm: var(--temp-warm);
+  --color-temp-cold: var(--temp-cold);
+  --color-temp-unset: var(--temp-unset);
 }
 
 :root {
-  /* Base tokens */
-  --background: oklch(1 0 0);
+  color-scheme: light;
+
+  /* Base tokens. El plano de página es apenas gris y las tarjetas van en blanco
+     puro: antes ambos eran oklch(1 0 0) y en modo claro las tarjetas se
+     fundían con el fondo, sin ninguna jerarquía visual. */
+  --background: oklch(0.976 0.002 250);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -116,13 +136,16 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Semantic: verde — activo, conectado */
-  --success: oklch(0.72 0.17 142);
+  /* Semantic: verde — activo, conectado.
+     Paso oscurecido para modo claro: el original (L 0.72) daba 2.34:1 sobre
+     blanco y los iconos de estado se veían lavados. Ahora 3.41:1. */
+  --success: oklch(0.62 0.17 142);
   --success-foreground: oklch(0.985 0 0);
   --success-muted: oklch(0.96 0.04 142);
 
-  /* Semantic: ámbar — tibio, estado intermedio */
-  --warning: oklch(0.79 0.17 70);
+  /* Semantic: ámbar — tibio, estado intermedio.
+     Mismo caso: L 0.79 daba 1.99:1 sobre blanco. Ahora 3.20:1. */
+  --warning: oklch(0.66 0.15 70);
   --warning-foreground: oklch(0.2 0 0);
   --warning-muted: oklch(0.97 0.04 70);
 
@@ -135,9 +158,31 @@
   --ai: oklch(0.65 0.22 295);
   --ai-foreground: oklch(0.985 0 0);
   --ai-muted: oklch(0.95 0.05 295);
+
+  /* ── Dashboard (modo claro / "mañana") ─────────────────────────── */
+  --app-canvas: #f6f7f9;
+  --app-surface: #ffffff;
+  --app-surface-hover: #f2f4f7;
+  --app-border: rgba(15, 23, 42, 0.09);
+  --app-topbar: rgba(255, 255, 255, 0.85);
+
+  /* Temperatura — VALIDADA sobre la superficie #ffffff:
+       chroma ✓ · CVD ΔE 15.3 ✓ · visión normal ΔE 20.8 ✓
+       contraste: el ámbar queda en 2.17:1 (<3:1) → aplica la "regla de
+       relief": la leyenda SIEMPRE muestra el valor y el % como etiqueta
+       visible, así el color nunca carga solo el significado.
+     Un ámbar más oscuro subiría el contraste pero colapsa contra el rojo
+     (ΔE 4.3 deutan / 12.5 visión normal): dejaría de distinguirse caliente
+     de tibio, que es justo lo que el gráfico tiene que comunicar. */
+  --temp-hot: #e34948;
+  --temp-warm: #eda100;
+  --temp-cold: #2a78d6;
+  --temp-unset: #94a3b8;
 }
 
 .dark {
+  color-scheme: dark;
+
   /* Base tokens */
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -190,6 +235,26 @@
   --ai: oklch(0.72 0.22 295);
   --ai-foreground: oklch(0.1 0 0);
   --ai-muted: oklch(0.22 0.07 295);
+
+  /* ── Dashboard (modo oscuro / "noche") ─────────────────────────── */
+  --app-canvas: #08080c;
+  --app-surface: #101018;
+  --app-surface-hover: #161622;
+  --app-border: rgba(255, 255, 255, 0.08);
+  --app-topbar: rgba(12, 12, 20, 0.85);
+
+  /* Temperatura — pasos PROPIOS del modo oscuro (no es un flip automático
+     del claro), validados sobre la superficie #101018:
+       chroma ✓ · CVD ΔE 10.9 ✓ · visión normal ΔE 17.7 ✓ · contraste ✓
+     Desvío consciente: el ámbar queda en L 0.75, por encima de la banda de
+     luminosidad oscura (0.48–0.67). Es una regla de armonía; el paso que sí
+     entra en banda (#c98500) falla el piso de visión normal con ΔE 13.0
+     contra el rojo — o sea, ni con visión completa se distingue caliente de
+     tibio. Se prioriza legibilidad. */
+  --temp-hot: #e66767;
+  --temp-warm: #d9a520;
+  --temp-cold: #3987e5;
+  --temp-unset: #64748b;
 }
 
 @layer base {

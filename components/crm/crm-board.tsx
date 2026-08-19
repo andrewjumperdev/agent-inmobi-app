@@ -9,18 +9,18 @@ import { LeadDetail } from "./lead-detail";
 
 /* ── Etapas = lifecycle_stage del backend ──────────────────────────── */
 const STAGES = [
-  { id: "lead",        label: "Nuevo",     color: "#e2e8f0" },
-  { id: "qualified",   label: "Calificado",color: "#3b82f6" },
-  { id: "in_proposal", label: "Propuesta", color: "#fb923c" },
-  { id: "customer",    label: "Cliente",   color: "#22c55e" },
-  { id: "lost",        label: "Perdido",   color: "#64748b" },
+  { id: "lead",        label: "Nuevo",     color: "var(--foreground)" },
+  { id: "qualified",   label: "Calificado",color: "var(--info)" },
+  { id: "in_proposal", label: "Propuesta", color: "var(--warning)" },
+  { id: "customer",    label: "Cliente",   color: "var(--success)" },
+  { id: "lost",        label: "Perdido",   color: "var(--muted-foreground)" },
 ] as const;
 
 const TEMP: Record<string, { label: string; color: string }> = {
-  hot:   { label: "Caliente", color: "#ef4444" },
-  warm:  { label: "Tibio",    color: "#eab308" },
-  cold:  { label: "Frío",     color: "#94a3b8" },
-  unset: { label: "Sin calificar", color: "#475569" },
+  hot:   { label: "Caliente", color: "var(--destructive)" },
+  warm:  { label: "Tibio",    color: "var(--warning)" },
+  cold:  { label: "Frío",     color: "var(--muted-foreground)" },
+  unset: { label: "Sin calificar", color: "var(--muted-foreground)" },
 };
 
 function initials(name: string | null, phone: string | null) {
@@ -41,8 +41,8 @@ function ContactCard({ c, color, onClick }: { c: ContactOut; color: string; onCl
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.96 }}
-      className="cursor-pointer rounded-xl border p-3 transition-colors hover:border-[rgba(59,130,246,0.4)]"
-      style={{ backgroundColor: "#0c0c14", borderColor: "rgba(255,255,255,0.07)" }}
+      className="cursor-pointer rounded-xl border p-3 transition-colors hover:border-[color-mix(in oklab, var(--info) 40%, transparent)]"
+      style={{ backgroundColor: "var(--app-surface)", borderColor: "var(--app-border)" }}
     >
       <div className="flex items-center gap-2.5">
         <div
@@ -52,10 +52,10 @@ function ContactCard({ c, color, onClick }: { c: ContactOut; color: string; onCl
           {initials(c.full_name, c.phone)}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold" style={{ color: "#f1f5f9" }}>
+          <p className="truncate text-sm font-semibold" style={{ color: "var(--foreground)" }}>
             {c.full_name || c.phone || c.email || "Sin nombre"}
           </p>
-          <p className="truncate text-[11px]" style={{ color: "#64748b" }}>
+          <p className="truncate text-[11px]" style={{ color: "var(--muted-foreground)" }}>
             {c.attributes?.company
               ? `${c.attributes.company}${c.attributes.role ? ` · ${c.attributes.role}` : ""}`
               : c.phone || c.email || "—"}
@@ -118,42 +118,42 @@ export function CrmBoard({ contacts: initial }: { contacts: ContactOut[] }) {
       {/* Top bar */}
       <div
         className="flex flex-wrap items-center gap-3 px-4 py-4 md:px-8 shrink-0"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+        style={{ borderBottom: "1px solid var(--app-border)" }}
       >
         <div className="flex items-center gap-2">
           {[
-            { label: "Total", value: total, color: "#e2e8f0" },
-            { label: "Calientes", value: hot, color: "#ef4444" },
-            { label: "Clientes", value: customers, color: "#22c55e" },
+            { label: "Total", value: total, color: "var(--foreground)" },
+            { label: "Calientes", value: hot, color: "var(--destructive)" },
+            { label: "Clientes", value: customers, color: "var(--success)" },
           ].map((s) => (
             <div
               key={s.label}
               className="flex items-center gap-1.5 rounded-full px-3 py-1"
-              style={{ backgroundColor: "rgba(188,198,224,0.06)", border: "1px solid rgba(255,255,255,0.06)" }}
+              style={{ backgroundColor: "rgba(188,198,224,0.06)", border: "1px solid var(--app-border)" }}
             >
               <span className="text-sm font-bold" style={{ color: s.color }}>{s.value}</span>
-              <span className="text-[10px] uppercase tracking-widest" style={{ color: "#334155" }}>{s.label}</span>
+              <span className="text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>{s.label}</span>
             </div>
           ))}
         </div>
         <div className="flex-1" />
         <div
           className="flex items-center gap-2 rounded-xl px-3 py-2"
-          style={{ backgroundColor: "#0c0c14", border: "1px solid rgba(255,255,255,0.08)", minWidth: 200 }}
+          style={{ backgroundColor: "var(--app-surface)", border: "1px solid var(--app-border)", minWidth: 200 }}
         >
-          <Search size={14} style={{ color: "#334155" }} />
+          <Search size={14} style={{ color: "var(--muted-foreground)" }} />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar…"
             className="w-full bg-transparent text-sm outline-none"
-            style={{ color: "#f1f5f9" }}
+            style={{ color: "var(--foreground)" }}
           />
         </div>
         <button
           onClick={() => setShowForm(true)}
           className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold"
-          style={{ backgroundColor: "#3b82f6", color: "#fff" }}
+          style={{ backgroundColor: "var(--info)", color: "#fff" }}
         >
           <Plus size={15} /> Nuevo lead
         </button>
@@ -165,7 +165,7 @@ export function CrmBoard({ contacts: initial }: { contacts: ContactOut[] }) {
         {total === 0 && (
           <div
             className="mb-4 rounded-xl border px-4 py-3 text-sm"
-            style={{ borderColor: "rgba(59,130,246,0.2)", backgroundColor: "rgba(59,130,246,0.05)", color: "#3b82f6" }}
+            style={{ borderColor: "color-mix(in oklab, var(--info) 20%, transparent)", backgroundColor: "color-mix(in oklab, var(--info) 5%, transparent)", color: "var(--info)" }}
           >
             Todavía no hay leads. Conectá WhatsApp en <b>Integraciones</b> o cargá uno con “Nuevo lead”.
           </div>
@@ -188,8 +188,8 @@ export function CrmBoard({ contacts: initial }: { contacts: ContactOut[] }) {
                 <div
                   className="flex items-center justify-between rounded-xl px-3 py-2.5"
                   style={{
-                    backgroundColor: dragStage === stage.id ? `${stage.color}10` : "#060609",
-                    border: `1px solid ${dragStage === stage.id ? stage.color + "40" : "rgba(255,255,255,0.06)"}`,
+                    backgroundColor: dragStage === stage.id ? `${stage.color}10` : "var(--app-canvas)",
+                    border: `1px solid ${dragStage === stage.id ? stage.color + "40" : "var(--app-border)"}`,
                   }}
                 >
                   <span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: stage.color }}>
@@ -267,12 +267,12 @@ function NewLeadModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.6)" }} onClick={onClose}>
       <div
         className="w-full max-w-sm rounded-2xl border p-6"
-        style={{ backgroundColor: "#10101c", borderColor: "rgba(69,70,77,0.5)" }}
+        style={{ backgroundColor: "var(--app-surface-hover)", borderColor: "var(--border)" }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-sm font-bold" style={{ color: "#f1f5f9" }}>Nuevo lead</p>
-          <button onClick={onClose}><X size={16} style={{ color: "#64748b" }} /></button>
+          <p className="text-sm font-bold" style={{ color: "var(--foreground)" }}>Nuevo lead</p>
+          <button onClick={onClose}><X size={16} style={{ color: "var(--muted-foreground)" }} /></button>
         </div>
         <div className="flex flex-col gap-3">
           {[
@@ -286,20 +286,20 @@ function NewLeadModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
               onChange={(e) => f.set(e.target.value)}
               placeholder={f.ph}
               className="rounded-xl border px-3 py-2.5 text-sm outline-none"
-              style={{ backgroundColor: "#0c0c14", borderColor: "rgba(255,255,255,0.08)", color: "#f1f5f9" }}
+              style={{ backgroundColor: "var(--app-surface)", borderColor: "var(--app-border)", color: "var(--foreground)" }}
             />
           ))}
-          {error && <p className="text-xs" style={{ color: "#f87171" }}>{error}</p>}
+          {error && <p className="text-xs" style={{ color: "var(--destructive)" }}>{error}</p>}
           <button
             onClick={submit}
             disabled={busy}
             className="mt-1 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold disabled:opacity-50"
-            style={{ backgroundColor: "#3b82f6", color: "#fff" }}
+            style={{ backgroundColor: "var(--info)", color: "#fff" }}
           >
             {busy ? <Loader2 size={15} className="animate-spin" /> : <Plus size={15} />}
             Crear lead
           </button>
-          <p className="text-center text-[11px]" style={{ color: "#475569" }}>
+          <p className="text-center text-[11px]" style={{ color: "var(--muted-foreground)" }}>
             La IA hace el primer contacto automáticamente.
           </p>
         </div>

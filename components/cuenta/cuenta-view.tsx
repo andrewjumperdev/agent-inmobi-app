@@ -10,6 +10,7 @@ import {
   Building2,
   Phone,
   CreditCard,
+  RefreshCw,
   Calendar,
   ChevronRight,
   Loader2,
@@ -49,9 +50,9 @@ const fadeUp = {
 
 /* ── Plan badge config ──────────────────────────────────────── */
 const PLAN_LABELS: Record<string, { label: string; color: string; bg: string }> = {
-  pro:   { label: "Pro",      color: "#3b82f6", bg: "rgba(59,130,246,0.1)" },
-  trial: { label: "Trial",    color: "#facc15", bg: "rgba(250,204,21,0.1)" },
-  free:  { label: "Free",     color: "#94a3b8", bg: "rgba(148,163,184,0.1)" },
+  pro:   { label: "Pro",      color: "var(--info)", bg: "color-mix(in oklab, var(--info) 10%, transparent)" },
+  trial: { label: "Trial",    color: "var(--warning)", bg: "color-mix(in oklab, var(--warning) 10%, transparent)" },
+  free:  { label: "Free",     color: "var(--muted-foreground)", bg: "color-mix(in oklab, var(--muted-foreground) 10%, transparent)" },
 };
 
 function getPlanDisplay(plan: string | null, status: string | null) {
@@ -97,6 +98,39 @@ export function CuentaView({ profile, authEmail }: Props) {
     router.push("/login");
   }
 
+  const [redoing, setRedoing] = useState(false);
+  const [redoError, setRedoError] = useState<string | null>(null);
+
+  async function redoDiagnosis() {
+    // Confirmación explícita: deja el sistema sin operar hasta rehacer el
+    // diagnóstico, y eso no se adivina desde el nombre del botón.
+    const ok = window.confirm(
+      [
+        "Vas a rehacer la configuración de tu negocio.",
+        "Mientras tanto los agentes dejan de responder, hasta que completes el diagnóstico de nuevo (son dos minutos).",
+        "¿Seguimos?",
+      ].join("\n\n")
+    );
+    if (!ok) return;
+
+    setRedoing(true);
+    setRedoError(null);
+    try {
+      const res = await fetch("/api/onboarding/reset", { method: "POST" });
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
+        setRedoError(body.error ?? "No pudimos reabrir el onboarding. Intentá de nuevo.");
+        return;
+      }
+      // Navegación dura: fuerza al middleware a reevaluar con el flag ya en false.
+      window.location.href = "/onboarding";
+    } catch {
+      setRedoError("No pudimos conectar. Revisá tu conexión e intentá de nuevo.");
+    } finally {
+      setRedoing(false);
+    }
+  }
+
   return (
     <div className="flex flex-col gap-8 p-6 max-w-2xl">
 
@@ -118,7 +152,7 @@ export function CuentaView({ profile, authEmail }: Props) {
         {/* Avatar */}
         <div
           className="size-16 rounded-2xl flex items-center justify-center text-xl font-bold shrink-0"
-          style={{ backgroundColor: "rgba(59,130,246,0.12)", color: "#3b82f6" }}
+          style={{ backgroundColor: "color-mix(in oklab, var(--info) 12%, transparent)", color: "var(--info)" }}
         >
           {profile.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -229,6 +263,33 @@ export function CuentaView({ profile, authEmail }: Props) {
           </span>
         </div>
         <div className="divide-y divide-border">
+          {/* Rehacer diagnóstico */}
+          <button
+            onClick={redoDiagnosis}
+            disabled={redoing}
+            className="group flex w-full items-center gap-3 px-5 py-4 text-left transition-colors hover:bg-info/5 disabled:opacity-50"
+          >
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-info/10">
+              {redoing ? (
+                <Loader2 size={15} className="animate-spin text-info" />
+              ) : (
+                <RefreshCw size={15} className="text-info" />
+              )}
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-foreground">
+                {redoing ? "Reabriendo el onboarding…" : "Rehacer mi diagnóstico"}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Cambiaste de rubro o el diagnóstico no refleja tu negocio
+              </p>
+              {redoError && (
+                <p className="mt-1 text-xs text-destructive">{redoError}</p>
+              )}
+            </div>
+            <ChevronRight size={15} className="text-muted-foreground/40 transition-colors group-hover:text-muted-foreground" />
+          </button>
+
           {/* Sign out */}
           <button
             onClick={handleSignOut}

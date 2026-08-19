@@ -7,15 +7,15 @@ import { Check, X, Loader2, Inbox } from "lucide-react";
 import type { EscalationOut } from "@/lib/kore/client";
 
 const REASON: Record<string, { label: string; color: string }> = {
-  price_signal:         { label: "Pregunta precio",      color: "#22c55e" },
-  close_ready:          { label: "Listo para cerrar",    color: "#22c55e" },
-  proposal_review:      { label: "Propuesta a revisar",  color: "#3b82f6" },
-  content_review:       { label: "Contenido a revisar",  color: "#a855f7" },
-  cannot_classify:      { label: "No se pudo clasificar",color: "#eab308" },
-  pipeline_stale:       { label: "Pipeline sin avance",  color: "#fb923c" },
-  overcontacted:        { label: "Contactado de más",    color: "#fb923c" },
-  tech_block:           { label: "Bloqueo técnico",      color: "#ef4444" },
-  payment_confirmation: { label: "Confirmar pago",       color: "#3b82f6" },
+  price_signal:         { label: "Pregunta precio",      color: "var(--success)" },
+  close_ready:          { label: "Listo para cerrar",    color: "var(--success)" },
+  proposal_review:      { label: "Propuesta a revisar",  color: "var(--info)" },
+  content_review:       { label: "Contenido a revisar",  color: "var(--ai)" },
+  cannot_classify:      { label: "No se pudo clasificar",color: "var(--warning)" },
+  pipeline_stale:       { label: "Pipeline sin avance",  color: "var(--warning)" },
+  overcontacted:        { label: "Contactado de más",    color: "var(--warning)" },
+  tech_block:           { label: "Bloqueo técnico",      color: "var(--destructive)" },
+  payment_confirmation: { label: "Confirmar pago",       color: "var(--info)" },
 };
 
 function timeAgo(iso: string) {
@@ -48,8 +48,8 @@ export function EscalationsQueue({ items: initial }: { items: EscalationOut[] })
   if (items.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20">
-        <Inbox size={40} style={{ color: "#1e293b" }} />
-        <p className="text-sm" style={{ color: "#64748b" }}>
+        <Inbox size={40} style={{ color: "var(--muted-foreground)" }} />
+        <p className="text-sm" style={{ color: "var(--muted-foreground)" }}>
           No hay nada esperando a un humano. La IA está manejando todo ✓
         </p>
       </div>
@@ -58,12 +58,12 @@ export function EscalationsQueue({ items: initial }: { items: EscalationOut[] })
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-3 p-4 md:p-8">
-      <p className="text-sm" style={{ color: "#64748b" }}>
+      <p className="text-sm" style={{ color: "var(--muted-foreground)" }}>
         {items.length} {items.length === 1 ? "caso requiere" : "casos requieren"} tu atención. La IA preparó cada uno.
       </p>
       <AnimatePresence>
         {items.map((e) => {
-          const r = REASON[e.reason] ?? { label: e.reason, color: "#64748b" };
+          const r = REASON[e.reason] ?? { label: e.reason, color: "var(--muted-foreground)" };
           return (
             <motion.div
               key={e.id}
@@ -72,7 +72,7 @@ export function EscalationsQueue({ items: initial }: { items: EscalationOut[] })
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, x: -20 }}
               className="rounded-2xl border p-4"
-              style={{ backgroundColor: "#0c0c14", borderColor: "rgba(255,255,255,0.07)" }}
+              style={{ backgroundColor: "var(--app-surface)", borderColor: "var(--app-border)" }}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
@@ -83,11 +83,11 @@ export function EscalationsQueue({ items: initial }: { items: EscalationOut[] })
                     >
                       {r.label}
                     </span>
-                    <span className="text-[11px]" style={{ color: "#475569" }}>{timeAgo(e.created_at)}</span>
+                    <span className="text-[11px]" style={{ color: "var(--muted-foreground)" }}>{timeAgo(e.created_at)}</span>
                   </div>
-                  <p className="text-sm font-semibold" style={{ color: "#f1f5f9" }}>{e.title}</p>
+                  <p className="text-sm font-semibold" style={{ color: "var(--foreground)" }}>{e.title}</p>
                   {e.executive_summary && (
-                    <p className="mt-1 text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
+                    <p className="mt-1 text-sm leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
                       {e.executive_summary}
                     </p>
                   )}
@@ -98,7 +98,7 @@ export function EscalationsQueue({ items: initial }: { items: EscalationOut[] })
                     disabled={busy === e.id}
                     title="Resuelto"
                     className="flex h-9 w-9 items-center justify-center rounded-xl disabled:opacity-40"
-                    style={{ backgroundColor: "rgba(34,197,94,0.12)", color: "#22c55e" }}
+                    style={{ backgroundColor: "color-mix(in oklab, var(--success) 12%, transparent)", color: "var(--success)" }}
                   >
                     {busy === e.id ? <Loader2 size={15} className="animate-spin" /> : <Check size={16} />}
                   </button>
@@ -107,7 +107,7 @@ export function EscalationsQueue({ items: initial }: { items: EscalationOut[] })
                     disabled={busy === e.id}
                     title="Descartar"
                     className="flex h-9 w-9 items-center justify-center rounded-xl disabled:opacity-40"
-                    style={{ backgroundColor: "rgba(239,68,68,0.1)", color: "#f87171" }}
+                    style={{ backgroundColor: "color-mix(in oklab, var(--destructive) 10%, transparent)", color: "var(--destructive)" }}
                   >
                     <X size={16} />
                   </button>

@@ -1,13 +1,15 @@
-﻿import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+﻿import { PageHeader } from "@/components/page-header";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardReal } from "@/components/dashboard/metrics-real";
 import { koreGet } from "@/lib/kore/server";
 import type { MetricsSnapshot } from "@/lib/kore/client";
 import { UserDropdown } from "@/components/cuenta/user-dropdown";
+import { Greeting } from "@/components/dashboard/greeting";
 
 const EMPTY_METRICS: MetricsSnapshot = {
   leads_new_7d: 0,
+  leads_prev_7d: 0,
+  leads_daily: [],
   temperature_distribution: {},
   auto_classification_rate: 0,
   cold_share: 0,
@@ -62,74 +64,29 @@ export default async function DashboardPage() {
   };
 
   return (
-    <div
-      className="flex flex-col flex-1 min-h-svh"
-      style={{ backgroundColor: "#060609", color: "#f1f5f9" }}
-    >
-      {/* Top bar */}
-      <header
-        className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b px-4 md:px-6"
-        style={{
-          backgroundColor: "#080812",
-          borderColor: "rgba(255,255,255,0.08)",
-          boxShadow: "0 0 20px rgba(59,130,246,0.04)",
-        }}
-      >
-        <div className="flex items-center gap-3">
-          <SidebarTrigger className="-ml-1" style={{ color: "#94a3b8" }} />
-          <Separator orientation="vertical" className="h-4 opacity-30" />
-          <span
-            className="font-headline text-sm font-bold uppercase tracking-tighter"
-            style={{ color: "#3b82f6" }}
-          >
-            KORE AI
+    <div className="flex min-h-svh flex-1 flex-col bg-app-canvas text-foreground">
+      <PageHeader title="Dashboard" icon="space_dashboard">
+        {/* Indicador de sistema activo. El punto que late es decorativo; el
+            texto es lo que comunica el estado a un lector de pantalla. */}
+        <span className="mr-2 hidden items-center gap-2 rounded-full border border-app-border px-2.5 py-1 sm:flex">
+          <span className="relative flex size-1.5" aria-hidden>
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-70" />
+            <span className="relative inline-flex size-1.5 rounded-full bg-success" />
           </span>
-        </div>
-
-        <div className="flex items-center gap-4">
-          {/* Live indicator */}
-          <div className="relative hidden sm:block">
-            <span
-              className="material-symbols-outlined cursor-pointer text-xl"
-              style={{ color: "#94a3b8" }}
-            >
-              sensors
-            </span>
-            <span
-              className="absolute -right-0.5 -top-0.5 h-2 w-2 animate-ping rounded-full"
-              style={{ backgroundColor: "#3b82f6" }}
-            />
-            <span
-              className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full"
-              style={{ backgroundColor: "#3b82f6" }}
-            />
-          </div>
-          <span
-            className="material-symbols-outlined cursor-pointer text-xl"
-            style={{ color: "#94a3b8" }}
-          >
-            notifications
+          <span className="font-label text-[10px] uppercase tracking-widest text-muted-foreground">
+            En vivo
           </span>
-          <span
-            className="material-symbols-outlined cursor-pointer text-xl"
-            style={{ color: "#94a3b8" }}
-          >
-            settings
-          </span>
+        </span>
 
-          {/* User avatar dropdown */}
-          <UserDropdown user={navUser} variant="navbar" />
-        </div>
-      </header>
+        <UserDropdown user={navUser} variant="navbar" />
+      </PageHeader>
 
-      {/* Dashboard canvas */}
+      {/* Lienzo del dashboard */}
       <div className="flex-1 space-y-6 p-4 md:p-8">
-        <div>
-          <h1 className="text-lg font-bold" style={{ color: "#f1f5f9" }}>
-            Hola, {userName} 👋
-          </h1>
-          <p className="text-sm" style={{ color: "#64748b" }}>
-            Tu pipeline en tiempo real.
+        <div className="space-y-1">
+          <Greeting name={userName} />
+          <p className="text-sm text-muted-foreground">
+            Así viene tu pipeline hoy.
           </p>
         </div>
         <DashboardReal metrics={metrics} />

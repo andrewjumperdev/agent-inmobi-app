@@ -1,17 +1,35 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { Loader2, Sparkles, Check, ArrowRight, Building2, Scale, Home, GraduationCap, Briefcase } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Briefcase,
+  Building2,
+  Check,
+  GraduationCap,
+  Home,
+  Loader2,
+  Scale,
+  Sparkles,
+} from "lucide-react";
 
 const EASE: [number, number, number, number] = [0.19, 1, 0.22, 1];
 
-interface NicheBrief { slug: string; name: string }
+interface NicheBrief {
+  slug: string;
+  name: string;
+}
+interface CoachQuestion {
+  text: string;
+  example: string;
+}
 interface OnboardingInfo {
   niche_slug: string | null;
   niche_name: string | null;
-  questions: string[];
+  questions: CoachQuestion[];
   diagnosis_completed: boolean;
   enabled_modules: string[];
   niches: NicheBrief[];
@@ -40,15 +58,44 @@ const NICHE_ICON: Record<string, React.ElementType> = {
   educacion: GraduationCap,
 };
 
+const FALLBACK_QUESTION: CoachQuestion = {
+  text: "Contanos sobre tu negocio: qué ofrecés, a quién y cuál es tu mayor desafío hoy.",
+  example: "Vendo software de gestión a pymes; me cuesta hacer seguimiento",
+};
+
+/**
+ * Borrador en el navegador.
+ *
+ * Se guarda local y no en el servidor a propósito: las respuestas recién
+ * significan algo como conjunto, al momento de diagnosticar. Lo que hay que
+ * evitar es el modo de falla real —refrescar sin querer y perder diez minutos de
+ * escritura—, y para eso localStorage alcanza sin agregar endpoints ni estado
+ * a medio completar en la base.
+ */
+const draftKey = (slug: string) => `kore:onboarding:${slug}`;
+
+function loadDraft(slug: string): Record<string, string> {
+  try {
+    return JSON.parse(localStorage.getItem(draftKey(slug)) || "{}");
+  } catch {
+    return {};
+  }
+}
+
 export default function OnboardingPage() {
   const router = useRouter();
-  const [phase, setPhase] = useState<"loading" | "niche" | "form" | "diagnosing" | "result" | "error">("loading");
+  const [phase, setPhase] = useState<
+    "loading" | "niche" | "question" | "diagnosing" | "result" | "error"
+  >("loading");
   const [niches, setNiches] = useState<NicheBrief[]>([]);
-  const [questions, setQuestions] = useState<string[]>([]);
+  const [nicheSlug, setNicheSlug] = useState<string>("");
+  const [questions, setQuestions] = useState<CoachQuestion[]>([]);
+  const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [result, setResult] = useState<DiagnoseResult | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const load = useCallback(async () => {
     try {
@@ -67,7 +114,15 @@ export default function OnboardingPage() {
     }
   }, [router]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  // El foco al avanzar de paso es lo que hace que se sienta un flujo y no un
+  // formulario: se puede responder entero sin tocar el mouse.
+  useEffect(() => {
+    if (phase === "question") inputRef.current?.focus();
+  }, [phase, step]);
 
   async function pickNiche(slug: string) {
     setBusy(true);
@@ -80,22 +135,56 @@ export default function OnboardingPage() {
       });
       if (!res.ok) throw new Error("niche");
       const d = (await res.json()) as OnboardingInfo;
-      setQuestions(
-        d.questions.length
-          ? d.questions
-          : ["Contanos sobre tu negocio: qué ofrecés, a quién y cuál es tu mayor desafío hoy."]
-      );
-      setAnswers({});
-      setPhase("form");
+
+      const qs = d.questions.length ? d.questions : [FALLBACK_QUESTION];
+      const draft = loadDraft(slug);
+      setNicheSlug(slug);
+      setQuestions(qs);
+      setAnswers(draft);
+      // Retoma en la primera pregunta sin responder, no en la cero: quien vuelve
+      // no debería tener que pasar de nuevo por lo que ya escribió.
+      const resume = qs.findIndex((q) => !(draft[q.text] || "").trim());
+      setStep(resume === -1 ? qs.length - 1 : resume);
+      setPhase("question");
     } catch {
-      setError("No se pudo seleccionar el nicho. Intentá de nuevo.");
+      setError("No se pudo seleccionar el rubro. Intentá de nuevo.");
     } finally {
       setBusy(false);
     }
   }
 
-  const allAnswered =
-    questions.length > 0 && questions.every((q) => (answers[q] || "").trim().length > 0);
+  function setAnswer(value: string) {
+    const question = questions[step];
+    if (!question) return;
+    const next = { ...answers, [question.text]: value };
+    setAnswers(next);
+    try {
+      localStorage.setItem(draftKey(nicheSlug), JSON.stringify(next));
+    } catch {
+      // Modo incógnito o cuota llena: el borrador es una comodidad, no un
+      // requisito. Se sigue igual.
+    }
+  }
+
+  const current = questions[step];
+  const currentAnswer = (answers[current?.text ?? ""] || "").trim();
+  const isLast = step === questions.length - 1;
+  const answeredCount = questions.filter((q) => (answers[q.text] || "").trim()).length;
+
+  function next() {
+    if (!currentAnswer) return;
+    if (isLast) void submit();
+    else setStep((s) => s + 1);
+  }
+
+  function handleKey(e: React.KeyboardEvent) {
+    // Enter avanza, Shift+Enter hace salto de línea. Las respuestas son de una
+    // o dos líneas, así que optimizamos para el caso frecuente.
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      next();
+    }
+  }
 
   async function submit() {
     setPhase("diagnosing");
@@ -111,47 +200,76 @@ export default function OnboardingPage() {
         throw new Error(e.detail || e.error || `HTTP ${res.status}`);
       }
       const d = (await res.json()) as DiagnoseResult;
-
-      // onboarding_completed se marca server-side en /api/onboarding/diagnose
-      // (service role) — así el middleware que gatea /dashboard lo ve siempre,
-      // sin depender de un write RLS desde el navegador.
+      try {
+        localStorage.removeItem(draftKey(nicheSlug));
+      } catch {
+        /* nada que hacer si no se puede limpiar */
+      }
       setResult(d);
       setPhase("result");
     } catch (err) {
-      setError(`No se pudo generar el diagnóstico: ${err instanceof Error ? err.message : "error"}`);
-      setPhase("form");
+      setError(
+        `No se pudo generar el diagnóstico: ${err instanceof Error ? err.message : "error"}`
+      );
+      setPhase("question");
     }
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12" style={{ backgroundColor: "#060609", color: "#f1f5f9" }}>
+    <div
+      className="flex min-h-screen flex-col items-center justify-center px-4 py-12"
+      style={{ backgroundColor: "var(--app-canvas)", color: "var(--foreground)" }}
+    >
       <div className="w-full max-w-xl">
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl" style={{ backgroundColor: "rgba(59,130,246,0.12)", border: "1px solid rgba(59,130,246,0.25)" }}>
-            <Sparkles size={22} style={{ color: "#3b82f6" }} />
+        {/* ── Cabecera ── */}
+        {phase !== "result" && (
+          <div className="mb-8 text-center">
+            <div
+              className="mx-auto mb-3 flex size-12 items-center justify-center rounded-2xl"
+              style={{
+                backgroundColor: "color-mix(in oklab, var(--info) 12%, transparent)",
+                border: "1px solid color-mix(in oklab, var(--info) 25%, transparent)",
+              }}
+            >
+              <Sparkles size={22} style={{ color: "var(--info)" }} />
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight">
+              {phase === "niche" ? "¿En qué rubro trabajás?" : "Contame de tu negocio"}
+            </h1>
+            <p className="mt-1 text-sm" style={{ color: "var(--muted-foreground)" }}>
+              {phase === "niche"
+                ? "Con esto armo las preguntas específicas para vos."
+                : "Cinco preguntas cortas. Con eso configuro tu sistema."}
+            </p>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            {phase === "niche" ? "¿En qué rubro trabajás?" : "Diagnóstico con tu Coach IA"}
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: "#64748b" }}>
-            {phase === "niche"
-              ? "Elegí tu rubro y el sistema arma el onboarding específico para vos."
-              : "Respondé unas preguntas y el sistema se configura solo para tu negocio."}
-          </p>
-        </div>
+        )}
 
         {phase === "loading" && (
-          <div className="flex justify-center py-16"><Loader2 className="animate-spin" style={{ color: "#3b82f6" }} /></div>
+          <div className="flex justify-center py-16">
+            <Loader2 className="animate-spin" style={{ color: "var(--info)" }} />
+          </div>
         )}
 
         {phase === "error" && (
-          <div className="rounded-xl border p-6 text-center text-sm" style={{ borderColor: "rgba(239,68,68,0.3)", color: "#f87171" }}>
+          <div
+            className="rounded-xl border p-6 text-center text-sm"
+            style={{
+              borderColor: "color-mix(in oklab, var(--destructive) 30%, transparent)",
+              color: "var(--destructive)",
+            }}
+          >
             {error}
-            <button onClick={load} className="mt-3 block w-full rounded-lg py-2 text-sm font-semibold" style={{ backgroundColor: "#3b82f6", color: "#fff" }}>Reintentar</button>
+            <button
+              onClick={load}
+              className="mt-3 block w-full rounded-lg py-2 text-sm font-semibold"
+              style={{ backgroundColor: "var(--info)", color: "#fff" }}
+            >
+              Reintentar
+            </button>
           </div>
         )}
 
-        {/* ── Selección de nicho ── */}
+        {/* ── Selección de rubro ── */}
         {phase === "niche" && (
           <div className="flex flex-col gap-3">
             {niches.map((n, i) => {
@@ -164,79 +282,250 @@ export default function OnboardingPage() {
                   transition={{ delay: i * 0.05, ease: EASE }}
                   onClick={() => pickNiche(n.slug)}
                   disabled={busy}
-                  className="group flex items-center gap-4 rounded-2xl border p-4 text-left transition-all hover:border-[rgba(59,130,246,0.5)] disabled:opacity-50"
-                  style={{ backgroundColor: "#10101c", borderColor: "rgba(69,70,77,0.5)" }}
+                  className="group flex items-center gap-4 rounded-2xl border p-4 text-left transition-colors disabled:opacity-50"
+                  style={{
+                    backgroundColor: "var(--app-surface-hover)",
+                    borderColor: "var(--border)",
+                  }}
                 >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: "rgba(59,130,246,0.12)" }}>
-                    <Icon size={20} style={{ color: "#3b82f6" }} />
+                  <div
+                    className="flex size-11 shrink-0 items-center justify-center rounded-xl"
+                    style={{
+                      backgroundColor: "color-mix(in oklab, var(--info) 12%, transparent)",
+                    }}
+                  >
+                    <Icon size={20} style={{ color: "var(--info)" }} />
                   </div>
-                  <span className="flex-1 text-[15px] font-semibold" style={{ color: "#f1f5f9" }}>{n.name}</span>
-                  {busy ? <Loader2 size={16} className="animate-spin" style={{ color: "#64748b" }} /> : <ArrowRight size={16} className="opacity-0 transition-opacity group-hover:opacity-100" style={{ color: "#3b82f6" }} />}
+                  <span
+                    className="flex-1 text-[15px] font-semibold"
+                    style={{ color: "var(--foreground)" }}
+                  >
+                    {n.name}
+                  </span>
+                  {busy ? (
+                    <Loader2
+                      size={16}
+                      className="animate-spin"
+                      style={{ color: "var(--muted-foreground)" }}
+                    />
+                  ) : (
+                    <ArrowRight
+                      size={16}
+                      className="opacity-0 transition-opacity group-hover:opacity-100"
+                      style={{ color: "var(--info)" }}
+                    />
+                  )}
                 </motion.button>
               );
             })}
-            {error && <p className="text-sm" style={{ color: "#f87171" }}>{error}</p>}
+            {error && (
+              <p className="text-sm" style={{ color: "var(--destructive)" }}>
+                {error}
+              </p>
+            )}
           </div>
         )}
 
-        {/* ── Preguntas del Coach ── */}
-        {(phase === "form" || phase === "diagnosing") && (
-          <div className="flex flex-col gap-4">
-            {questions.map((q, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05, ease: EASE }}>
-                <label className="mb-1.5 block text-sm font-medium" style={{ color: "#cbd5e1" }}>{q}</label>
+        {/* ── Una pregunta por pantalla ── */}
+        {(phase === "question" || phase === "diagnosing") && current && (
+          <div className="flex flex-col gap-5">
+            {/* Progreso: el punto no es decorar, es que se vea que son pocas y
+                cuántas faltan. Sin esto, cinco campos vacíos parecen infinitos. */}
+            <div className="flex items-center gap-3">
+              <div
+                className="h-1 flex-1 overflow-hidden rounded-full"
+                style={{ backgroundColor: "var(--app-surface-hover)" }}
+                role="progressbar"
+                aria-valuenow={answeredCount}
+                aria-valuemin={0}
+                aria-valuemax={questions.length}
+                aria-label={`${answeredCount} de ${questions.length} respondidas`}
+              >
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ backgroundColor: "var(--info)" }}
+                  animate={{ width: `${((step + 1) / questions.length) * 100}%` }}
+                  transition={{ ease: EASE, duration: 0.4 }}
+                />
+              </div>
+              <span
+                className="font-label shrink-0 text-[11px] uppercase tracking-widest"
+                style={{ color: "var(--muted-foreground)" }}
+              >
+                {step + 1} de {questions.length}
+              </span>
+            </div>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={step}
+                initial={{ opacity: 0, x: 16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -16 }}
+                transition={{ duration: 0.25, ease: EASE }}
+                className="flex flex-col gap-3"
+              >
+                <label
+                  htmlFor="respuesta"
+                  className="text-lg font-semibold leading-snug"
+                  style={{ color: "var(--foreground)" }}
+                >
+                  {current.text}
+                </label>
+
                 <textarea
-                  rows={2}
-                  value={answers[q] || ""}
-                  onChange={(e) => setAnswers((a) => ({ ...a, [q]: e.target.value }))}
+                  id="respuesta"
+                  ref={inputRef}
+                  rows={3}
+                  value={answers[current.text] || ""}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  onKeyDown={handleKey}
                   disabled={phase === "diagnosing"}
-                  className="w-full resize-none rounded-xl border px-3 py-2.5 text-sm outline-none disabled:opacity-50"
-                  style={{ backgroundColor: "#10101c", borderColor: "rgba(255,255,255,0.08)", color: "#f1f5f9" }}
+                  // El ejemplo va de placeholder: se ve mientras el campo está
+                  // vacío, que es justo cuando hace falta, y desaparece solo.
+                  placeholder={current.example ? `Ej: ${current.example}` : "Escribí tu respuesta…"}
+                  className="w-full resize-none rounded-xl border px-4 py-3 text-[15px] outline-none transition-colors disabled:opacity-50"
+                  style={{
+                    backgroundColor: "var(--app-surface-hover)",
+                    borderColor: currentAnswer ? "var(--info)" : "var(--app-border)",
+                    color: "var(--foreground)",
+                  }}
                 />
               </motion.div>
-            ))}
-            {error && <p className="text-sm" style={{ color: "#f87171" }}>{error}</p>}
-            <button
-              onClick={submit}
-              disabled={!allAnswered || phase === "diagnosing"}
-              className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl text-base font-bold uppercase tracking-tight transition-all disabled:opacity-40"
-              style={{ backgroundColor: "#3b82f6", color: "#fff" }}
-            >
-              {phase === "diagnosing" ? (<><Loader2 size={18} className="animate-spin" /> Diagnosticando tu negocio…</>) : (<>Generar mi diagnóstico <ArrowRight size={18} /></>)}
-            </button>
-            <button onClick={() => { setPhase("niche"); setError(null); }} disabled={phase === "diagnosing"} className="text-xs disabled:opacity-40" style={{ color: "#64748b" }}>
-              ← Cambiar de rubro
-            </button>
+            </AnimatePresence>
+
+            {error && (
+              <p className="text-sm" style={{ color: "var(--destructive)" }}>
+                {error}
+              </p>
+            )}
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => (step === 0 ? setPhase("niche") : setStep((s) => s - 1))}
+                disabled={phase === "diagnosing"}
+                className="inline-flex h-12 items-center gap-1.5 rounded-xl px-4 text-sm font-medium transition-colors disabled:opacity-40"
+                style={{ color: "var(--muted-foreground)" }}
+              >
+                <ArrowLeft size={16} />
+                {step === 0 ? "Cambiar rubro" : "Atrás"}
+              </button>
+
+              <button
+                onClick={next}
+                disabled={!currentAnswer || phase === "diagnosing"}
+                className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl text-base font-bold tracking-tight transition-opacity disabled:opacity-40"
+                style={{ backgroundColor: "var(--info)", color: "#fff" }}
+              >
+                {phase === "diagnosing" ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" /> Configurando tu sistema…
+                  </>
+                ) : isLast ? (
+                  <>
+                    Generar mi diagnóstico <Sparkles size={17} />
+                  </>
+                ) : (
+                  <>
+                    Siguiente <ArrowRight size={17} />
+                  </>
+                )}
+              </button>
+            </div>
+
+            <p className="text-center text-[11px]" style={{ color: "var(--muted-foreground)" }}>
+              Enter para seguir · Shift + Enter para otra línea · se guarda solo
+            </p>
           </div>
         )}
 
         {/* ── Resultado ── */}
         {phase === "result" && result && (
-          <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col gap-5">
-            <div className="rounded-2xl border p-5" style={{ backgroundColor: "#10101c", borderColor: "rgba(59,130,246,0.25)" }}>
-              <p className="mb-1 text-[11px] uppercase tracking-widest" style={{ color: "#3b82f6" }}>Tu diagnóstico</p>
-              <p className="text-sm leading-relaxed" style={{ color: "#e2e8f0" }}>{result.summary}</p>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col gap-5"
+          >
+            <div className="text-center">
+              <div
+                className="mx-auto mb-3 flex size-12 items-center justify-center rounded-2xl"
+                style={{
+                  backgroundColor: "color-mix(in oklab, var(--success) 12%, transparent)",
+                  border: "1px solid color-mix(in oklab, var(--success) 25%, transparent)",
+                }}
+              >
+                <Check size={22} style={{ color: "var(--success)" }} />
+              </div>
+              <h1 className="text-2xl font-bold tracking-tight">Tu sistema está configurado</h1>
+            </div>
+
+            <div
+              className="rounded-2xl border p-5"
+              style={{
+                backgroundColor: "var(--app-surface-hover)",
+                borderColor: "color-mix(in oklab, var(--info) 25%, transparent)",
+              }}
+            >
+              <p
+                className="mb-1 text-[11px] uppercase tracking-widest"
+                style={{ color: "var(--info)" }}
+              >
+                Tu diagnóstico
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--foreground)" }}>
+                {result.summary}
+              </p>
               {result.strategy && (
-                <p className="mt-3 text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
-                  <span className="font-semibold" style={{ color: "#cbd5e1" }}>Estrategia: </span>{result.strategy}
+                <p
+                  className="mt-3 text-sm leading-relaxed"
+                  style={{ color: "var(--muted-foreground)" }}
+                >
+                  <span className="font-semibold" style={{ color: "var(--foreground)" }}>
+                    Estrategia:{" "}
+                  </span>
+                  {result.strategy}
                 </p>
               )}
             </div>
+
             <div>
-              <p className="mb-2 text-[11px] uppercase tracking-widest" style={{ color: "#64748b" }}>Módulos activados para vos</p>
+              <p
+                className="mb-2 text-[11px] uppercase tracking-widest"
+                style={{ color: "var(--muted-foreground)" }}
+              >
+                Módulos activados para vos
+              </p>
               <div className="flex flex-col gap-2">
                 {(result.enabled_modules || []).map((m) => (
-                  <div key={m} className="flex items-center gap-2.5 rounded-xl px-4 py-2.5" style={{ backgroundColor: "#10101c", border: "1px solid rgba(34,197,94,0.2)" }}>
-                    <Check size={15} style={{ color: "#22c55e" }} />
-                    <span className="text-sm" style={{ color: "#f1f5f9" }}>{MODULE_LABELS[m] ?? m}</span>
+                  <div
+                    key={m}
+                    className="flex items-center gap-2.5 rounded-xl px-4 py-2.5"
+                    style={{
+                      backgroundColor: "var(--app-surface-hover)",
+                      border: "1px solid color-mix(in oklab, var(--success) 20%, transparent)",
+                    }}
+                  >
+                    <Check size={15} style={{ color: "var(--success)" }} />
+                    <span className="text-sm" style={{ color: "var(--foreground)" }}>
+                      {MODULE_LABELS[m] ?? m}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
+
             {/* Navegación DURA (full reload) a propósito: fuerza una nueva
                 evaluación del middleware con el flag ya seteado y evita cualquier
-                estado trabado del router del cliente. */}
-            <a href="/dashboard" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl text-base font-bold uppercase tracking-tight no-underline" style={{ backgroundColor: "#3b82f6", color: "#fff" }}>
+                estado trabado del router del cliente. Con <Link /> el router
+                cliente reusa su caché y el middleware puede seguir viendo
+                onboarding_completed=false → vuelve a mandar acá (el loop
+                dashboard↔onboarding que ya nos pasó). */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a
+              href="/dashboard"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-xl text-base font-bold tracking-tight no-underline"
+              style={{ backgroundColor: "var(--info)", color: "#fff" }}
+            >
               Ir a mi dashboard <ArrowRight size={18} />
             </a>
           </motion.div>

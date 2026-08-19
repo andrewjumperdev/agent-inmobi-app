@@ -60,10 +60,10 @@ function KoreWordmark() {
   return (
     <div className="flex flex-col leading-none group-data-[collapsible=icon]:hidden">
       <span className="font-headline text-[15px] font-black uppercase tracking-[0.1em]">
-        <span style={{ color: "#f1f5f9" }}>KORE </span>
+        <span className="text-sidebar-foreground">KORE </span>
         <span
           style={{
-            background: "linear-gradient(135deg, #93c5fd 0%, #2563eb 100%)",
+            background: "linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
           }}
@@ -71,7 +71,9 @@ function KoreWordmark() {
           AI
         </span>
       </span>
-      <span className="font-label text-[7px] uppercase tracking-[0.18em]" style={{ color: "#1e293b" }}>
+      {/* Antes iba en #1e293b sobre un fondo #08080f: contraste ~1.3:1, o sea
+          prácticamente invisible. Ahora usa el token muted del sidebar. */}
+      <span className="font-label text-[7px] uppercase tracking-[0.18em] text-muted-foreground">
         OS for Growth
       </span>
     </div>
@@ -86,15 +88,9 @@ export function AppSidebar({ userName }: AppSidebarProps = {}) {
   const pathname = usePathname();
 
   return (
-    <Sidebar
-      collapsible="icon"
-      style={{ backgroundColor: "#08080f", borderRight: "1px solid rgba(255,255,255,0.05)" }}
-    >
+    <Sidebar collapsible="icon" className="border-r border-app-border">
       {/* Logo */}
-      <SidebarHeader
-        className="h-16 flex flex-row items-center justify-between px-4"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
-      >
+      <SidebarHeader className="flex h-16 flex-row items-center justify-between border-b border-app-border px-4">
         <Link href="/dashboard" className="flex items-center gap-3 group-data-[collapsible=icon]:hidden">
           <KoreLogo size={26} />
           <KoreWordmark />
@@ -102,16 +98,13 @@ export function AppSidebar({ userName }: AppSidebarProps = {}) {
         <Link href="/dashboard" className="hidden group-data-[collapsible=icon]:flex items-center justify-center">
           <KoreLogo size={22} />
         </Link>
-        <SidebarTrigger className="-mr-1 group-data-[collapsible=icon]:hidden" style={{ color: "#334155" }} />
+        <SidebarTrigger className="-mr-1 text-muted-foreground group-data-[collapsible=icon]:hidden" />
       </SidebarHeader>
 
       {/* Nav */}
-      <SidebarContent style={{ backgroundColor: "#08080f" }}>
+      <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel
-            className="font-label text-[9px] uppercase tracking-[0.22em] px-4"
-            style={{ color: "#1e293b" }}
-          >
+          <SidebarGroupLabel className="px-4 font-label text-[9px] uppercase tracking-[0.22em] text-muted-foreground">
             Módulos
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -120,23 +113,22 @@ export function AppSidebar({ userName }: AppSidebarProps = {}) {
                 const active = pathname === item.href || pathname.startsWith(item.href + "/");
                 return (
                   <SidebarMenuItem key={item.href}>
+                    {/* La ruta activa se marca por color de fondo Y por peso de
+                        texto: el color solo no alcanza si el contraste del tema
+                        claro atenúa el resalte. */}
                     <SidebarMenuButton
                       render={<Link href={item.href} />}
                       isActive={active}
                       tooltip={item.label}
-                      className="mx-2 rounded-lg"
-                      style={
+                      aria-current={active ? "page" : undefined}
+                      className={`mx-2 rounded-lg transition-colors ${
                         active
-                          ? {
-                              backgroundColor: "rgba(59,130,246,0.1)",
-                              color: "#93c5fd",
-                              border: "1px solid rgba(59,130,246,0.15)",
-                            }
-                          : { color: "#475569" }
-                      }
+                          ? "bg-info/10 font-semibold text-info ring-1 ring-info/20"
+                          : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                      }`}
                     >
                       <item.icon style={{ width: 15, height: 15 }} />
-                      <span className="font-medium text-sm">{item.label}</span>
+                      <span className="text-sm">{item.label}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
@@ -147,28 +139,22 @@ export function AppSidebar({ userName }: AppSidebarProps = {}) {
       </SidebarContent>
 
       {/* Footer */}
-      <SidebarFooter
-        className="p-3"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.05)", backgroundColor: "#08080f" }}
-      >
+      <SidebarFooter className="border-t border-app-border p-3">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               render={<Link href="/cuenta" />}
               isActive={pathname === "/cuenta"}
               tooltip="Mi cuenta"
-              style={{ color: "#475569" }}
+              className="text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
             >
               <div
-                className="size-6 rounded-lg flex items-center justify-center text-[10px] font-bold shrink-0"
-                style={{
-                  background: "linear-gradient(135deg, #3b82f6, #1d4ed8)",
-                  color: "#ffffff",
-                }}
+                className="flex size-6 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold text-white"
+                style={{ background: "linear-gradient(135deg, #3b82f6, #1d4ed8)" }}
               >
                 {userName ? userName[0].toUpperCase() : "U"}
               </div>
-              <span className="group-data-[collapsible=icon]:hidden truncate text-sm font-medium" style={{ color: "#475569" }}>
+              <span className="truncate text-sm font-medium group-data-[collapsible=icon]:hidden">
                 {userName ?? "Mi cuenta"}
               </span>
             </SidebarMenuButton>

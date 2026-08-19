@@ -11,6 +11,17 @@
 
 const BASE_URL = process.env.KORE_BACKEND_URL ?? "http://localhost:8000/api/v1";
 
+/**
+ * Secreto compartido que autoriza el alta de tenants en el backend
+ * (`POST /tenants`). Ese endpoint emite una API key válida, así que está
+ * cerrado: sin este header responde 401. Tiene que valer lo mismo que
+ * `KORE_PROVISIONING_SECRET` en el backend.
+ *
+ * En desarrollo el backend lo deja pasar vacío; en producción es obligatorio en
+ * ambos lados o el onboarding se corta al provisionar.
+ */
+const PROVISIONING_SECRET = process.env.KORE_PROVISIONING_SECRET ?? "";
+
 export class KoreError extends Error {
   constructor(
     public status: number,
@@ -23,8 +34,10 @@ export class KoreError extends Error {
 }
 
 type FetchOpts = {
-  /** API key del tenant (kore_…). Omitir para endpoints sin auth (ej. POST /tenants). */
+  /** API key del tenant (kore_…). */
   apiKey?: string;
+  /** Manda el secreto de provisioning. Solo para POST /tenants. */
+  provisioning?: boolean;
   method?: string;
   body?: unknown;
   signal?: AbortSignal;
@@ -39,10 +52,13 @@ function safeJson(text: string): unknown {
 }
 
 export async function koreFetch<T>(path: string, opts: FetchOpts = {}): Promise<T> {
-  const { apiKey, method = "GET", body, signal } = opts;
+  const { apiKey, provisioning, method = "GET", body, signal } = opts;
 
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
+  if (provisioning && PROVISIONING_SECRET) {
+    headers["x-provisioning-secret"] = PROVISIONING_SECRET;
+  }
 
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
@@ -129,13 +145,17 @@ export function runAgent(
 }
 
 /** Provisiona un cliente como instancia de un nicho (P2). Devuelve su API key
- *  (mostrada una sola vez). Endpoint sin auth en esta etapa. */
+ *  (mostrada una sola vez). Requiere el secreto de provisioning. */
 export function createTenant(input: {
   name: string;
   slug: string;
   niche_slug: string;
 }): Promise<TenantCreated> {
-  return koreFetch<TenantCreated>("/tenants", { method: "POST", body: input });
+  return koreFetch<TenantCreated>("/tenants", {
+    method: "POST",
+    body: input,
+    provisioning: true,
+  });
 }
 
 /** Contacto del CRM (GET /contacts). */
@@ -149,6 +169,8 @@ export interface ContactOut {
   attributes: Record<string, string>; // role, company, pain, … capturados por el agente
   last_activity_at: string | null;
   created_at: string;
+  /** Hasta cuándo el agente NO responde a este contacto. null = lo atiende el agente. */
+  paused_until: string | null;
 }
 
 /** Mensaje de la conversación de un contacto (GET /contacts/{id}/messages). */
@@ -164,6 +186,10 @@ export interface MessageOut {
 /** Snapshot de métricas del orquestador (GET /metrics, §08). */
 export interface MetricsSnapshot {
   leads_new_7d: number;
+  /** Los 7 días previos a esos, para calcular la variación. */
+  leads_prev_7d: number;
+  /** Serie de 14 días con los días vacíos en cero (ver _leads_daily en el backend). */
+  leads_daily: { date: string; count: number }[];
   temperature_distribution: Record<string, number>;
   auto_classification_rate: number;
   cold_share: number;

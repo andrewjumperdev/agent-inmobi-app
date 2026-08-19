@@ -26,7 +26,7 @@ function parseLines(text: string): Row[] {
 }
 
 const INPUT = "rounded-lg border px-3 py-2 text-sm outline-none w-full";
-const INPUT_STYLE = { backgroundColor: "#0c0c14", borderColor: "rgba(255,255,255,0.08)", color: "#f1f5f9" };
+const INPUT_STYLE = { backgroundColor: "var(--app-surface)", borderColor: "var(--app-border)", color: "var(--foreground)" };
 
 export function ColdEmail() {
   const [stats, setStats] = useState<Stats | null>(null);
@@ -94,23 +94,23 @@ export function ColdEmail() {
   }
 
   const counts: { label: string; key: keyof Stats; color: string }[] = [
-    { label: "Pendientes", key: "pending", color: "#3b82f6" },
-    { label: "Enviados", key: "sent", color: "#22c55e" },
-    { label: "Fallidos", key: "failed", color: "#ef4444" },
+    { label: "Pendientes", key: "pending", color: "var(--info)" },
+    { label: "Enviados", key: "sent", color: "var(--success)" },
+    { label: "Fallidos", key: "failed", color: "var(--destructive)" },
   ];
 
   return (
-    <div className="max-w-xl rounded-2xl border p-6" style={{ backgroundColor: "#10101c", borderColor: "rgba(69,70,77,0.5)" }}>
+    <div className="max-w-xl rounded-2xl border p-6" style={{ backgroundColor: "var(--app-surface-hover)", borderColor: "var(--border)" }}>
       <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl" style={{ backgroundColor: "rgba(59,130,246,0.12)", border: "1px solid rgba(59,130,246,0.25)" }}>
-          <Mail size={20} style={{ color: "#3b82f6" }} />
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl" style={{ backgroundColor: "color-mix(in oklab, var(--info) 12%, transparent)", border: "1px solid color-mix(in oklab, var(--info) 25%, transparent)" }}>
+          <Mail size={20} style={{ color: "var(--info)" }} />
         </div>
         <div className="flex-1">
-          <p className="font-headline text-sm font-bold" style={{ color: "#f1f5f9" }}>Cold Email · Prospección</p>
-          <p className="text-xs" style={{ color: "#64748b" }}>La IA scrapea cada web, escribe un icebreaker y lo envía por tu SMTP.</p>
+          <p className="font-headline text-sm font-bold" style={{ color: "var(--foreground)" }}>Cold Email · Prospección</p>
+          <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>La IA scrapea cada web, escribe un icebreaker y lo envía por tu SMTP.</p>
         </div>
         {cfg?.configured && (
-          <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: "#22c55e" }}>
+          <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: "var(--success)" }}>
             <CheckCircle2 size={14} /> SMTP listo
           </span>
         )}
@@ -120,10 +120,10 @@ export function ColdEmail() {
       <button
         onClick={() => setOpen((o) => !o)}
         className="mt-4 flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm"
-        style={{ backgroundColor: "#0c0c14", color: "#cbd5e1" }}
+        style={{ backgroundColor: "var(--app-surface)", color: "var(--foreground)" }}
       >
         <span className="flex items-center gap-2">
-          {!cfg?.configured && <AlertTriangle size={14} style={{ color: "#eab308" }} />}
+          {!cfg?.configured && <AlertTriangle size={14} style={{ color: "var(--warning)" }} />}
           Configurar envío (SMTP) {cfg?.configured ? "" : "— requerido"}
         </span>
         <ChevronDown size={16} style={{ transform: open ? "rotate(180deg)" : "none", transition: "0.2s" }} />
@@ -143,7 +143,7 @@ export function ColdEmail() {
             onClick={saveCfg}
             disabled={busy !== null}
             className="col-span-2 mt-1 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold disabled:opacity-50"
-            style={{ backgroundColor: "#3b82f6", color: "#fff" }}
+            style={{ backgroundColor: "var(--info)", color: "#fff" }}
           >
             {busy === "save" ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Guardar configuración
           </button>
@@ -154,29 +154,29 @@ export function ColdEmail() {
       {stats && (
         <div className="mt-4 grid grid-cols-3 gap-2">
           {counts.map((c) => (
-            <div key={c.key} className="rounded-xl px-3 py-2.5 text-center" style={{ backgroundColor: "#0c0c14" }}>
+            <div key={c.key} className="rounded-xl px-3 py-2.5 text-center" style={{ backgroundColor: "var(--app-surface)" }}>
               <p className="text-xl font-bold" style={{ color: c.color }}>{stats[c.key]}</p>
-              <p className="text-[10px] uppercase tracking-widest" style={{ color: "#475569" }}>{c.label}</p>
+              <p className="text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>{c.label}</p>
             </div>
           ))}
         </div>
       )}
 
       {/* Import */}
-      <p className="mt-5 mb-2 text-xs uppercase tracking-widest" style={{ color: "#64748b" }}>Importar prospectos</p>
+      <p className="mt-5 mb-2 text-xs uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>Importar prospectos</p>
       <textarea
         value={text} onChange={(e) => setText(e.target.value)} rows={3}
         placeholder={"Empresa Uno, empresauno.com, hola@empresauno.com\nempresados.com, contacto@empresados.com"}
         className="w-full resize-none rounded-xl border px-3 py-2.5 text-sm outline-none"
         style={INPUT_STYLE}
       />
-      {msg && <p className="mt-2 text-xs" style={{ color: "#94a3b8" }}>{msg}</p>}
+      {msg && <p className="mt-2 text-xs" style={{ color: "var(--muted-foreground)" }}>{msg}</p>}
 
       <div className="mt-4 flex items-center gap-3">
-        <button onClick={importlist} disabled={busy !== null || !text.trim()} className="inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold disabled:opacity-40" style={{ borderColor: "rgba(255,255,255,0.12)", color: "#cbd5e1" }}>
+        <button onClick={importlist} disabled={busy !== null || !text.trim()} className="inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold disabled:opacity-40" style={{ borderColor: "var(--app-border)", color: "var(--foreground)" }}>
           {busy === "import" ? <Loader2 size={15} className="animate-spin" /> : <Upload size={15} />} Importar lista
         </button>
-        <button onClick={run} disabled={busy !== null || !stats || stats.pending === 0} className="ml-auto inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold disabled:opacity-40" style={{ backgroundColor: "#3b82f6", color: "#fff" }}>
+        <button onClick={run} disabled={busy !== null || !stats || stats.pending === 0} className="ml-auto inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold disabled:opacity-40" style={{ backgroundColor: "var(--info)", color: "#fff" }}>
           {busy === "run" ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />} Enviar batch ahora
         </button>
       </div>

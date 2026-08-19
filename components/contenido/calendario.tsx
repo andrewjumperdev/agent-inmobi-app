@@ -78,22 +78,22 @@ function SlotCard({
       <div
         className="flex flex-col rounded-xl border p-3"
         style={{
-          borderColor: "rgba(255,255,255,0.06)",
-          backgroundColor: "#080812",
+          borderColor: "var(--app-border)",
+          backgroundColor: "var(--app-topbar)",
           opacity: 0.4,
         }}
       >
         <div className="flex items-center justify-between">
           <span
             className="font-label text-xs uppercase tracking-widest"
-            style={{ color: "#64748b" }}
+            style={{ color: "var(--muted-foreground)" }}
           >
             {shortLabel}
           </span>
         </div>
         <p
           className="mt-3 text-xs italic"
-          style={{ color: "#64748b" }}
+          style={{ color: "var(--muted-foreground)" }}
         >
           Descanso
         </p>
@@ -111,26 +111,26 @@ function SlotCard({
       className="flex flex-col rounded-xl border p-3 transition-all"
       style={{
         borderColor: isToday
-          ? "rgba(59,130,246,0.35)"
+          ? "color-mix(in oklab, var(--info) 35%, transparent)"
           : hasContent
           ? `${pillarColor}30`
-          : "rgba(255,255,255,0.08)",
+          : "var(--app-border)",
         backgroundColor: isToday
-          ? "rgba(59,130,246,0.04)"
-          : "#10101c",
+          ? "color-mix(in oklab, var(--info) 4%, transparent)"
+          : "var(--app-surface-hover)",
       }}
     >
       {/* Day header */}
       <div className="flex items-center justify-between">
         <span
           className="font-label text-xs uppercase tracking-widest"
-          style={{ color: isToday ? "#3b82f6" : "#64748b" }}
+          style={{ color: isToday ? "var(--info)" : "var(--muted-foreground)" }}
         >
           {shortLabel}
           {isToday && (
             <span
               className="ml-1.5 rounded-full px-1.5 py-0.5 font-label text-[9px]"
-              style={{ backgroundColor: "rgba(59,130,246,0.15)", color: "#3b82f6" }}
+              style={{ backgroundColor: "color-mix(in oklab, var(--info) 15%, transparent)", color: "var(--info)" }}
             >
               HOY
             </span>
@@ -139,7 +139,7 @@ function SlotCard({
         <span
           className="material-symbols-outlined text-sm"
           style={{
-            color: hasContent ? "#22c55e" : "#64748b",
+            color: hasContent ? "var(--success)" : "var(--muted-foreground)",
             fontVariationSettings: hasContent ? "'FILL' 1" : "'FILL' 0",
           }}
         >
@@ -151,15 +151,15 @@ function SlotCard({
       <div className="mt-2 flex items-center gap-1.5 flex-wrap">
         <div
           className="flex items-center gap-1 rounded-md px-1.5 py-0.5"
-          style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
+          style={{ backgroundColor: "var(--app-border)" }}
         >
           <span
             className="material-symbols-outlined text-xs"
-            style={{ color: "#64748b", fontVariationSettings: "'FILL' 1" }}
+            style={{ color: "var(--muted-foreground)", fontVariationSettings: "'FILL' 1" }}
           >
             {FORMAT_ICONS[slot.format]}
           </span>
-          <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#64748b" }}>
+          <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>
             {FORMAT_LABELS[slot.format]}
           </span>
         </div>
@@ -174,7 +174,7 @@ function SlotCard({
       </div>
 
       {/* Label */}
-      <p className="mt-2 text-xs font-medium" style={{ color: "#f1f5f9" }}>
+      <p className="mt-2 text-xs font-medium" style={{ color: "var(--foreground)" }}>
         {slot.label}
       </p>
 
@@ -182,7 +182,7 @@ function SlotCard({
       {hasContent ? (
         <p
           className="mt-2 line-clamp-2 text-[11px] leading-relaxed"
-          style={{ color: "#64748b" }}
+          style={{ color: "var(--muted-foreground)" }}
         >
           {pieza!.content.slice(0, 100)}…
         </p>
@@ -191,9 +191,9 @@ function SlotCard({
           onClick={() => onGenerate?.(slot.format, slot.pillar)}
           className="mt-3 flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 font-label text-[10px] uppercase tracking-widest transition-all"
           style={{
-            borderColor: "rgba(59,130,246,0.2)",
-            backgroundColor: "rgba(59,130,246,0.04)",
-            color: "#3b82f6",
+            borderColor: "color-mix(in oklab, var(--info) 20%, transparent)",
+            backgroundColor: "color-mix(in oklab, var(--info) 4%, transparent)",
+            color: "var(--info)",
           }}
         >
           <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -294,11 +294,11 @@ export function Calendario({
         <div>
           <h2
             className="font-headline text-xl font-bold"
-            style={{ color: "#f1f5f9" }}
+            style={{ color: "var(--foreground)" }}
           >
             Calendario semanal
           </h2>
-          <p className="mt-1 text-sm" style={{ color: "#64748b" }}>
+          <p className="mt-1 text-sm" style={{ color: "var(--muted-foreground)" }}>
             Plan de contenido para la semana — 4 a 5 piezas
           </p>
         </div>
@@ -307,20 +307,20 @@ export function Calendario({
         <div className="shrink-0 text-right">
           <p
             className="font-headline text-2xl font-bold"
-            style={{ color: "#3b82f6" }}
+            style={{ color: "var(--info)" }}
           >
             {completed}/{totalSlots}
           </p>
-          <p className="text-xs" style={{ color: "#64748b" }}>
+          <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>
             piezas listas
           </p>
           <div
             className="mt-1.5 h-1.5 w-24 overflow-hidden rounded-full"
-            style={{ backgroundColor: "rgba(255,255,255,0.10)" }}
+            style={{ backgroundColor: "var(--app-border)" }}
           >
             <motion.div
               className="h-full rounded-full"
-              style={{ backgroundColor: "#3b82f6" }}
+              style={{ backgroundColor: "var(--info)" }}
               initial={{ width: 0 }}
               animate={{ width: `${pct}%` }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -350,13 +350,13 @@ export function Calendario({
       <div
         className="rounded-xl border p-4"
         style={{
-          borderColor: "rgba(255,255,255,0.08)",
-          backgroundColor: "#10101c",
+          borderColor: "var(--app-border)",
+          backgroundColor: "var(--app-surface-hover)",
         }}
       >
         <p
           className="mb-3 font-label text-xs uppercase tracking-widest"
-          style={{ color: "#64748b" }}
+          style={{ color: "var(--muted-foreground)" }}
         >
           Distribución de pilares esta semana
         </p>
@@ -372,12 +372,12 @@ export function Calendario({
                     className="h-2 w-2 shrink-0 rounded-full"
                     style={{ backgroundColor: PILLAR_COLORS[p] }}
                   />
-                  <span className="text-xs" style={{ color: "#64748b" }}>
+                  <span className="text-xs" style={{ color: "var(--muted-foreground)" }}>
                     {PILLAR_LABELS[p]}
                   </span>
                   <span
                     className="ml-auto font-label text-xs font-bold"
-                    style={{ color: "#f1f5f9" }}
+                    style={{ color: "var(--foreground)" }}
                   >
                     {count}x
                   </span>
@@ -395,8 +395,8 @@ export function Calendario({
           animate={{ opacity: 1 }}
           className="flex items-center gap-2 rounded-xl border px-4 py-3"
           style={{
-            borderColor: "rgba(59,130,246,0.2)",
-            backgroundColor: "rgba(59,130,246,0.05)",
+            borderColor: "color-mix(in oklab, var(--info) 20%, transparent)",
+            backgroundColor: "color-mix(in oklab, var(--info) 5%, transparent)",
           }}
         >
           <div className="flex gap-1">
@@ -404,13 +404,13 @@ export function Calendario({
               <motion.span
                 key={i}
                 className="h-1.5 w-1.5 rounded-full"
-                style={{ backgroundColor: "#3b82f6" }}
+                style={{ backgroundColor: "var(--info)" }}
                 animate={{ opacity: [0.3, 1, 0.3] }}
                 transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
               />
             ))}
           </div>
-          <span className="text-sm" style={{ color: "#3b82f6" }}>
+          <span className="text-sm" style={{ color: "var(--info)" }}>
             Generando contenido para {generating}…
           </span>
         </motion.div>

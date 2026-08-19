@@ -1,27 +1,35 @@
 /**
  * /api/chat — ARIA, la interfaz conversacional del dashboard.
  *
- * ARIA *es* el Coach Agent (§04-01) del backend KORE IA: diagnostica el negocio
- * del cliente y habilita los módulos. Este route handler actúa como BFF:
+ * ARIA es el **asistente**, no el Coach. Responde dudas sobre el sistema del
+ * cliente; no configura nada.
  *
- *   browser (sesión Supabase) → aquí (inyecta la API key del tenant) → FastAPI /agents/run
+ *   browser (sesión Supabase) → aquí (inyecta la API key) → FastAPI /assistant/chat
  *
- * El backend responde un JSON estructurado (NO streaming); lo reemitimos en el
- * mismo formato SSE (`data: {text}` … `data: [DONE]`) que ya consume
- * components/dashboard/ai-chat.tsx, sin tocar el componente.
+ * Antes esto llamaba al Coach, que SÍ configura: cada mensaje reemplazaba el
+ * perfil del negocio y los módulos habilitados por lo que devolviera el modelo,
+ * así que un "hola" borraba el diagnóstico completo. Reconfigurar es un acto
+ * explícito y tiene su propio camino (onboarding, y Cuenta → Rehacer diagnóstico).
+ *
+ * El backend responde JSON (NO streaming); lo reemitimos en el mismo formato SSE
+ * (`data: {text}` … `data: [DONE]`) que ya consume el componente de chat.
+ *
+ * El historial NO se manda desde acá: el backend guarda cada turno en el hilo de
+ * ARIA del tenant y lo relee solo. Mandar el historial completo en cada request
+ * duplicaría el contexto y haría crecer el costo con cada mensaje.
  */
 
 import { getTenantCredentials } from "@/lib/kore/tenant";
-import { runAgent, agentReplyText, KoreError } from "@/lib/kore/client";
+import { koreFetch, KoreError } from "@/lib/kore/client";
 
-export const maxDuration = 60; // el Coach llama a gpt-4o; evita el timeout de 10s de Vercel
+export const maxDuration = 60; // llama al LLM; evita el timeout de 10s de Vercel
 
 /* ── Saludo de apertura (no consume backend; el Coach diagnostica, no saluda) ── */
 const GREETING_FIRST = (name?: string) =>
-  `¡Hola${name ? `, ${name}` : ""}! Soy ARIA, tu coach de inteligencia artificial dentro de KORE IA. Para configurar tu sistema necesito entender tu negocio: contame en qué ciudad operás, qué tipo de propiedades manejás y cómo conseguís clientes hoy.`;
+  `¡Hola${name ? `, ${name}` : ""}! Soy ARIA. Te acompaño dentro de KORE: puedo explicarte qué hace cada módulo, qué significan tus métricas o qué conviene revisar. Preguntame lo que quieras.`;
 
 const GREETING_RETURNING = (name?: string) =>
-  `Bienvenido de vuelta${name ? `, ${name}` : ""}. ¿En qué puedo ayudarte hoy? Puedo seguir afinando el diagnóstico de tu negocio o explicarte cualquier módulo del sistema.`;
+  `Bienvenido de vuelta${name ? `, ${name}` : ""}. ¿En qué te ayudo? Puedo explicarte cualquier parte del sistema o ayudarte a leer tus números.`;
 
 /* ── Mensajes de fallback ───────────────────────────────────────────────────── */
 const MSG_NO_SESSION =
@@ -99,11 +107,13 @@ export async function POST(request: Request) {
     const creds = await getTenantCredentials();
     if (!creds) return streamText(MSG_NO_SESSION);
 
-    // Coach Agent: diagnostica y, como side-effect en el runner, habilita módulos.
-    const run = await runAgent(creds.apiKey, "coach", { message: userText });
+    const run = await koreFetch<{ reply: string }>("/assistant/chat", {
+      apiKey: creds.apiKey,
+      method: "POST",
+      body: { message: userText },
+    });
     const reply =
-      agentReplyText(run) ||
-      "Registré eso. ¿Querés que avancemos con el diagnóstico completo de tu negocio?";
+      run.reply || "No te entendí del todo. ¿Me lo contás de otra manera?";
 
     return streamText(reply);
   } catch (err) {

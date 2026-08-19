@@ -29,8 +29,8 @@ export function ContenidoView() {
       <div
         className="flex gap-1 border-b px-4 md:px-8"
         style={{
-          borderColor: "rgba(255,255,255,0.08)",
-          backgroundColor: "#060609",
+          borderColor: "var(--app-border)",
+          backgroundColor: "var(--app-canvas)",
         }}
       >
         {TABS.map((tab) => {
@@ -40,7 +40,7 @@ export function ContenidoView() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className="relative flex items-center gap-2 px-4 py-3 font-label text-xs uppercase tracking-widest transition-colors"
-              style={{ color: active ? "#3b82f6" : "#64748b" }}
+              style={{ color: active ? "var(--info)" : "var(--muted-foreground)" }}
             >
               <span
                 className="material-symbols-outlined text-sm"
@@ -54,7 +54,7 @@ export function ContenidoView() {
               {tab.id === "banco" && banco.length > 0 && (
                 <span
                   className="flex h-4 min-w-4 items-center justify-center rounded-full px-1 font-label text-[9px] font-bold"
-                  style={{ backgroundColor: "#3b82f6", color: "#ffffff" }}
+                  style={{ backgroundColor: "var(--info)", color: "#ffffff" }}
                 >
                   {banco.length}
                 </span>
@@ -63,7 +63,7 @@ export function ContenidoView() {
                 <motion.div
                   layoutId="contenido-tab-underline"
                   className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                  style={{ backgroundColor: "#3b82f6" }}
+                  style={{ backgroundColor: "var(--info)" }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 />
               )}

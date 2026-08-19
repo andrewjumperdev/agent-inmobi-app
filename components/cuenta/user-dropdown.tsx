@@ -17,11 +17,14 @@ export interface SidebarUser {
   status?: string;
 }
 
-/* ── Plan badge ─────────────────────────────────────────────── */
-const PLAN_STYLES: Record<string, { label: string; color: string; bg: string }> = {
-  pro:   { label: "Pro",   color: "#3b82f6", bg: "rgba(59,130,246,0.12)" },
-  trial: { label: "Trial", color: "#facc15", bg: "rgba(250,204,21,0.12)" },
-  free:  { label: "Free",  color: "#94a3b8", bg: "rgba(148,163,184,0.12)" },
+/* ── Plan badge ───────────────────────────────────────────────
+ * Los tonos salen de tokens para que el badge siga al tema; el fondo se deriva
+ * del mismo token con color-mix en vez de un rgba() paralelo que habría que
+ * mantener sincronizado a mano. */
+const PLAN_STYLES: Record<string, { label: string; token: string }> = {
+  pro:   { label: "Pro",   token: "var(--info)" },
+  trial: { label: "Trial", token: "var(--warning)" },
+  free:  { label: "Free",  token: "var(--muted-foreground)" },
 };
 
 function getPlan(plan?: string, status?: string) {
@@ -52,8 +55,7 @@ function AvatarCircle({
   const radius = size === "sm" ? "rounded-full" : "rounded-xl";
   return (
     <div
-      className={cn(dim, radius, "flex items-center justify-center font-bold shrink-0 overflow-hidden")}
-      style={{ backgroundColor: "rgba(59,130,246,0.12)", color: "#3b82f6" }}
+      className={cn(dim, radius, "flex shrink-0 items-center justify-center overflow-hidden bg-info/12 font-bold text-info")}
     >
       {avatarUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -91,9 +93,8 @@ export function UserDropdown({
   const triggerClass =
     variant === "navbar"
       ? cn(
-          "flex items-center justify-center outline-none cursor-pointer",
-          "rounded-full transition-opacity hover:opacity-80",
-          "border",
+          "flex cursor-pointer items-center justify-center outline-none",
+          "rounded-full border border-info/30 transition-opacity hover:opacity-80",
         )
       : cn(
           "flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none",
@@ -103,14 +104,7 @@ export function UserDropdown({
 
   return (
     <Menu.Root>
-      <Menu.Trigger
-        className={triggerClass}
-        style={
-          variant === "navbar"
-            ? { borderColor: "rgba(59,130,246,0.3)" }
-            : undefined
-        }
-      >
+      <Menu.Trigger className={triggerClass}>
         <AvatarCircle
           avatarUrl={user.avatarUrl}
           initials={initials}
@@ -130,87 +124,81 @@ export function UserDropdown({
         >
           <Menu.Popup
             className={cn(
-              "z-50 min-w-[230px] rounded-xl border border-border p-1 shadow-2xl",
+              "z-50 min-w-[230px] rounded-xl border border-border bg-popover p-1 text-popover-foreground shadow-2xl",
               "origin-(--transform-origin)",
               "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
               "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
             )}
-            style={{ backgroundColor: "#10101c", borderColor: "rgba(69,70,77,0.5)" }}
           >
-            {/* User info header */}
-            <div className="flex items-center gap-3 px-3 py-3 mb-1">
+            {/* Cabecera con los datos del usuario */}
+            <div className="mb-1 flex items-center gap-3 px-3 py-3">
               <AvatarCircle
                 avatarUrl={user.avatarUrl}
                 initials={initials}
                 displayName={displayName}
                 size="md"
               />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-semibold truncate" style={{ color: "#f1f5f9" }}>
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="truncate text-sm font-semibold text-foreground">
                     {displayName}
                   </span>
                   <span
-                    className="text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-full shrink-0"
-                    style={{ color: plan.color, backgroundColor: plan.bg }}
+                    className="shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest"
+                    style={{
+                      color: plan.token,
+                      backgroundColor: `color-mix(in oklab, ${plan.token} 14%, transparent)`,
+                    }}
                   >
                     {plan.label}
                   </span>
                 </div>
                 {user.email && (
-                  <p className="text-xs truncate mt-0.5" style={{ color: "#64748b" }}>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">
                     {user.email}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="h-px mx-1 mb-1" style={{ backgroundColor: "rgba(69,70,77,0.5)" }} />
+            <div className="mx-1 mb-1 h-px bg-border" />
 
-            {/* Mi cuenta */}
+            {/* El hover va por clases, no por handlers de mouse en JS: así
+                también responde al foco de teclado y no pisa el estilo cuando
+                el menú se navega con flechas. */}
             <Menu.Item
               render={<Link href="/cuenta" />}
               className={cn(
-                "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm outline-none",
-                "cursor-pointer transition-colors",
+                "flex cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm outline-none",
+                "text-foreground transition-colors",
+                "hover:bg-info/8 data-highlighted:bg-info/8",
               )}
-              style={{ color: "#f1f5f9" }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(59,130,246,0.07)")}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
             >
-              <div
-                className="size-6 rounded-md flex items-center justify-center shrink-0"
-                style={{ backgroundColor: "rgba(188,198,224,0.08)" }}
-              >
-                <User size={12} style={{ color: "#94a3b8" }} />
+              <div className="flex size-6 shrink-0 items-center justify-center rounded-md bg-muted">
+                <User size={12} className="text-muted-foreground" />
               </div>
               <span className="flex-1">Mi cuenta</span>
-              <ChevronRight size={13} style={{ color: "#334155" }} />
+              <ChevronRight size={13} className="text-muted-foreground" />
             </Menu.Item>
 
-            <div className="h-px mx-1 my-1" style={{ backgroundColor: "rgba(69,70,77,0.5)" }} />
+            <div className="mx-1 my-1 h-px bg-border" />
 
-            {/* Cerrar sesión */}
             <Menu.Item
               onClick={handleSignOut}
               disabled={signingOut}
               className={cn(
-                "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm outline-none",
-                "cursor-pointer transition-colors",
-                "disabled:opacity-50 disabled:pointer-events-none",
+                "flex cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm outline-none",
+                "text-destructive transition-colors",
+                "hover:bg-destructive/8 data-highlighted:bg-destructive/8",
+                "disabled:pointer-events-none disabled:opacity-50",
               )}
-              style={{ color: "#ff6b6b" }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(255,107,107,0.08)")}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
             >
-              <div
-                className="size-6 rounded-md flex items-center justify-center shrink-0"
-                style={{ backgroundColor: "rgba(255,107,107,0.1)" }}
-              >
-                {signingOut
-                  ? <Loader2 size={12} className="animate-spin" style={{ color: "#ff6b6b" }} />
-                  : <LogOut size={12} style={{ color: "#ff6b6b" }} />
-                }
+              <div className="flex size-6 shrink-0 items-center justify-center rounded-md bg-destructive/10">
+                {signingOut ? (
+                  <Loader2 size={12} className="animate-spin" />
+                ) : (
+                  <LogOut size={12} />
+                )}
               </div>
               <span>{signingOut ? "Cerrando sesión…" : "Cerrar sesión"}</span>
             </Menu.Item>
