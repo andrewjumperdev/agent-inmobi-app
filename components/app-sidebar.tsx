@@ -133,21 +133,19 @@ export function AppSidebar({
 
   return (
     <Sidebar collapsible="icon" className="border-r border-app-border bg-app-rail">
-      <SidebarHeader className="flex h-[60px] flex-row items-center justify-between border-b border-app-border px-4">
-        <Link
-          href="/dashboard"
-          className="flex items-center gap-3 group-data-[collapsible=icon]:hidden"
-        >
+      {/* UN solo logo. Antes había dos —uno para expandido y otro para
+          colapsado— y en móvil se veían los dos: el Sheet del sidebar no lleva
+          el `group` ni `data-collapsible`, así que ahí ninguna de esas clases
+          aplica. El wordmark ya se oculta solo, con lo cual el segundo logo
+          nunca hizo falta.
+          El padding cae a cero al colapsar: con px-4 sobre los 48px del modo
+          icono, el contenido no entra y queda descentrado. */}
+      <SidebarHeader className="flex h-[60px] flex-row items-center justify-between gap-2 border-b border-app-border px-4 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
+        <Link href="/dashboard" className="flex min-w-0 items-center gap-3">
           <KoreLogo size={26} />
           <KoreWordmark />
         </Link>
-        <Link
-          href="/dashboard"
-          className="hidden items-center justify-center group-data-[collapsible=icon]:flex"
-        >
-          <KoreLogo size={22} />
-        </Link>
-        <SidebarTrigger className="-mr-1 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+        <SidebarTrigger className="-mr-1 shrink-0 text-muted-foreground group-data-[collapsible=icon]:hidden" />
       </SidebarHeader>
 
       <SidebarContent>
@@ -172,14 +170,14 @@ export function AppSidebar({
                       isActive={active}
                       tooltip={item.label}
                       aria-current={active ? "page" : undefined}
-                      className={`h-auto rounded-lg px-2.5 py-2 font-headline text-[13px] transition-colors ${
+                      className={`h-auto rounded-lg px-2.5 py-2 font-headline text-[13px] transition-colors group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 ${
                         active
                           ? "bg-info/10 font-bold text-info ring-1 ring-info/20"
                           : "font-medium text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
                       }`}
                     >
-                      <item.icon style={{ width: 17, height: 17 }} />
-                      <span className="flex-1">{item.label}</span>
+                      <item.icon className="shrink-0" style={{ width: 17, height: 17 }} />
+                      <span className="flex-1 group-data-[collapsible=icon]:hidden">{item.label}</span>
                       <Count value={count} />
                       <Badge value={badge} />
                     </SidebarMenuButton>
@@ -198,7 +196,7 @@ export function AppSidebar({
               render={<Link href="/cuenta" />}
               isActive={pathname === "/cuenta"}
               tooltip="Mi cuenta"
-              className="h-auto px-2.5 py-2 font-headline text-[13px] font-semibold text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
+              className="h-auto px-2.5 py-2 font-headline text-[13px] font-semibold text-muted-foreground transition-colors group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 hover:bg-sidebar-accent hover:text-sidebar-foreground"
             >
               <span
                 className="flex size-6 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold text-white"
