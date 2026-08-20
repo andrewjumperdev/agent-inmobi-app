@@ -1,33 +1,52 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { CalendarDays, Mic } from "lucide-react";
+import { BarraProgreso } from "@/components/integraciones/barra-progreso";
+import { WhatsAppConnect } from "@/components/integraciones/whatsapp-connect";
+import { CanalesPendientes } from "@/components/integraciones/canales-pendientes";
 import { ColdEmail } from "@/components/integraciones/cold-email";
 import { SettingsCard } from "@/components/integraciones/settings-card";
 
 export default function IntegracionesPage() {
   return (
     <div className="flex min-h-svh flex-1 flex-col bg-app-canvas text-foreground">
-      <PageHeader title="Integraciones" subtitle="Servicios y credenciales" icon="power" />
+      <PageHeader title="Integraciones" subtitle="Canales y credenciales" icon="power" />
 
-      <div className="flex-1 p-4 md:p-7">
-        <h2 className="font-headline text-[21px] font-extrabold tracking-[-0.02em] text-foreground">
-          Servicios conectados
-        </h2>
-        {/* Los canales de conversación se configuran en Atención, junto al
-            agente que los usa. Acá quedan las credenciales de servicios que
-            varios módulos comparten: el SMTP lo usan el cold email y el agente,
-            el calendario lo usa el agendado. */}
-        <p className="mb-6 mt-[3px] font-headline text-[13px] text-muted-foreground">
-          Credenciales que usan varios módulos. Los canales por los que atiende
-          tu agente se configuran en{" "}
-          <Link href="/atencion" className="font-semibold text-info hover:opacity-80">
-            Atención
-          </Link>
-          .
-        </p>
-        <div className="flex flex-col gap-6">
+      <div className="flex-1 space-y-5 p-4 md:p-7">
+        {/* Arriba de todo: responde "¿me falta algo?" sin obligar a recorrer la
+            página entera ni a abrir cada tarjeta para ver su estado. */}
+        <BarraProgreso />
+
+        <div>
+          <h2 className="font-headline text-[21px] font-extrabold tracking-[-0.02em] text-foreground">
+            Canales de conversación
+          </h2>
+          <p className="mt-[3px] font-headline text-[13px] text-muted-foreground">
+            Por acá atiende tu agente. Cómo se comporta al responder se define en{" "}
+            <Link href="/atencion" className="font-semibold text-info hover:opacity-80">
+              Atención
+            </Link>
+            .
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-5">
+          <WhatsAppConnect />
           <ColdEmail />
+          <CanalesPendientes />
+        </div>
 
+        <div className="pt-1">
+          <h2 className="font-headline text-[21px] font-extrabold tracking-[-0.02em] text-foreground">
+            Servicios
+          </h2>
+          <p className="mt-[3px] font-headline text-[13px] text-muted-foreground">
+            Credenciales que le suman capacidades al agente. Sin ellas conversa
+            igual, pero no puede agendar ni mandar audios.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-5">
           <SettingsCard
             title="Google Calendar"
             subtitle="Para que el agente agende reuniones y proponga horarios reales."

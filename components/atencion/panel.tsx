@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AgentConfig } from "@/components/integraciones/agent-config";
 import { AIChat } from "@/components/dashboard/ai-chat";
-import { Canales } from "./canales";
+import Link from "next/link";
 
 /* ── El panel del agente de atención ───────────────────────────────────
  *
@@ -12,10 +12,10 @@ import { Canales } from "./canales";
  * Son dos agentes distintos con dos audiencias distintas, y mezclarlos fue
  * justo el bug que rompía la configuración del diagnóstico.
  *
- * Las tres secciones siguen el orden en que uno lo pone a andar: por dónde
- * atiende, cómo se comporta, y comprobar que quedó bien. */
+ * Acá se define QUÉ dice el agente; POR DÓNDE lo dice se conecta en
+ * Integraciones, que es el único lugar de conexiones del producto. La
+ * configuración es una sola y vale para todos los canales a la vez. */
 const SECCIONES = [
-  { id: "canales", label: "Canales", icon: "hub" },
   { id: "agente", label: "El agente", icon: "smart_toy" },
   { id: "probar", label: "Probarlo", icon: "chat" },
 ] as const;
@@ -23,7 +23,7 @@ const SECCIONES = [
 type SeccionId = (typeof SECCIONES)[number]["id"];
 
 export function AtencionPanel({ userName }: { userName?: string }) {
-  const [seccion, setSeccion] = useState<SeccionId>("canales");
+  const [seccion, setSeccion] = useState<SeccionId>("agente");
 
   return (
     <div className="flex flex-1 flex-col">
@@ -62,18 +62,17 @@ export function AtencionPanel({ userName }: { userName?: string }) {
         // que no lleva el padding de las otras secciones.
         <AIChat endpoint="/api/atencion" userProfile={{ name: userName, first_time: false }} />
       ) : (
-        <div className="flex-1 p-4 md:p-7">
-          {seccion === "canales" ? (
-            <Canales />
-          ) : (
-            <div className="space-y-4">
-              <p className="max-w-2xl font-headline text-[13px] leading-relaxed text-muted-foreground">
-                Esto es lo que el agente sabe de tu negocio y cómo se comporta al
-                hablar con un cliente. Vale para todos los canales conectados.
-              </p>
-              <AgentConfig />
-            </div>
-          )}
+        <div className="flex-1 space-y-4 p-4 md:p-7">
+          <p className="max-w-2xl font-headline text-[13px] leading-relaxed text-muted-foreground">
+            Esto es lo que el agente sabe de tu negocio y cómo se comporta al
+            hablar con un cliente. Vale para todos los canales a la vez — se
+            conectan en{" "}
+            <Link href="/integraciones" className="font-semibold text-info hover:opacity-80">
+              Integraciones
+            </Link>
+            .
+          </p>
+          <AgentConfig />
         </div>
       )}
     </div>
