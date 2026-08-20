@@ -1,25 +1,31 @@
+import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { CalendarDays, Mic } from "lucide-react";
-import { WhatsAppConnect } from "@/components/integraciones/whatsapp-connect";
-import { AgentConfig } from "@/components/integraciones/agent-config";
 import { ColdEmail } from "@/components/integraciones/cold-email";
 import { SettingsCard } from "@/components/integraciones/settings-card";
 
 export default function IntegracionesPage() {
   return (
     <div className="flex min-h-svh flex-1 flex-col bg-app-canvas text-foreground">
-      <PageHeader title="Integraciones" subtitle="Canales y credenciales" icon="power" />
+      <PageHeader title="Integraciones" subtitle="Servicios y credenciales" icon="power" />
 
-      <div className="flex-1 p-4 md:p-8">
-        <h1 className="mb-1 text-lg font-bold" style={{ color: "var(--foreground)" }}>
-          Canales
-        </h1>
-        <p className="mb-6 text-sm" style={{ color: "var(--muted-foreground)" }}>
-          Conectá tus canales para que los agentes operen por ellos.
+      <div className="flex-1 p-4 md:p-7">
+        <h2 className="font-headline text-[21px] font-extrabold tracking-[-0.02em] text-foreground">
+          Servicios conectados
+        </h2>
+        {/* Los canales de conversación se configuran en Atención, junto al
+            agente que los usa. Acá quedan las credenciales de servicios que
+            varios módulos comparten: el SMTP lo usan el cold email y el agente,
+            el calendario lo usa el agendado. */}
+        <p className="mb-6 mt-[3px] font-headline text-[13px] text-muted-foreground">
+          Credenciales que usan varios módulos. Los canales por los que atiende
+          tu agente se configuran en{" "}
+          <Link href="/atencion" className="font-semibold text-info hover:opacity-80">
+            Atención
+          </Link>
+          .
         </p>
         <div className="flex flex-col gap-6">
-          <WhatsAppConnect />
-          <AgentConfig />
           <ColdEmail />
 
           <SettingsCard

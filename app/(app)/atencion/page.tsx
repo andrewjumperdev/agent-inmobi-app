@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/page-header";
 import { createClient } from "@/lib/supabase/server";
-import { AIChat } from "@/components/dashboard/ai-chat";
+import { AtencionPanel } from "@/components/atencion/panel";
 
 export default async function AtencionPage() {
   const supabase = await createClient();
@@ -18,9 +18,13 @@ export default async function AtencionPage() {
 
   return (
     <div className="flex min-h-svh flex-1 flex-col bg-app-canvas text-foreground">
-      <PageHeader title="Atención al cliente" icon="headset_mic" />
+      <PageHeader
+        title="Atención al cliente"
+        subtitle="Tu agente y sus canales"
+        icon="headset_mic"
+      />
 
-      <AIChat endpoint="/api/atencion" userProfile={{ name, first_time: false }} />
+      <AtencionPanel userName={name} />
     </div>
   );
 }
