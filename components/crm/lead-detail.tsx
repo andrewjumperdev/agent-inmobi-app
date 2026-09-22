@@ -100,7 +100,10 @@ export function LeadDetail({
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: 400, opacity: 0 }}
       transition={{ type: "spring", stiffness: 320, damping: 34 }}
-      className="flex h-full w-[360px] shrink-0 flex-col border-l"
+      /* En teléfono ocupa la pantalla entera: puesto al lado del tablero, sus
+         360px fijos empujaban el layout y obligaban a scrollear en horizontal
+         para volver a la lista. Desde md vuelve a ser el panel lateral. */
+      className="fixed inset-0 z-50 flex h-full w-full flex-col border-l md:relative md:inset-auto md:z-auto md:w-[360px] md:shrink-0"
       style={{ backgroundColor: "var(--app-surface)", borderColor: "var(--app-border)" }}
     >
       {/* Header */}

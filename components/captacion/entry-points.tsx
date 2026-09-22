@@ -113,7 +113,7 @@ function WhatsAppPanel() {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <StatPill icon="trending_up" label="Tasa apertura" value="98%" />
         <StatPill icon="schedule" label="Resp. promedio" value="3 min" />
         <StatPill icon="group" label="Leads / mes" value="~40" />
@@ -224,7 +224,7 @@ function FormularioPanel() {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <StatPill icon="conversion_path" label="Conversión" value="~12%" />
         <StatPill icon="timer" label="Tiempo llenado" value="90 seg" />
         <StatPill icon="verified" label="Datos válidos" value="94%" />
@@ -304,7 +304,7 @@ function LandingPanel() {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <StatPill icon="speed" label="Carga" value="< 1 seg" />
         <StatPill icon="devices" label="Mobile-first" value="100%" />
         <StatPill icon="search" label="SEO Ready" value="Sí" />

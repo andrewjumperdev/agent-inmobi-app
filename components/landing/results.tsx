@@ -116,7 +116,7 @@ export function ResultsSection({ dict }: { dict: Dictionary }) {
                 style={{ background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.2)" }}
               >
                 <span className="font-headline text-2xl font-black leading-none" style={{ color: "#3b82f6" }}>
-                  "
+                  &ldquo;
                 </span>
               </div>
 
@@ -160,7 +160,7 @@ export function ResultsSection({ dict }: { dict: Dictionary }) {
               {/* Stars */}
               <div className="mt-5 flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Icon name="star" size="md" style={{ color: "#f59e0b" }} />
+                  <Icon key={i} name="star" size="md" style={{ color: "#f59e0b" }} />
                 ))}
                 <span className="ml-2 font-label text-[10px] uppercase tracking-widest" style={{ color: "#475569" }}>
                   +40% cierres · Primer mes

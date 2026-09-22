@@ -38,10 +38,10 @@ export function ColdEmail() {
   const [busy, setBusy] = useState<"import" | "run" | "save" | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (signal?: AbortSignal) => {
     const [s, c] = await Promise.all([
-      fetch("/api/prospeccion/stats").then((r) => (r.ok ? r.json() : null)),
-      fetch("/api/integraciones/smtp").then((r) => (r.ok ? r.json() : null)),
+      fetch("/api/prospeccion/stats", { signal }).then((r) => (r.ok ? r.json() : null)),
+      fetch("/api/integraciones/smtp", { signal }).then((r) => (r.ok ? r.json() : null)),
     ]);
     if (s) setStats(s);
     if (c) {
@@ -54,7 +54,15 @@ export function ColdEmail() {
     }
   }, []);
 
-  useEffect(() => { refresh(); }, [refresh]);
+  useEffect(() => {
+    const ac = new AbortController();
+    // Falso positivo: el estado se escribe DESPUÉS del await del fetch, no de
+    // forma síncrona, pero la regla no puede ver a través del useCallback. La
+    // petición se cancela al desmontar, que es el riesgo real que cubre.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    refresh(ac.signal).catch(() => {});
+    return () => ac.abort();
+  }, [refresh]);
 
   function set(k: string, v: string) { setForm((f) => ({ ...f, [k]: v })); }
 
@@ -152,7 +160,7 @@ export function ColdEmail() {
 
       {/* Stats */}
       {stats && (
-        <div className="mt-4 grid grid-cols-3 gap-2">
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
           {counts.map((c) => (
             <div key={c.key} className="rounded-xl px-3 py-2.5 text-center" style={{ backgroundColor: "var(--app-surface)" }}>
               <p className="text-xl font-bold" style={{ color: c.color }}>{stats[c.key]}</p>

@@ -37,8 +37,8 @@ export function SettingsCard({
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    const res = await fetch(endpoint);
+  const load = useCallback(async (signal?: AbortSignal) => {
+    const res = await fetch(endpoint, { signal });
     if (!res.ok) return;
     const d = (await res.json()) as Record<string, unknown>;
     setData(d);
@@ -48,7 +48,13 @@ export function SettingsCard({
   }, [endpoint, fields]);
 
   useEffect(() => {
-    load();
+    const ac = new AbortController();
+    // Falso positivo: el estado se escribe DESPUÉS del await del fetch, no de
+    // forma síncrona, pero la regla no puede ver a través del useCallback. La
+    // petición se cancela al desmontar, que es el riesgo real que cubre.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    load(ac.signal).catch(() => {});
+    return () => ac.abort();
   }, [load]);
 
   async function save() {

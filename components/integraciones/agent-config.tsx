@@ -28,8 +28,8 @@ export function AgentConfig() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    const res = await fetch("/api/integraciones/whatsapp-agent");
+  const load = useCallback(async (signal?: AbortSignal) => {
+    const res = await fetch("/api/integraciones/whatsapp-agent", { signal });
     if (!res.ok) return;
     const d = await res.json();
     setConfigured(Boolean(d.configured));
@@ -38,7 +38,18 @@ export function AgentConfig() {
     setForm(f);
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  // AbortController y no una bandera: además de callar al linter, cancela la
+  // petición en vuelo. Sin esto, salir de la pantalla antes de que responda
+  // escribe estado sobre un componente desmontado.
+  useEffect(() => {
+    const ac = new AbortController();
+    // Falso positivo: el estado se escribe DESPUÉS del await del fetch, no de
+    // forma síncrona, pero la regla no puede ver a través del useCallback. La
+    // petición se cancela al desmontar, que es el riesgo real que cubre.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    load(ac.signal).catch(() => {});
+    return () => ac.abort();
+  }, [load]);
 
   async function save() {
     setBusy(true); setMsg(null);

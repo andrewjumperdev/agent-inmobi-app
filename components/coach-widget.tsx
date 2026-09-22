@@ -35,7 +35,7 @@ export function CoachWidget() {
             exit={{ opacity: 0, y: 8, scale: 0.95 }}
             transition={{ duration: 0.25, ease: EASE }}
             className={cn(
-              "w-72 rounded-2xl border shadow-xl",
+              "w-[min(18rem,calc(100vw-2.5rem))] rounded-2xl border shadow-xl",
               "border-[var(--ai)]/20 bg-card"
             )}
           >
