@@ -4,13 +4,17 @@ import { createClient } from "@/lib/supabase/server";
 /* ── GET /api/seguimiento ───────────────────────────────────── */
 export async function GET() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any)
     .from("followup_executions")
-    .select(`
+    .select(
+      `
       id,
       lead_id,
       sequence_id,
@@ -29,11 +33,13 @@ export async function GET() {
         notes,
         property_type
       )
-    `)
+    `,
+    )
     .in("status", ["active", "paused"])
     .order("created_at", { ascending: false });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error)
+    return NextResponse.json({ error: error.message }, { status: 500 });
 
   return NextResponse.json({ executions: data ?? [] });
 }
@@ -42,14 +48,20 @@ export async function GET() {
 // Body: { lead_id: string, sequence_id?: string }
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json().catch(() => null);
   const { lead_id, sequence_id } = body ?? {};
 
   if (!lead_id) {
-    return NextResponse.json({ error: "lead_id es requerido" }, { status: 400 });
+    return NextResponse.json(
+      { error: "lead_id es requerido" },
+      { status: 400 },
+    );
   }
 
   // Verify lead belongs to user
@@ -81,8 +93,11 @@ export async function POST(req: NextRequest) {
 
   if (!resolvedSequenceId) {
     return NextResponse.json(
-      { error: "No hay secuencias activas. Corré la migración 0002 en Supabase." },
-      { status: 422 }
+      {
+        error:
+          "No hay secuencias activas. Corré la migración 0002 en Supabase.",
+      },
+      { status: 422 },
     );
   }
 
@@ -99,7 +114,7 @@ export async function POST(req: NextRequest) {
   if (existing) {
     return NextResponse.json(
       { error: "Este lead ya tiene una secuencia activa." },
-      { status: 409 }
+      { status: 409 },
     );
   }
 

@@ -12,7 +12,8 @@ import { runAgent } from "@/lib/kore/client";
 export const maxDuration = 60; // Content agent (gpt-4o); evita el timeout de 10s de Vercel
 
 export type ContentFormat = "reel" | "carrusel" | "historia" | "post";
-export type ContentPillar = "autoridad" | "conversion" | "confianza" | "atraccion";
+export type ContentPillar =
+  "autoridad" | "conversion" | "confianza" | "atraccion";
 
 const SSE_HEADERS = {
   "Content-Type": "text/event-stream",
@@ -26,8 +27,11 @@ function textToStream(text: string): ReadableStream {
   return new ReadableStream({
     async start(controller) {
       for (let i = 0; i < words.length; i += 3) {
-        const chunk = words.slice(i, i + 3).join(" ") + (i + 3 < words.length ? " " : "");
-        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`));
+        const chunk =
+          words.slice(i, i + 3).join(" ") + (i + 3 < words.length ? " " : "");
+        controller.enqueue(
+          encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`),
+        );
         await new Promise((r) => setTimeout(r, 18 + Math.random() * 18));
       }
       controller.enqueue(encoder.encode("data: [DONE]\n\n"));
@@ -36,7 +40,11 @@ function textToStream(text: string): ReadableStream {
   });
 }
 
-interface Draft { channel?: string; title?: string; body?: string }
+interface Draft {
+  channel?: string;
+  title?: string;
+  body?: string;
+}
 
 export async function POST(request: Request) {
   const { format, pillar, context, zona } = (await request.json()) as {
@@ -56,7 +64,10 @@ export async function POST(request: Request) {
     const creds = await getTenantCredentials();
     if (!creds) throw new Error("no_session");
     const run = await runAgent(creds.apiKey, "content", { message });
-    const out = (run.output?.output ?? {}) as { drafts?: Draft[]; rationale?: string };
+    const out = (run.output?.output ?? {}) as {
+      drafts?: Draft[];
+      rationale?: string;
+    };
     const drafts = out.drafts ?? [];
     text =
       drafts

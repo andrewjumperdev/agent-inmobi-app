@@ -32,8 +32,7 @@ const GREETING_RETURNING = (name?: string) =>
   `Bienvenido de vuelta${name ? `, ${name}` : ""}. ¿En qué te ayudo? Puedo explicarte cualquier parte del sistema o ayudarte a leer tus números.`;
 
 /* ── Mensajes de fallback ───────────────────────────────────────────────────── */
-const MSG_NO_SESSION =
-  "Necesitás iniciar sesión para hablar con ARIA.";
+const MSG_NO_SESSION = "Necesitás iniciar sesión para hablar con ARIA.";
 const MSG_BACKEND_DOWN =
   "No pude conectar con el sistema KORE en este momento. Verificá que el backend esté corriendo e intentá de nuevo en unos segundos.";
 
@@ -49,7 +48,7 @@ function textToStream(text: string, chunkSize = 4): ReadableStream {
           words.slice(i, i + chunkSize).join(" ") +
           (i + chunkSize < words.length ? " " : "");
         controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`)
+          encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`),
         );
         await new Promise((r) => setTimeout(r, 28 + Math.random() * 24));
       }
@@ -84,13 +83,13 @@ export async function POST(request: Request) {
     const isInit = messages.some(
       (m) =>
         m.content === "__SYSTEM_INIT_FIRST_TIME__" ||
-        m.content === "__SYSTEM_INIT_RETURNING__"
+        m.content === "__SYSTEM_INIT_RETURNING__",
     );
     if (isInit) {
       return streamText(
         userProfile?.first_time
           ? GREETING_FIRST(userProfile?.name)
-          : GREETING_RETURNING(userProfile?.name)
+          : GREETING_RETURNING(userProfile?.name),
       );
     }
 

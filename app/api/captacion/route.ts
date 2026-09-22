@@ -5,8 +5,7 @@
  * dispare cuatro round-trips desde el navegador. Cada una degrada por separado:
  * si el estado de WhatsApp falla, la pantalla sigue mostrando las fuentes.
  */
-import { getTenantCredentials } from "@/lib/kore/tenant";
-import { koreFetch } from "@/lib/kore/client";
+import { koreTenantFetch, NoSessionError, bffError } from "@/lib/kore/server";
 
 export interface SourceStat {
   source: string;
@@ -16,37 +15,43 @@ export interface SourceStat {
 }
 
 /** Lectura que no rompe la página: ante cualquier fallo devuelve el fallback. */
-async function safe<T>(path: string, apiKey: string, fallback: T): Promise<T> {
+/** Lectura que no rompe la página: ante un fallo del backend devuelve el
+ *  fallback, PERO deja pasar el "sin sesión". Tragarse ese caso le mostraría
+ *  ceros a alguien deslogueado en vez de mandarlo a entrar — y los ceros se
+ *  leen como "tu negocio no tiene datos", que es una mentira distinta. */
+async function safe<T>(path: string, fallback: T): Promise<T> {
   try {
-    return await koreFetch<T>(path, { apiKey });
-  } catch {
+    return await koreTenantFetch<T>(path);
+  } catch (err) {
+    if (err instanceof NoSessionError) throw err;
     return fallback;
   }
 }
 
 export async function GET() {
-  const creds = await getTenantCredentials();
-  if (!creds) return Response.json({ error: "no_session" }, { status: 401 });
+  try {
+    const [sources, capture, whatsapp, smtp] = await Promise.all([
+      safe<SourceStat[]>("/leads/sources", []),
+      safe<{ url: string; example_payload: Record<string, unknown> }>(
+        "/leads/capture-url",
+        { url: "", example_payload: {} },
+      ),
+      safe<{ connected?: boolean; state?: string }>(
+        "/integrations/whatsapp/status",
+        {},
+      ),
+      safe<{ configured?: boolean }>("/integrations/smtp", {}),
+    ]);
 
-  const [sources, capture, whatsapp, smtp] = await Promise.all([
-    safe<SourceStat[]>("/leads/sources", creds.apiKey, []),
-    safe<{ url: string; example_payload: Record<string, unknown> }>(
-      "/leads/capture-url",
-      creds.apiKey,
-      { url: "", example_payload: {} }
-    ),
-    safe<{ connected?: boolean; state?: string }>(
-      "/integrations/whatsapp/status",
-      creds.apiKey,
-      {}
-    ),
-    safe<{ configured?: boolean }>("/integrations/smtp", creds.apiKey, {}),
-  ]);
-
-  return Response.json({
-    sources,
-    capture,
-    whatsappConnected: Boolean(whatsapp.connected || whatsapp.state === "open"),
-    emailConfigured: Boolean(smtp.configured),
-  });
+    return Response.json({
+      sources,
+      capture,
+      whatsappConnected: Boolean(
+        whatsapp.connected || whatsapp.state === "open",
+      ),
+      emailConfigured: Boolean(smtp.configured),
+    });
+  } catch (err) {
+    return bffError(err);
+  }
 }

@@ -5,43 +5,50 @@
  * Cada consulta degrada por separado: si el estado de WhatsApp falla, la barra
  * lo cuenta como no conectado en vez de romper la pantalla entera.
  */
-import { getTenantCredentials } from "@/lib/kore/tenant";
-import { koreFetch } from "@/lib/kore/client";
+import { koreTenantFetch, NoSessionError, bffError } from "@/lib/kore/server";
 
 export interface EstadoIntegracion {
   id: string;
   conectado: boolean;
 }
 
-async function safe<T>(path: string, apiKey: string, fallback: T): Promise<T> {
+/** Lectura que no rompe la página: ante un fallo del backend devuelve el
+ *  fallback, PERO deja pasar el "sin sesión". Tragarse ese caso le mostraría
+ *  ceros a alguien deslogueado en vez de mandarlo a entrar — y los ceros se
+ *  leen como "tu negocio no tiene datos", que es una mentira distinta. */
+async function safe<T>(path: string, fallback: T): Promise<T> {
   try {
-    return await koreFetch<T>(path, { apiKey });
-  } catch {
+    return await koreTenantFetch<T>(path);
+  } catch (err) {
+    if (err instanceof NoSessionError) throw err;
     return fallback;
   }
 }
 
 export async function GET() {
-  const creds = await getTenantCredentials();
-  if (!creds) return Response.json({ error: "no_session" }, { status: 401 });
+  try {
+    const [whatsapp, smtp, calendar, voz] = await Promise.all([
+      safe<{ connected?: boolean; state?: string }>(
+        "/integrations/whatsapp/status",
+        {},
+      ),
+      safe<{ configured?: boolean }>("/integrations/smtp", {}),
+      safe<{ configured?: boolean }>("/integrations/calendar", {}),
+      safe<{ configured?: boolean }>("/integrations/elevenlabs", {}),
+    ]);
 
-  const [whatsapp, smtp, calendar, voz] = await Promise.all([
-    safe<{ connected?: boolean; state?: string }>(
-      "/integrations/whatsapp/status",
-      creds.apiKey,
-      {}
-    ),
-    safe<{ configured?: boolean }>("/integrations/smtp", creds.apiKey, {}),
-    safe<{ configured?: boolean }>("/integrations/calendar", creds.apiKey, {}),
-    safe<{ configured?: boolean }>("/integrations/elevenlabs", creds.apiKey, {}),
-  ]);
+    const estados: EstadoIntegracion[] = [
+      {
+        id: "whatsapp",
+        conectado: Boolean(whatsapp.connected || whatsapp.state === "open"),
+      },
+      { id: "email", conectado: Boolean(smtp.configured) },
+      { id: "calendar", conectado: Boolean(calendar.configured) },
+      { id: "voz", conectado: Boolean(voz.configured) },
+    ];
 
-  const estados: EstadoIntegracion[] = [
-    { id: "whatsapp", conectado: Boolean(whatsapp.connected || whatsapp.state === "open") },
-    { id: "email", conectado: Boolean(smtp.configured) },
-    { id: "calendar", conectado: Boolean(calendar.configured) },
-    { id: "voz", conectado: Boolean(voz.configured) },
-  ];
-
-  return Response.json({ estados });
+    return Response.json({ estados });
+  } catch (err) {
+    return bffError(err);
+  }
 }

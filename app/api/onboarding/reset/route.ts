@@ -7,20 +7,13 @@
  * con el sistema apagado y el middleware mandándolo igual al dashboard — sin
  * forma de llegar a la pantalla donde se rehace.
  */
-import { getTenantCredentials } from "@/lib/kore/tenant";
-import { koreFetch, KoreError } from "@/lib/kore/client";
+import { koreTenantFetch, bffError } from "@/lib/kore/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST() {
-  const creds = await getTenantCredentials();
-  if (!creds) return Response.json({ error: "no_session" }, { status: 401 });
-
   try {
-    const data = await koreFetch("/onboarding/reset", {
-      apiKey: creds.apiKey,
-      method: "POST",
-    });
+    const data = await koreTenantFetch("/onboarding/reset", { method: "POST" });
 
     const supabase = await createClient();
     const {
@@ -37,24 +30,23 @@ export async function POST() {
       // mandando al dashboard: es un estado trabado, no un detalle. Se devuelve
       // error para que la UI no diga "listo" sobre algo que quedó a medias.
       if (error) {
-        console.error("[/api/onboarding/reset] no se pudo reabrir el onboarding:", error);
+        console.error(
+          "[/api/onboarding/reset] no se pudo reabrir el onboarding:",
+          error,
+        );
         return Response.json(
           {
             error:
               "Se limpió la configuración pero no pudimos reabrir el onboarding. " +
               "Recargá la página; si sigue igual, escribinos.",
           },
-          { status: 500 }
+          { status: 500 },
         );
       }
     }
 
     return Response.json(data);
   } catch (err) {
-    const status = err instanceof KoreError ? err.status : 500;
-    return Response.json(
-      { error: err instanceof Error ? err.message : String(err) },
-      { status }
-    );
+    return bffError(err);
   }
 }

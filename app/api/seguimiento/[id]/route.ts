@@ -6,11 +6,14 @@ const TOTAL_STEPS = 5;
 /* ── PATCH /api/seguimiento/[id] ────────────────────────────── */
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
   const body = await req.json().catch(() => null);
@@ -19,7 +22,7 @@ export async function PATCH(
   if (!["advance", "pause", "resume", "cancel"].includes(action)) {
     return NextResponse.json(
       { error: "action debe ser: advance | pause | resume | cancel" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -32,7 +35,10 @@ export async function PATCH(
     .single();
 
   if (fetchError || !raw) {
-    return NextResponse.json({ error: "Ejecución no encontrada" }, { status: 404 });
+    return NextResponse.json(
+      { error: "Ejecución no encontrada" },
+      { status: 404 },
+    );
   }
 
   const exec = raw as unknown as {
@@ -49,8 +55,14 @@ export async function PATCH(
     if (nextStep > TOTAL_STEPS) {
       patch = { status: "completed", completed_at: new Date().toISOString() };
     } else {
-      const nextStepAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
-      patch = { current_step: nextStep, status: "active", next_step_at: nextStepAt };
+      const nextStepAt = new Date(
+        Date.now() + 24 * 60 * 60 * 1000,
+      ).toISOString();
+      patch = {
+        current_step: nextStep,
+        status: "active",
+        next_step_at: nextStepAt,
+      };
     }
   } else if (action === "pause") {
     patch = { status: "paused" };

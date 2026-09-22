@@ -1,19 +1,15 @@
 /** BFF: historial de conversación de un contacto → GET /contacts/{id}/messages. */
-import { getTenantCredentials } from "@/lib/kore/tenant";
-import { koreFetch, KoreError } from "@/lib/kore/client";
+import { koreTenantFetch, bffError } from "@/lib/kore/server";
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  const creds = await getTenantCredentials();
-  if (!creds) return Response.json({ error: "no_session" }, { status: 401 });
   try {
     const { id } = await params;
-    const data = await koreFetch(`/contacts/${id}/messages`, { apiKey: creds.apiKey });
+    const data = await koreTenantFetch(`/contacts/${id}/messages`);
     return Response.json(data);
   } catch (err) {
-    const status = err instanceof KoreError ? err.status : 500;
-    return Response.json({ error: err instanceof Error ? err.message : String(err) }, { status });
+    return bffError(err);
   }
 }

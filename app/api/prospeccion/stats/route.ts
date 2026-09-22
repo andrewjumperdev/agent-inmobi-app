@@ -1,15 +1,11 @@
 /** BFF: estado de la prospección → GET /prospecting/stats. */
-import { getTenantCredentials } from "@/lib/kore/tenant";
-import { koreFetch, KoreError } from "@/lib/kore/client";
+import { koreTenantFetch, bffError } from "@/lib/kore/server";
 
 export async function GET() {
-  const creds = await getTenantCredentials();
-  if (!creds) return Response.json({ error: "no_session" }, { status: 401 });
   try {
-    const data = await koreFetch("/prospecting/stats", { apiKey: creds.apiKey });
+    const data = await koreTenantFetch("/prospecting/stats");
     return Response.json(data);
   } catch (err) {
-    const status = err instanceof KoreError ? err.status : 500;
-    return Response.json({ error: err instanceof Error ? err.message : String(err) }, { status });
+    return bffError(err);
   }
 }

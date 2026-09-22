@@ -9,8 +9,7 @@
  * integramos. Inventar esos números sería mostrarle a un cliente que paga
  * métricas fabricadas sobre su propio negocio.
  */
-import { getTenantCredentials } from "@/lib/kore/tenant";
-import { koreFetch } from "@/lib/kore/client";
+import { koreTenantFetch, NoSessionError, bffError } from "@/lib/kore/server";
 
 export interface StageSummary {
   stage: string;
@@ -43,36 +42,42 @@ export interface Metrics {
   alerts: { metric: string; issue: string; action: string }[];
 }
 
-async function safe<T>(path: string, apiKey: string, fallback: T): Promise<T> {
+/** Lectura que no rompe la página: ante un fallo del backend devuelve el
+ *  fallback, PERO deja pasar el "sin sesión". Tragarse ese caso le mostraría
+ *  ceros a alguien deslogueado en vez de mandarlo a entrar — y los ceros se
+ *  leen como "tu negocio no tiene datos", que es una mentira distinta. */
+async function safe<T>(path: string, fallback: T): Promise<T> {
   try {
-    return await koreFetch<T>(path, { apiKey });
-  } catch {
+    return await koreTenantFetch<T>(path);
+  } catch (err) {
+    if (err instanceof NoSessionError) throw err;
     return fallback;
   }
 }
 
 export async function GET() {
-  const creds = await getTenantCredentials();
-  if (!creds) return Response.json({ error: "no_session" }, { status: 401 });
+  try {
+    const [pipeline, sources, metrics] = await Promise.all([
+      safe<Pipeline>("/deals/pipeline", {
+        stages: [],
+        open_amount_cents: 0,
+        won_amount_cents: 0,
+        currency: "USD",
+        avg_days_to_close: null,
+      }),
+      safe<SourceStat[]>("/leads/sources", []),
+      safe<Metrics>("/metrics", {
+        leads_daily: [],
+        temperature_distribution: {},
+        auto_classification_rate: 0,
+        cold_share: 0,
+        open_escalations: 0,
+        alerts: [],
+      }),
+    ]);
 
-  const [pipeline, sources, metrics] = await Promise.all([
-    safe<Pipeline>("/deals/pipeline", creds.apiKey, {
-      stages: [],
-      open_amount_cents: 0,
-      won_amount_cents: 0,
-      currency: "USD",
-      avg_days_to_close: null,
-    }),
-    safe<SourceStat[]>("/leads/sources", creds.apiKey, []),
-    safe<Metrics>("/metrics", creds.apiKey, {
-      leads_daily: [],
-      temperature_distribution: {},
-      auto_classification_rate: 0,
-      cold_share: 0,
-      open_escalations: 0,
-      alerts: [],
-    }),
-  ]);
-
-  return Response.json({ pipeline, sources, metrics });
+    return Response.json({ pipeline, sources, metrics });
+  } catch (err) {
+    return bffError(err);
+  }
 }

@@ -15,7 +15,8 @@ export const maxDuration = 60; // gpt-4o + reserva; evita el timeout de 10s de V
 const GREETING = (name?: string) =>
   `¡Hola${name ? `, ${name}` : ""}! Soy el asistente de atención al cliente. Contame qué estás buscando y, si querés, coordinamos una demo o llamada. ¿En qué te puedo ayudar?`;
 
-const MSG_NO_SESSION = "Necesitás iniciar sesión para usar el agente de atención.";
+const MSG_NO_SESSION =
+  "Necesitás iniciar sesión para usar el agente de atención.";
 const MSG_BACKEND_DOWN =
   "No pude conectar con el sistema KORE en este momento. Verificá que el backend esté corriendo e intentá de nuevo.";
 
@@ -37,7 +38,7 @@ function textToStream(text: string, chunkSize = 4): ReadableStream {
           words.slice(i, i + chunkSize).join(" ") +
           (i + chunkSize < words.length ? " " : "");
         controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`)
+          encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`),
         );
         await new Promise((r) => setTimeout(r, 24 + Math.random() * 20));
       }

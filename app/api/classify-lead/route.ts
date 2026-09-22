@@ -46,12 +46,18 @@ function mockClassify(data: {
   const hasZone = !!data.zone_interest;
 
   const urgency =
-    hasSource && hasBudget && hasZone ? "hot" :
-    hasBudget || hasZone ? "warm" : "cold";
+    hasSource && hasBudget && hasZone
+      ? "hot"
+      : hasBudget || hasZone
+        ? "warm"
+        : "cold";
 
   const score =
-    hasBudget && (data.budget_min ?? 0) >= 50000 ? "qualified" :
-    hasBudget ? "pending" : "unqualified";
+    hasBudget && (data.budget_min ?? 0) >= 50000
+      ? "qualified"
+      : hasBudget
+        ? "pending"
+        : "unqualified";
 
   const operation_type = "compra"; // default without more context
 
@@ -72,7 +78,7 @@ export async function POST(request: Request) {
     } = await supabase.auth.getUser();
     if (!user) return Response.json({ error: "no_session" }, { status: 401 });
 
-    const body = await request.json() as {
+    const body = (await request.json()) as {
       name?: string;
       phone?: string;
       source?: string;
@@ -100,25 +106,30 @@ Clasificá este lead.`;
 
     /* Groq */
     if (PROVIDER === "groq") {
-      const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+      const groqRes = await fetch(
+        "https://api.groq.com/openai/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "llama-3.3-70b-versatile",
+            messages: [
+              { role: "system", content: CLASSIFY_SYSTEM },
+              { role: "user", content: userPrompt },
+            ],
+            max_tokens: 200,
+            temperature: 0.1,
+          }),
         },
-        body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          messages: [
-            { role: "system", content: CLASSIFY_SYSTEM },
-            { role: "user", content: userPrompt },
-          ],
-          max_tokens: 200,
-          temperature: 0.1,
-        }),
-      });
+      );
 
       if (!groqRes.ok) throw new Error(`Groq error: ${groqRes.status}`);
-      const groqData = await groqRes.json() as { choices: { message: { content: string } }[] };
+      const groqData = (await groqRes.json()) as {
+        choices: { message: { content: string } }[];
+      };
       const raw = groqData.choices?.[0]?.message?.content ?? "{}";
       const parsed = JSON.parse(raw.trim());
       return Response.json(parsed);
@@ -127,7 +138,9 @@ Clasificá este lead.`;
     /* Anthropic */
     if (PROVIDER === "anthropic") {
       const { default: Anthropic } = await import("@anthropic-ai/sdk");
-      const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+      const anthropic = new Anthropic({
+        apiKey: process.env.ANTHROPIC_API_KEY,
+      });
 
       const msg = await anthropic.messages.create({
         model: "claude-haiku-4-5-20251001",
@@ -145,8 +158,13 @@ Clasificá este lead.`;
   } catch (err) {
     console.error("[/api/classify-lead]", err);
     return Response.json(
-      { operation_type: "compra", urgency: "cold", score: "pending", zone_interest: "" },
-      { status: 200 }
+      {
+        operation_type: "compra",
+        urgency: "cold",
+        score: "pending",
+        zone_interest: "",
+      },
+      { status: 200 },
     );
   }
 }
