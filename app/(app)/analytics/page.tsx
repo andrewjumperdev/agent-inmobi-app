@@ -1,10 +1,11 @@
-import { ComingSoon } from "@/components/ui/coming-soon";
+import { PageHeader } from "@/components/page-header";
+import { AnalyticsReal } from "@/components/analytics/analytics-real";
 
 export default function AnalyticsPage() {
   return (
-    <ComingSoon
-      title="Analytics"
-      description="Reportes avanzados y optimización de campañas (Meta / Google Ads) con IA. Mientras tanto, las métricas en tiempo real de tu pipeline están en el Dashboard."
-    />
+    <div className="flex min-h-svh flex-1 flex-col bg-app-canvas text-foreground">
+      <PageHeader title="Analytics" subtitle="Embudo y rendimiento" icon="bar_chart" />
+      <AnalyticsReal />
+    </div>
   );
 }

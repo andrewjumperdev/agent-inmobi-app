@@ -5,7 +5,7 @@
  * `app/(app)/captacion/page.tsx` renderiza <ComingSoon />, así que hoy no llega
  * a ningún cliente.
  *
- * A diferencia de components/analytics/analytics-view.tsx, acá el mock solo
+ * Acá el mock solo
  * aparece cuando no hay leads reales y va acompañado de un aviso visible en la
  * UI. Si esta vista se conecta de verdad, hay que decidir explícitamente si ese
  * relleno se queda: un dashboard vacío es información honesta; uno con leads

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Rastro } from "@/components/crm/rastro";
 import { motion } from "framer-motion";
 import { X, Phone, Mail, Clock, Bot, User, Loader2 } from "lucide-react";
 import type { ContactOut, MessageOut } from "@/lib/kore/client";
@@ -44,6 +45,7 @@ export function LeadDetail({
 }) {
   const [stage, setStage] = useState(contact.lifecycle_stage);
   const [msgs, setMsgs] = useState<MessageOut[] | null>(null);
+  const [vista, setVista] = useState<"conversacion" | "rastro">("conversacion");
   // `paused_until` en el futuro = una persona tomó la conversación.
   const [pausedUntil, setPausedUntil] = useState<string | null>(
     contact.paused_until ?? null
@@ -194,9 +196,30 @@ export function LeadDetail({
           ))}
         </div>
 
-        {/* Conversación */}
-        <p className="mb-2 mt-6 text-[11px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>Conversación</p>
-        {msgs === null ? (
+        {/* Conversación vs. rastro: lo que la persona ve, y lo que el sistema
+            hizo por detrás. Son dos lecturas distintas del mismo contacto y
+            mezclarlas haría ilegibles a las dos. */}
+        <div className="mb-2 mt-6 flex gap-1">
+          {(["conversacion", "rastro"] as const).map((t) => (
+            <button
+              key={t}
+              onClick={() => setVista(t)}
+              aria-current={vista === t ? "page" : undefined}
+              className="rounded-lg px-2.5 py-1 text-[11px] font-semibold uppercase tracking-widest transition-all"
+              style={
+                vista === t
+                  ? { backgroundColor: "color-mix(in oklab, var(--info) 12%, transparent)", color: "var(--info)" }
+                  : { color: "var(--muted-foreground)" }
+              }
+            >
+              {t === "conversacion" ? "Conversación" : "Rastro"}
+            </button>
+          ))}
+        </div>
+
+        {vista === "rastro" ? (
+          <Rastro key={contact.id} contactId={contact.id} />
+        ) : msgs === null ? (
           <div className="flex items-center gap-2 text-xs" style={{ color: "var(--muted-foreground)" }}><Loader2 size={13} className="animate-spin" /> Cargando…</div>
         ) : msgs.length === 0 ? (
           <p className="text-sm" style={{ color: "var(--muted-foreground)" }}>Sin mensajes aún.</p>
