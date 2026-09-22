@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "usuario:prueba": "node scripts/crear-usuario-prueba.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.81.0",
