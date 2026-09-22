@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import { RevealOnScroll } from "./motion";
+import { Icon } from "@/components/ui/icon";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -12,7 +13,7 @@ const STEP_ICONS = [
   "verified_user",
   "calendar_month",
   "notifications_active",
-];
+] as const;
 
 export function HowItWorksSection({ dict }: { dict: Dictionary }) {
   return (
@@ -100,12 +101,7 @@ export function HowItWorksSection({ dict }: { dict: Dictionary }) {
                         border: "1px solid rgba(59,130,246,0.15)",
                       }}
                     >
-                      <span
-                        className="material-symbols-outlined text-base"
-                        style={{ color: "#3b82f6", fontVariationSettings: "'FILL' 1" }}
-                      >
-                        {STEP_ICONS[i]}
-                      </span>
+                      <Icon name={STEP_ICONS[i]} size="md" style={{ color: "#3b82f6" }} />
                     </div>
                     <div>
                       <h3 className="font-headline mb-1.5 text-lg font-bold" style={{ color: "#f1f5f9" }}>

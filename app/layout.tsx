@@ -17,9 +17,6 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["400", "500", "700"],
 });
 
-const MATERIAL_SYMBOLS_URL =
-  "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200";
-
 export const metadata: Metadata = {
   title: "KORE AI — Predictive Real Estate Intelligence",
   description: "Captá, calificá y cerrá leads con inteligencia artificial.",
@@ -41,7 +38,6 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <link rel="stylesheet" href={MATERIAL_SYMBOLS_URL} />
       </head>
       <body
         className="min-h-screen bg-background font-sans antialiased"

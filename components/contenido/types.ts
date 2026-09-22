@@ -1,3 +1,4 @@
+import { type IconName } from "@/components/ui/icon";
 export type ContentFormat = "reel" | "carrusel" | "historia" | "post";
 export type ContentPillar = "autoridad" | "conversion" | "confianza" | "atraccion";
 
@@ -18,7 +19,7 @@ export const FORMAT_LABELS: Record<ContentFormat, string> = {
   post: "Post",
 };
 
-export const FORMAT_ICONS: Record<ContentFormat, string> = {
+export const FORMAT_ICONS: Record<ContentFormat, IconName> = {
   reel: "play_circle",
   carrusel: "view_carousel",
   historia: "fiber_manual_record",

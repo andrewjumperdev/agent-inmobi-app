@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Icon } from "@/components/ui/icon";
 import {
   ContentFormat,
   ContentPillar,
@@ -136,15 +137,10 @@ function SlotCard({
             </span>
           )}
         </span>
-        <span
-          className="material-symbols-outlined text-sm"
-          style={{
+        <Icon name={hasContent ? "check_circle" : "radio_button_unchecked"} size="sm" style={{
             color: hasContent ? "var(--success)" : "var(--muted-foreground)",
             fontVariationSettings: hasContent ? "'FILL' 1" : "'FILL' 0",
-          }}
-        >
-          {hasContent ? "check_circle" : "radio_button_unchecked"}
-        </span>
+          }} />
       </div>
 
       {/* Format + Pillar badges */}
@@ -153,12 +149,7 @@ function SlotCard({
           className="flex items-center gap-1 rounded-md px-1.5 py-0.5"
           style={{ backgroundColor: "var(--app-border)" }}
         >
-          <span
-            className="material-symbols-outlined text-xs"
-            style={{ color: "var(--muted-foreground)", fontVariationSettings: "'FILL' 1" }}
-          >
-            {FORMAT_ICONS[slot.format]}
-          </span>
+          <Icon name={FORMAT_ICONS[slot.format]} size="xs" style={{ color: "var(--muted-foreground)" }} />
           <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>
             {FORMAT_LABELS[slot.format]}
           </span>
@@ -196,9 +187,7 @@ function SlotCard({
             color: "var(--info)",
           }}
         >
-          <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>
-            auto_awesome
-          </span>
+          <Icon name="auto_awesome" size="xs" />
           Generar
         </button>
       )}

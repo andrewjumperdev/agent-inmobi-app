@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import { RevealOnScroll, StaggerContainer, StaggerItem, fadeUp } from "./motion";
+import { Icon } from "@/components/ui/icon";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -159,13 +160,7 @@ export function ResultsSection({ dict }: { dict: Dictionary }) {
               {/* Stars */}
               <div className="mt-5 flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <span
-                    key={i}
-                    className="material-symbols-outlined text-base"
-                    style={{ color: "#f59e0b", fontVariationSettings: "'FILL' 1" }}
-                  >
-                    star
-                  </span>
+                  <Icon name="star" size="md" style={{ color: "#f59e0b" }} />
                 ))}
                 <span className="ml-2 font-label text-[10px] uppercase tracking-widest" style={{ color: "#475569" }}>
                   +40% cierres · Primer mes

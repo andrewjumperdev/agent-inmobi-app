@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Icon } from "@/components/ui/icon";
 import {
   ContentFormat,
   ContentPillar,
@@ -61,12 +62,7 @@ function FilterBar({
               }}
             >
               {f !== "all" && (
-                <span
-                  className="material-symbols-outlined text-xs"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  {FORMAT_ICONS[f as ContentFormat]}
-                </span>
+                <Icon name={FORMAT_ICONS[f as ContentFormat]} size="xs" />
               )}
               {f === "all" ? "Todos" : FORMAT_LABELS[f as ContentFormat]}
             </button>
@@ -144,12 +140,7 @@ function PiezaCard({ pieza }: { pieza: PiezaGuardada }) {
             className="flex items-center gap-1 rounded-md px-2 py-0.5"
             style={{ backgroundColor: "var(--app-border)" }}
           >
-            <span
-              className="material-symbols-outlined text-xs"
-              style={{ color: "var(--muted-foreground)", fontVariationSettings: "'FILL' 1" }}
-            >
-              {FORMAT_ICONS[pieza.format]}
-            </span>
+            <Icon name={FORMAT_ICONS[pieza.format]} size="xs" style={{ color: "var(--muted-foreground)" }} />
             <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>
               {FORMAT_LABELS[pieza.format]}
             </span>
@@ -191,9 +182,7 @@ function PiezaCard({ pieza }: { pieza: PiezaGuardada }) {
               color: copied ? "var(--success)" : "var(--muted-foreground)",
             }}
           >
-            <span className="material-symbols-outlined text-sm">
-              {copied ? "check" : "content_copy"}
-            </span>
+            <Icon name={copied ? "check" : "content_copy"} size="sm" />
           </button>
         </div>
       </div>
@@ -234,12 +223,7 @@ function EmptyState() {
           backgroundColor: "var(--app-surface-hover)",
         }}
       >
-        <span
-          className="material-symbols-outlined text-2xl"
-          style={{ color: "var(--muted-foreground)" }}
-        >
-          inventory_2
-        </span>
+        <Icon name="inventory_2" size="xl" style={{ color: "var(--muted-foreground)" }} />
       </div>
       <p className="font-headline text-base font-bold" style={{ color: "var(--foreground)" }}>
         El banco está vacío

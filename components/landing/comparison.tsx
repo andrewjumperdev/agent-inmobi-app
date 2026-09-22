@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import { RevealOnScroll, StaggerContainer, StaggerItem, fadeUp } from "./motion";
+import { Icon } from "@/components/ui/icon";
 
 export function ComparisonSection({ dict }: { dict: Dictionary }) {
   return (
@@ -31,12 +32,7 @@ export function ComparisonSection({ dict }: { dict: Dictionary }) {
                 className="flex h-8 w-8 items-center justify-center rounded-lg"
                 style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)" }}
               >
-                <span
-                  className="material-symbols-outlined text-base"
-                  style={{ color: "#ef4444", fontVariationSettings: "'FILL' 1" }}
-                >
-                  close
-                </span>
+                <Icon name="close" size="md" />
               </div>
               <h3 className="font-headline text-lg font-bold" style={{ color: "#64748b" }}>
                 {dict.comparison.old_title}
@@ -46,12 +42,7 @@ export function ComparisonSection({ dict }: { dict: Dictionary }) {
             <StaggerContainer staggerDelay={0.08} className="space-y-4">
               {dict.comparison.old_items.map((item) => (
                 <StaggerItem key={item} variants={fadeUp} className="flex gap-3">
-                  <span
-                    className="material-symbols-outlined mt-0.5 shrink-0 text-base"
-                    style={{ color: "#334155" }}
-                  >
-                    remove
-                  </span>
+                  <Icon name="remove" size="md" className="mt-0.5 shrink-0" />
                   <span className="text-sm leading-relaxed" style={{ color: "#475569" }}>
                     {item}
                   </span>
@@ -79,12 +70,7 @@ export function ComparisonSection({ dict }: { dict: Dictionary }) {
                   className="flex h-8 w-8 items-center justify-center rounded-lg"
                   style={{ background: "rgba(59,130,246,0.12)", border: "1px solid rgba(59,130,246,0.25)" }}
                 >
-                  <span
-                    className="material-symbols-outlined text-base"
-                    style={{ color: "#3b82f6", fontVariationSettings: "'FILL' 1" }}
-                  >
-                    check_circle
-                  </span>
+                  <Icon name="check_circle" size="md" />
                 </div>
                 <h3 className="font-headline text-lg font-bold" style={{ color: "#93c5fd" }}>
                   {dict.comparison.new_title}
@@ -109,12 +95,7 @@ export function ComparisonSection({ dict }: { dict: Dictionary }) {
             <StaggerContainer staggerDelay={0.08} className="space-y-4">
               {dict.comparison.new_items.map((item) => (
                 <StaggerItem key={item} variants={fadeUp} className="flex gap-3">
-                  <span
-                    className="material-symbols-outlined mt-0.5 shrink-0 text-base"
-                    style={{ color: "#3b82f6" }}
-                  >
-                    check
-                  </span>
+                  <Icon name="check" size="md" className="mt-0.5 shrink-0" />
                   <span className="text-sm font-medium leading-relaxed" style={{ color: "#e2e8f0" }}>
                     {item}
                   </span>

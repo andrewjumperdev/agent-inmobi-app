@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import { RevealOnScroll } from "./motion";
+import { Icon } from "@/components/ui/icon";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -11,7 +12,7 @@ const TRUST_BADGES = [
   { icon: "shield_with_heart", label: "Sin contratos largos" },
   { icon: "support_agent", label: "Soporte incluido" },
   { icon: "verified", label: "Resultados en 30 días" },
-];
+] as const;
 
 export function CTASection({ dict }: { dict: Dictionary }) {
   return (
@@ -76,9 +77,7 @@ export function CTASection({ dict }: { dict: Dictionary }) {
               }}
             >
               {dict.cta_final.cta}
-              <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                arrow_forward
-              </span>
+              <Icon name="arrow_forward" size="xl" />
             </motion.a>
 
             <motion.a
@@ -109,12 +108,7 @@ export function CTASection({ dict }: { dict: Dictionary }) {
                 className="flex items-center gap-2 rounded-xl px-4 py-2.5"
                 style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
               >
-                <span
-                  className="material-symbols-outlined text-base"
-                  style={{ color: "#3b82f6", fontVariationSettings: "'FILL' 1" }}
-                >
-                  {badge.icon}
-                </span>
+                <Icon name={badge.icon} size="md" style={{ color: "#3b82f6" }} />
                 <span className="font-label text-[11px] uppercase tracking-widest" style={{ color: "#334155" }}>
                   {badge.label}
                 </span>

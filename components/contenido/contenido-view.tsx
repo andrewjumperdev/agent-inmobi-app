@@ -6,6 +6,7 @@ import { Generador } from "./generador";
 import { Calendario } from "./calendario";
 import { Banco } from "./banco";
 import type { PiezaGuardada } from "./types";
+import { Icon } from "@/components/ui/icon";
 
 const TABS = [
   { id: "generador", label: "Generador", icon: "auto_awesome" },
@@ -102,14 +103,9 @@ export function ContenidoView() {
               className="relative flex items-center gap-2 px-4 py-3 font-label text-[10px] font-semibold uppercase tracking-[0.16em] transition-colors"
               style={{ color: active ? "var(--info)" : "var(--muted-foreground)" }}
             >
-              <span
-                className="material-symbols-outlined text-sm"
-                style={{
+              <Icon name={tab.icon} size="sm" style={{
                   fontVariationSettings: active ? "'FILL' 1" : "'FILL' 0",
-                }}
-              >
-                {tab.icon}
-              </span>
+                }} />
               <span className="hidden sm:block">{tab.label}</span>
               {tab.id === "banco" && banco.length > 0 && (
                 <span

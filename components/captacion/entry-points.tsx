@@ -2,16 +2,17 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Icon, type IconName } from "@/components/ui/icon";
 
 /* ── Types ─────────────────────────────────────────────────── */
 type Channel = "whatsapp" | "formulario" | "landing";
 
 /* ── Channel Tab ───────────────────────────────────────────── */
-const CHANNELS: { id: Channel; label: string; icon: string; color: string }[] = [
+const CHANNELS: { id: Channel; label: string; icon: IconName; color: string }[] = [
   { id: "whatsapp",   label: "WhatsApp",  icon: "chat",    color: "#25d366" },
   { id: "formulario", label: "Formulario", icon: "article", color: "var(--info)" },
   { id: "landing",    label: "Landing",   icon: "web",     color: "var(--ai)" },
-];
+] as const;
 
 /* ── Copy button ───────────────────────────────────────────── */
 function CopyButton({ text, label = "Copiar" }: { text: string; label?: string }) {
@@ -32,7 +33,7 @@ function CopyButton({ text, label = "Copiar" }: { text: string; label?: string }
         border: copied ? "1px solid color-mix(in oklab, var(--info) 30%, transparent)" : "1px solid var(--app-border)",
       }}
     >
-      <span className="material-symbols-outlined text-xs">{copied ? "check" : "content_copy"}</span>
+      <Icon name={copied ? "check" : "content_copy"} size="xs" />
       {copied ? "¡Copiado!" : label}
     </button>
   );
@@ -76,11 +77,11 @@ function Step({ n, label }: { n: number; label: string }) {
 }
 
 /* ── Stat pill ─────────────────────────────────────────────── */
-function StatPill({ icon, label, value }: { icon: string; label: string; value: string }) {
+function StatPill({ icon, label, value }: { icon: IconName; label: string; value: string }) {
   return (
     <div className="rounded-xl p-4" style={{ backgroundColor: "var(--app-canvas)", border: "1px solid var(--app-border)" }}>
       <div className="flex items-center gap-2 mb-1">
-        <span className="material-symbols-outlined text-sm" style={{ color: "var(--info)" }}>{icon}</span>
+        <Icon name={icon} size="sm" style={{ color: "var(--info)" }} />
         <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>{label}</span>
       </div>
       <p className="font-headline text-xl font-bold" style={{ color: "var(--foreground)" }}>{value}</p>
@@ -158,7 +159,7 @@ function WhatsAppPanel() {
             className="flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-label uppercase tracking-widest"
             style={{ backgroundColor: "#25d366", color: "#fff" }}
           >
-            <span className="material-symbols-outlined text-sm">open_in_new</span>
+            <Icon name="open_in_new" size="sm" />
             Probar link
           </a>
           <CopyButton text={waLink} label="Copiar link" />
@@ -251,9 +252,7 @@ function FormularioPanel() {
                 onClick={() => !field.req && toggle(field.id)}
               >
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-sm" style={{ color: active ? "var(--info)" : "var(--muted-foreground)" }}>
-                    {active ? "check_box" : "check_box_outline_blank"}
-                  </span>
+                  <Icon name={active ? "check_box" : "check_box_outline_blank"} size="sm" style={{ color: active ? "var(--info)" : "var(--muted-foreground)" }} />
                   <span className="text-sm" style={{ color: active ? "var(--foreground)" : "var(--muted-foreground)" }}>{field.label}</span>
                   {field.req && (
                     <span className="rounded-full px-1.5 py-0.5 font-label text-[9px] uppercase" style={{ backgroundColor: "color-mix(in oklab, var(--destructive) 12%, transparent)", color: "var(--destructive)" }}>
@@ -295,7 +294,7 @@ const LANDING_TEMPLATES = [
   { id: "venta",     label: "Vender mi propiedad",    icon: "sell",          leads: "15-25/mes",  cr: "12%" },
   { id: "inversion", label: "Inversión inmobiliaria", icon: "trending_up",   leads: "10-20/mes",  cr: "15%" },
   { id: "tasacion",  label: "Tasación gratuita",      icon: "calculate",     leads: "30-50/mes",  cr: "18%" },
-];
+] as const;
 
 function LandingPanel() {
   const [selected, setSelected] = useState("compra");
@@ -328,9 +327,7 @@ function LandingPanel() {
                 }}
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="material-symbols-outlined text-base" style={{ color: active ? "var(--info)" : "var(--muted-foreground)" }}>
-                    {tpl.icon}
-                  </span>
+                  <Icon name={tpl.icon} size="md" style={{ color: active ? "var(--info)" : "var(--muted-foreground)" }} />
                   <span className="font-label text-xs font-bold" style={{ color: active ? "var(--foreground)" : "var(--muted-foreground)" }}>
                     {tpl.label}
                   </span>
@@ -356,7 +353,7 @@ function LandingPanel() {
           className="flex items-center gap-3 rounded-lg px-4 py-3"
           style={{ backgroundColor: "var(--app-canvas)", border: "1px solid var(--app-border)" }}
         >
-          <span className="material-symbols-outlined text-sm" style={{ color: "var(--info)" }}>link</span>
+          <Icon name="link" size="sm" style={{ color: "var(--info)" }} />
           <span className="flex-1 font-label text-xs truncate" style={{ color: "var(--foreground)" }}>
             app.kore.ai/lp/tu-agencia/{selectedTpl.id}
           </span>
@@ -364,7 +361,7 @@ function LandingPanel() {
         </div>
 
         <div className="flex items-center gap-2 rounded-lg px-3 py-2" style={{ backgroundColor: "color-mix(in oklab, var(--info) 5%, transparent)", border: "1px solid color-mix(in oklab, var(--info) 10%, transparent)" }}>
-          <span className="material-symbols-outlined text-xs" style={{ color: "var(--info)" }}>info</span>
+          <Icon name="info" size="xs" style={{ color: "var(--info)" }} />
           <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>
             Conversión estimada: <span style={{ color: "var(--info)" }}>{selectedTpl.cr}</span> · Leads/mes: <span style={{ color: "var(--info)" }}>{selectedTpl.leads}</span>
           </p>
@@ -411,7 +408,7 @@ export function EntryPoints() {
                 border: active ? `1px solid ${ch.color}40` : "1px solid var(--app-border)",
               }}
             >
-              <span className="material-symbols-outlined text-sm">{ch.icon}</span>
+              <Icon name={ch.icon} size="sm" />
               {ch.label}
             </button>
           );

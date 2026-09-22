@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import { RevealOnScroll, StaggerContainer, StaggerItem } from "./motion";
+import { Icon, asIconName } from "@/components/ui/icon";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -68,12 +69,7 @@ export function ProblemSection({ dict }: { dict: Dictionary }) {
                       border: `1px solid ${ICON_COLORS[i]}20`,
                     }}
                   >
-                    <span
-                      className="material-symbols-outlined text-xl"
-                      style={{ color: ICON_COLORS[i], fontVariationSettings: "'FILL' 1" }}
-                    >
-                      {item.icon}
-                    </span>
+                    <Icon name={asIconName(item.icon)} size="xl" style={{ color: ICON_COLORS[i] }} />
                   </div>
                 </div>
 

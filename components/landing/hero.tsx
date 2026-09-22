@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
+import { Icon } from "@/components/ui/icon";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -11,7 +12,7 @@ const ACTIVITY = [
   { icon: "smart_toy", label: "IA respondió", sub: "WhatsApp · 28 segundos", time: "hace 41s", color: "#22c55e" },
   { icon: "calendar_month", label: "Cita agendada", sub: "Miércoles 10:00 AM", time: "hace 2 min", color: "#a78bfa" },
   { icon: "star", label: "Lead calificado", sub: "Score 94 · HOT", time: "hace 5 min", color: "#f59e0b" },
-];
+] as const;
 
 function LiveDashboard() {
   return (
@@ -113,12 +114,7 @@ function LiveDashboard() {
                 className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
                 style={{ background: `${item.color}18`, border: `1px solid ${item.color}30` }}
               >
-                <span
-                  className="material-symbols-outlined text-sm"
-                  style={{ color: item.color, fontVariationSettings: "'FILL' 1" }}
-                >
-                  {item.icon}
-                </span>
+                <Icon name={item.icon} size="sm" style={{ color: item.color }} />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-semibold truncate" style={{ color: "#e2e8f0" }}>
@@ -141,12 +137,7 @@ function LiveDashboard() {
           style={{ background: "rgba(34,197,94,0.04)", border: "1px solid rgba(34,197,94,0.12)" }}
         >
           <div className="flex items-center gap-2 mb-3">
-            <span
-              className="material-symbols-outlined text-base"
-              style={{ color: "#22c55e", fontVariationSettings: "'FILL' 1" }}
-            >
-              chat
-            </span>
+            <Icon name="chat" size="md" style={{ color: "#22c55e" }} />
             <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "#22c55e" }}>
               WhatsApp · IA respondió
             </span>
@@ -278,9 +269,7 @@ export function HeroSection({ dict }: { dict: Dictionary }) {
               }}
             >
               {dict.hero.cta_primary}
-              <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
-                play_circle
-              </span>
+              <Icon name="play_circle" size="lg" />
             </motion.a>
 
             <motion.a
@@ -294,7 +283,7 @@ export function HeroSection({ dict }: { dict: Dictionary }) {
               }}
             >
               {dict.hero.cta_secondary}
-              <span className="material-symbols-outlined text-lg">arrow_downward</span>
+              <Icon name="arrow_downward" size="lg" />
             </motion.a>
           </motion.div>
 

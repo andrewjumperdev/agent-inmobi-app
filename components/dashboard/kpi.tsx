@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { motion } from "framer-motion";
+import { Icon } from "@/components/ui/icon";
 
 const LIVE_FEED = [
   { time: "Hace 2 min", highlight: "Lead calificado", rest: "por Lead Engine — Buenos Aires Norte", accent: true },
@@ -24,9 +25,7 @@ export function DashboardKPI() {
       >
         {/* Background icon */}
         <div className="absolute right-4 top-4 opacity-5 transition-opacity group-hover:opacity-10">
-          <span className="material-symbols-outlined" style={{ fontSize: "96px", color: "var(--info)" }}>
-            hub
-          </span>
+          <Icon name="hub" size="md" />
         </div>
 
         <span

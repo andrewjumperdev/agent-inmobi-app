@@ -6,6 +6,7 @@ import type { Database } from "@/lib/supabase/types";
 import { CaptacionOverview } from "./overview";
 import { EntryPoints } from "./entry-points";
 import { ClasificarTab } from "./clasificar";
+import { Icon } from "@/components/ui/icon";
 
 type Lead = Database["public"]["Tables"]["leads"]["Row"];
 
@@ -45,12 +46,7 @@ export function CaptacionView({ leads, kpis }: { leads: Lead[]; kpis: Kpis }) {
               className="relative flex items-center gap-2 px-4 py-3 font-label text-xs uppercase tracking-widest transition-colors"
               style={{ color: active ? "var(--info)" : "var(--muted-foreground)" }}
             >
-              <span
-                className="material-symbols-outlined text-sm"
-                style={{ fontVariationSettings: active ? "'FILL' 1" : "'FILL' 0" }}
-              >
-                {tab.icon}
-              </span>
+              <Icon name={tab.icon} size="sm" style={{ fontVariationSettings: active ? "'FILL' 1" : "'FILL' 0" }} />
               <span className="hidden sm:block">{tab.label}</span>
               {tab.id === "clasificar" && kpis.unclassified > 0 && (
                 <span

@@ -3,17 +3,18 @@
 import { motion } from "framer-motion";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import { RevealOnScroll, StaggerContainer, StaggerItem, fadeUp } from "./motion";
+import { Icon, asIconName } from "@/components/ui/icon";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-const ITEM_ICONS = ["rocket_launch", "query_stats"];
+const ITEM_ICONS = ["rocket_launch", "query_stats"] as const;
 
 const TIMELINE_ITEMS = [
   { day: "Día 1–3", label: "Onboarding & setup" },
   { day: "Día 4–7", label: "Configuración de agentes IA" },
   { day: "Día 8–12", label: "Pruebas & ajuste fino" },
   { day: "Día 14", label: "Lanzamiento en producción" },
-];
+] as const;
 
 export function DoneWithYouSection({ dict }: { dict: Dictionary }) {
   return (
@@ -43,9 +44,7 @@ export function DoneWithYouSection({ dict }: { dict: Dictionary }) {
                 className="flex h-10 w-10 items-center justify-center rounded-xl"
                 style={{ background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.2)" }}
               >
-                <span className="material-symbols-outlined text-xl" style={{ color: "#3b82f6" }}>
-                  schedule
-                </span>
+                <Icon name="schedule" size="xl" style={{ color: "#3b82f6" }} />
               </div>
             </div>
 
@@ -76,9 +75,7 @@ export function DoneWithYouSection({ dict }: { dict: Dictionary }) {
                     }}
                   >
                     {i === 3 && (
-                      <span className="material-symbols-outlined text-xs text-white" style={{ fontVariationSettings: "'FILL' 1" }}>
-                        check
-                      </span>
+                      <Icon name="check" size="xs" className="text-white" />
                     )}
                   </div>
                   <div
@@ -114,9 +111,7 @@ export function DoneWithYouSection({ dict }: { dict: Dictionary }) {
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
                 style={{ background: "linear-gradient(135deg, #3b82f6, #1d4ed8)" }}
               >
-                <span className="material-symbols-outlined text-sm text-white" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  support_agent
-                </span>
+                <Icon name="support_agent" size="sm" className="text-white" />
               </motion.div>
               <div>
                 <p className="text-xs font-bold" style={{ color: "#f1f5f9" }}>
@@ -157,9 +152,7 @@ export function DoneWithYouSection({ dict }: { dict: Dictionary }) {
                     border: "1px solid rgba(59,130,246,0.15)",
                   }}
                 >
-                  <span className="material-symbols-outlined text-base" style={{ color: "#3b82f6" }}>
-                    {ITEM_ICONS[i] ?? "check"}
-                  </span>
+                  <Icon name={asIconName(ITEM_ICONS[i] ?? "check")} size="md" style={{ color: "#3b82f6" }} />
                 </div>
                 <div>
                   <h4 className="mb-1 font-bold" style={{ color: "#e2e8f0" }}>{item.title}</h4>
@@ -187,7 +180,7 @@ export function DoneWithYouSection({ dict }: { dict: Dictionary }) {
               }}
             >
               {dict.done_with_you.cta}
-              <span className="material-symbols-outlined text-lg">arrow_forward</span>
+              <Icon name="arrow_forward" size="lg" />
             </motion.a>
           </RevealOnScroll>
         </div>

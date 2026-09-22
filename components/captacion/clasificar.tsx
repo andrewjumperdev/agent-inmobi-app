@@ -3,6 +3,8 @@
 import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Database } from "@/lib/supabase/types";
+import { Loader2 } from "lucide-react";
+import { Icon, type IconName } from "@/components/ui/icon";
 
 type Lead = Database["public"]["Tables"]["leads"]["Row"];
 
@@ -44,7 +46,7 @@ function timeAgo(dateStr: string) {
 }
 
 /* ── Source icon ───────────────────────────────────────────── */
-const SRC_ICON: Record<string, string> = {
+const SRC_ICON: Record<string, IconName> = {
   whatsapp: "chat", formulario: "article", landing: "web", directo: "person", referido: "group",
 };
 
@@ -81,7 +83,7 @@ function AISuggestion({ suggestion, onApply }: { suggestion: Partial<Classificat
       style={{ backgroundColor: "color-mix(in oklab, var(--info) 6%, transparent)", border: "1px solid color-mix(in oklab, var(--info) 20%, transparent)" }}
     >
       <div className="flex items-start gap-2">
-        <span className="material-symbols-outlined text-sm mt-0.5" style={{ color: "var(--info)" }}>auto_awesome</span>
+        <Icon name="auto_awesome" size="sm" className="mt-0.5" style={{ color: "var(--info)" }} />
         <div className="space-y-1">
           <p className="font-label text-[10px] uppercase tracking-widest" style={{ color: "var(--info)" }}>Sugerencia de ARIA</p>
           <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>
@@ -154,9 +156,7 @@ function LeadRow({
             </span>
           </div>
           <div className="flex items-center gap-2 mt-0.5">
-            <span className="material-symbols-outlined text-xs" style={{ color: "var(--muted-foreground)" }}>
-              {SRC_ICON[lead.source ?? ""] ?? "person"}
-            </span>
+            <Icon name={SRC_ICON[lead.source ?? ""] ?? "person"} size="xs" style={{ color: "var(--muted-foreground)" }} />
             <span className="font-label text-[10px] capitalize" style={{ color: "var(--muted-foreground)" }}>
               {lead.source ?? "directo"}
             </span>
@@ -172,7 +172,7 @@ function LeadRow({
         </div>
 
         {classified && (
-          <span className="material-symbols-outlined text-sm" style={{ color: "var(--info)" }}>check_circle</span>
+          <Icon name="check_circle" size="sm" style={{ color: "var(--info)" }} />
         )}
       </div>
     </button>
@@ -360,7 +360,7 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
         {/* Demo notice */}
         {unclassified.length === 0 && (
           <div className="rounded-xl px-3 py-2.5 flex items-center gap-2" style={{ backgroundColor: "color-mix(in oklab, var(--info) 4%, transparent)", border: "1px solid color-mix(in oklab, var(--info) 10%, transparent)" }}>
-            <span className="material-symbols-outlined text-xs" style={{ color: "var(--info)" }}>info</span>
+            <Icon name="info" size="xs" style={{ color: "var(--info)" }} />
             <p className="text-[10px]" style={{ color: "var(--muted-foreground)" }}>Datos de demostración</p>
           </div>
         )}
@@ -395,9 +395,7 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
                   </span>
                   <span style={{ color: "var(--muted-foreground)" }}>·</span>
                   <div className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-xs" style={{ color: "var(--info)" }}>
-                      {SRC_ICON[selectedLead.source ?? ""] ?? "person"}
-                    </span>
+                    <Icon name={SRC_ICON[selectedLead.source ?? ""] ?? "person"} size="xs" style={{ color: "var(--info)" }} />
                     <span className="font-label text-xs capitalize" style={{ color: "var(--muted-foreground)" }}>
                       {selectedLead.source ?? "directo"}
                     </span>
@@ -425,15 +423,9 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
                 }}
               >
                 {aiLoading ? (
-                  <motion.span
-                    className="material-symbols-outlined text-sm"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  >
-                    sync
-                  </motion.span>
+                  <Loader2 size={15} className="shrink-0 animate-spin" />
                 ) : (
-                  <span className="material-symbols-outlined text-sm">auto_awesome</span>
+                  <Icon name="auto_awesome" size="sm" />
                 )}
                 {aiLoading ? "Analizando…" : "Clasificar con IA"}
               </button>
@@ -555,12 +547,12 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
                     animate={{ scale: 1 }}
                     className="flex items-center gap-2"
                   >
-                    <span className="material-symbols-outlined text-base">check_circle</span>
+                    <Icon name="check_circle" size="md" />
                     Guardado
                   </motion.span>
                 ) : (
                   <motion.span key="save" className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-base">save</span>
+                    <Icon name="save" size="md" />
                     Guardar clasificación
                   </motion.span>
                 )}
@@ -575,7 +567,7 @@ export function ClasificarTab({ leads }: { leads: Lead[] }) {
             className="flex-1 flex flex-col items-center justify-center gap-4"
             style={{ color: "var(--muted-foreground)" }}
           >
-            <span className="material-symbols-outlined text-4xl">inbox</span>
+            <Icon name="inbox" size="md" className="text-4xl" />
             <p className="font-label text-sm uppercase tracking-widest">Seleccioná un lead para clasificar</p>
           </motion.div>
         )}

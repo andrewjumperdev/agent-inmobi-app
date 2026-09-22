@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { motion } from "framer-motion";
+import { Icon } from "@/components/ui/icon";
 
 const AGENTS = [
   {
@@ -96,9 +97,7 @@ const AGENTS = [
           <span className="font-headline text-xl font-bold" style={{ color: "var(--info)" }}>
             +4.2%
           </span>
-          <span className="material-symbols-outlined text-sm" style={{ color: "var(--info)" }}>
-            trending_up
-          </span>
+          <Icon name="trending_up" size="sm" style={{ color: "var(--info)" }} />
         </div>
         <span className="font-label text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>
           Alpha Generation v2
@@ -106,7 +105,7 @@ const AGENTS = [
       </div>
     ),
   },
-];
+] as const;
 
 export function AgentGrid() {
   return (
@@ -151,15 +150,9 @@ export function AgentGrid() {
                   boxShadow: agent.badgeAccent ? "0 0 20px color-mix(in oklab, var(--info) 40%, transparent)" : undefined,
                 }}
               >
-                <span
-                  className="material-symbols-outlined text-xl"
-                  style={{
+                <Icon name={agent.icon} size="xl" style={{
                     color: agent.badgeAccent ? "#ffffff" : "var(--info)",
-                    fontVariationSettings: "'FILL' 1",
-                  }}
-                >
-                  {agent.icon}
-                </span>
+                  }} />
               </div>
               <span
                 className="rounded px-2 py-1 font-label text-[10px] uppercase tracking-widest"

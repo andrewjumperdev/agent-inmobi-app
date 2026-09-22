@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import { RevealOnScroll, StaggerContainer, StaggerItem } from "./motion";
+import { Icon, asIconName } from "@/components/ui/icon";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -89,15 +90,9 @@ export function FeaturesSection({ dict }: { dict: Dictionary }) {
                       border: `1px solid ${isPopular ? "rgba(59,130,246,0.2)" : "rgba(255,255,255,0.06)"}`,
                     }}
                   >
-                    <span
-                      className="material-symbols-outlined text-xl"
-                      style={{
+                    <Icon name={asIconName(feature.icon)} size="xl" style={{
                         color: isPopular ? "#3b82f6" : "#475569",
-                        fontVariationSettings: "'FILL' 1",
-                      }}
-                    >
-                      {feature.icon}
-                    </span>
+                      }} />
                   </div>
 
                   <h3

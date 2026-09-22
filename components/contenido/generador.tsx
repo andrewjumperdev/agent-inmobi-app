@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Icon } from "@/components/ui/icon";
 import {
   ContentFormat,
   ContentPillar,
@@ -46,14 +47,9 @@ function FormatSelector({
               color: active ? "var(--info)" : "var(--muted-foreground)",
             }}
           >
-            <span
-              className="material-symbols-outlined text-xl"
-              style={{
+            <Icon name={FORMAT_ICONS[f]} size="xl" style={{
                 fontVariationSettings: active ? "'FILL' 1" : "'FILL' 0",
-              }}
-            >
-              {FORMAT_ICONS[f]}
-            </span>
+              }} />
             <span className="font-label text-xs uppercase tracking-widest">
               {FORMAT_LABELS[f]}
             </span>
@@ -163,12 +159,7 @@ function OutputCard({
             className="flex h-6 w-6 items-center justify-center rounded-md"
             style={{ backgroundColor: "color-mix(in oklab, var(--info) 12%, transparent)" }}
           >
-            <span
-              className="material-symbols-outlined text-sm"
-              style={{ color: "var(--info)", fontVariationSettings: "'FILL' 1" }}
-            >
-              auto_awesome
-            </span>
+            <Icon name="auto_awesome" size="sm" style={{ color: "var(--info)" }} />
           </div>
           <span
             className="font-label text-xs uppercase tracking-widest"
@@ -210,9 +201,7 @@ function OutputCard({
                 color: copied ? "var(--success)" : "var(--muted-foreground)",
               }}
             >
-              <span className="material-symbols-outlined text-sm">
-                {copied ? "check" : "content_copy"}
-              </span>
+              <Icon name={copied ? "check" : "content_copy"} size="sm" />
               {copied ? "Copiado" : "Copiar"}
             </button>
             <button
@@ -224,9 +213,7 @@ function OutputCard({
                 color: "var(--info)",
               }}
             >
-              <span className="material-symbols-outlined text-sm">
-                bookmark_add
-              </span>
+              <Icon name="bookmark_add" size="sm" />
               Guardar
             </button>
           </div>
@@ -440,12 +427,7 @@ export function Generador({
           border: streaming ? "1px solid color-mix(in oklab, var(--info) 30%, transparent)" : "none",
         }}
       >
-        <span
-          className="material-symbols-outlined text-base"
-          style={{ fontVariationSettings: "'FILL' 1" }}
-        >
-          {streaming ? "hourglass_top" : "auto_awesome"}
-        </span>
+        <Icon name={streaming ? "hourglass_top" : "auto_awesome"} size="md" />
         {streaming ? "Generando..." : generated ? "Regenerar" : "Generar contenido"}
       </motion.button>
 

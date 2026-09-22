@@ -1,6 +1,7 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Icon, type IconName } from "@/components/ui/icon";
 
 /**
  * Barra superior compartida por todas las pestañas.
@@ -21,7 +22,7 @@ export function PageHeader({
   /** Contexto corto a la derecha del título (ej. "Cola humana"). */
   subtitle?: string;
   /** Nombre del Material Symbol que identifica la sección. */
-  icon?: string;
+  icon?: IconName;
   /** Acciones extra, antes del toggle. */
   children?: React.ReactNode;
 }) {
@@ -31,13 +32,7 @@ export function PageHeader({
       <Separator orientation="vertical" className="h-4 opacity-40" />
 
       {icon && (
-        <span
-          className="material-symbols-outlined -mr-1 text-lg text-info"
-          style={{ fontVariationSettings: "'FILL' 1" }}
-          aria-hidden
-        >
-          {icon}
-        </span>
+        <Icon name={icon} size="lg" className="-mr-1 text-info" />
       )}
       <h1 className="font-headline text-[13px] font-extrabold uppercase tracking-[0.02em] text-foreground">
         {title}

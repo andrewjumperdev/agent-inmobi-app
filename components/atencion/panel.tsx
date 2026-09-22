@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AgentConfig } from "@/components/integraciones/agent-config";
 import { AIChat } from "@/components/dashboard/ai-chat";
 import Link from "next/link";
+import { Icon } from "@/components/ui/icon";
 
 /* ── El panel del agente de atención ───────────────────────────────────
  *
@@ -38,13 +39,7 @@ export function AtencionPanel({ userName }: { userName?: string }) {
               className="relative flex items-center gap-2 px-4 py-3 font-label text-[10px] font-semibold uppercase tracking-[0.16em] transition-colors"
               style={{ color: activa ? "var(--info)" : "var(--muted-foreground)" }}
             >
-              <span
-                className="material-symbols-outlined text-base"
-                style={activa ? { fontVariationSettings: "'FILL' 1" } : undefined}
-                aria-hidden
-              >
-                {s.icon}
-              </span>
+              <Icon name={s.icon} size="md" />
               {s.label}
               {/* Subrayado en el borde de la barra, no un fondo: mantiene la
                   pestaña activa legible en los dos temas sin pelear con el

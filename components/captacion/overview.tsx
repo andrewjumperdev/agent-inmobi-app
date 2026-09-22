@@ -15,6 +15,7 @@
 import { motion } from "framer-motion";
 import type { Database } from "@/lib/supabase/types";
 import type { Kpis } from "./captacion-view";
+import { Icon, type IconName } from "@/components/ui/icon";
 
 type Lead = Database["public"]["Tables"]["leads"]["Row"];
 
@@ -25,7 +26,7 @@ const URGENCY_COLOR: Record<string, { bg: string; text: string; label: string }>
   cold: { bg: "rgba(188,198,224,0.12)", text: "var(--foreground)", label: "Frío"     },
 };
 
-const SOURCE_ICON: Record<string, string> = {
+const SOURCE_ICON: Record<string, IconName> = {
   whatsapp: "chat",
   formulario: "article",
   landing: "web",
@@ -44,7 +45,7 @@ function KpiCard({
   label, value, sub, accent, icon, delay,
 }: {
   label: string; value: string | number; sub?: string;
-  accent?: boolean; icon: string; delay: number;
+  accent?: boolean; icon: IconName; delay: number;
 }) {
   return (
     <motion.div
@@ -64,7 +65,7 @@ function KpiCard({
           {sub && <p className="mt-1 text-xs" style={{ color: "var(--muted-foreground)" }}>{sub}</p>}
         </div>
         <div className="flex h-10 w-10 items-center justify-center rounded-full" style={{ backgroundColor: accent ? "color-mix(in oklab, var(--info) 12%, transparent)" : "rgba(188,198,224,0.08)" }}>
-          <span className="material-symbols-outlined text-lg" style={{ color: accent ? "var(--info)" : "var(--foreground)" }}>{icon}</span>
+          <Icon name={icon} size="lg" style={{ color: accent ? "var(--info)" : "var(--foreground)" }} />
         </div>
       </div>
     </motion.div>
@@ -127,7 +128,7 @@ export function CaptacionOverview({ leads, kpis }: { leads: Lead[]; kpis: Kpis }
     <div className="space-y-8">
       {showMock && (
         <div className="rounded-xl border px-4 py-3 text-sm flex items-center gap-2" style={{ borderColor: "color-mix(in oklab, var(--info) 20%, transparent)", backgroundColor: "color-mix(in oklab, var(--info) 5%, transparent)", color: "var(--info)" }}>
-          <span className="material-symbols-outlined text-sm">info</span>
+          <Icon name="info" size="sm" />
           Datos de demostración — conectá tu fuente de leads para ver datos reales.
         </div>
       )}
@@ -173,9 +174,7 @@ export function CaptacionOverview({ leads, kpis }: { leads: Lead[]; kpis: Kpis }
             {mockSources.map(([src, count]) => (
               <div key={src} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-sm" style={{ color: "var(--info)" }}>
-                    {SOURCE_ICON[src] ?? "person"}
-                  </span>
+                  <Icon name={SOURCE_ICON[src] ?? "person"} size="sm" style={{ color: "var(--info)" }} />
                   <span className="font-label text-xs capitalize" style={{ color: "var(--muted-foreground)" }}>
                     {src}
                   </span>
@@ -249,7 +248,7 @@ export function CaptacionOverview({ leads, kpis }: { leads: Lead[]; kpis: Kpis }
                     </td>
                     <td className="py-3 pr-4">
                       <div className="flex items-center gap-1">
-                        <span className="material-symbols-outlined text-xs" style={{ color: "var(--info)" }}>{SOURCE_ICON[lead.source ?? ""] ?? "person"}</span>
+                        <Icon name={SOURCE_ICON[lead.source ?? ""] ?? "person"} size="xs" style={{ color: "var(--info)" }} />
                         <span className="font-label text-xs capitalize" style={{ color: "var(--muted-foreground)" }}>{lead.source ?? "directo"}</span>
                       </div>
                     </td>
