@@ -263,7 +263,7 @@ export function AnalyticsReal() {
   }
   if (!datos) {
     return (
-      <div className="flex justify-center p-16">
+      <div className="flex justify-center p-10 sm:p-16">
         <Loader2 className="animate-spin text-info" />
       </div>
     );

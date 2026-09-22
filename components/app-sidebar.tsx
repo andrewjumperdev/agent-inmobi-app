@@ -89,7 +89,7 @@ function KoreWordmark() {
           AI
         </span>
       </span>
-      <span className="font-label text-[7px] font-semibold uppercase tracking-[0.18em] text-app-label">
+      <span className="font-label text-[9px] font-semibold uppercase tracking-[0.14em] text-app-label">
         OS for Growth
       </span>
     </div>
